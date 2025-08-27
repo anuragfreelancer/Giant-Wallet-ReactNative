@@ -1,11 +1,14 @@
 import React, { useState } from "react";
-import { View, Text, TouchableOpacity, StyleSheet, SafeAreaView } from "react-native";
+import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 import CustomHeader from "../../../../compoent/CustomHeader";
 import imageIndex from "../../../../assets/imageIndex";
+import { useNavigation } from "@react-navigation/native";
+import { SafeAreaView } from "react-native-safe-area-context";
+
 
 export default function BuyDetailScreen() {
   const [amount, setAmount] = useState(0);
-
+const navigation = useNavigation()
   const balance = 10000; // Example Balance
   const minLimit = 100;
   const maxLimit = 1000000; // 10,00,000
@@ -24,6 +27,7 @@ export default function BuyDetailScreen() {
                 leftPress={true}
             />
       {/* Buy/Sell Row */}
+      <View style={{paddingHorizontal:20}}>
       <View style={styles.rowBetween}>
         <Text style={styles.subTitle}>
           Buy Bitcoin <Text style={{ fontSize: 12, color: "#777" }}>(BTC)</Text>
@@ -59,6 +63,7 @@ export default function BuyDetailScreen() {
           </TouchableOpacity>
         ))}
       </View>
+      </View>
     </SafeAreaView>
   );
 }
@@ -67,7 +72,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#fff",
-    padding: 20,
+    // paddingVertical: 20,
   },
   header: {
     flexDirection: "row",
