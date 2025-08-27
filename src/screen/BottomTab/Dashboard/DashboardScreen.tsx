@@ -63,8 +63,8 @@ export default function WalletHome() {
         </View>
       </TouchableOpacity>
 
-      <TouchableOpacity style={styles.actionCard}>
-        <Image source={imageIndex.download} style={styles.actionIcon} />
+       <TouchableOpacity style={styles.actionCard} onPress={()=>navigation.navigate(ScreenNameEnum.BuyScreen)}>
+       <Image source={imageIndex.download} style={styles.actionIcon} />
         <View>
           <Text style={styles.actionTitle}>Add existing wallet</Text>
           <Text style={styles.actionSubtitle}>Import, restore or view-only</Text>

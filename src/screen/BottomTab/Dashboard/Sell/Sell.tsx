@@ -13,8 +13,6 @@ import imageIndex from "../../../../assets/imageIndex";
 import CustomHeader from "../../../../compoent/CustomHeader";
 import SearchBar from "../../../../compoent/SearchBar";
 import { color, fonts } from "../../../../constant";
-import { useNavigation } from "@react-navigation/native";
-import ScreenNameEnum from "../../../../routes/screenName.enum";
 
 
 // Currency Data
@@ -30,10 +28,10 @@ const currencies = [
     { id: "inj", name: "INJ", subtitle: "Native Injective", icon: imageIndex.inj },
 ];
 
-const BuyScreen = () => {
+const SellScreen = ({ navigation }) => {
     const [selectedCurrency, setSelectedCurrency] = useState("eth");
     const [search, setSearch] = useState("");
-const navigation = useNavigation()
+
     // Filtered list based on search
     const filteredData = currencies.filter(
         (item) =>
@@ -44,7 +42,7 @@ const navigation = useNavigation()
     const renderItem = ({ item }) => (
         <TouchableOpacity
             style={styles.item}
-            onPress={() => navigation.navigate(ScreenNameEnum.BuyDetail)}
+            onPress={() => setSelectedCurrency(item.id)}
         >
             <View style={styles.leftRow}>
                 <Image source={item.icon} style={styles.icon} />
@@ -150,4 +148,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default BuyScreen;
+export default SellScreen;

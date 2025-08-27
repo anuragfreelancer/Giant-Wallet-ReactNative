@@ -32,6 +32,9 @@ import PaymentDetails from "../screen/BottomTab/Dashboard/Donation/PaymentDetail
 import Notification from "../screen/Profile/Notification";
 import CurrencyScreen from "../screen/Profile/Currency";
 import FAQScreen from "../screen/Profile/FAQ";
+import BuyScreen from "../screen/BottomTab/Dashboard/Buy/Buy";
+import SellScreen from "../screen/BottomTab/Dashboard/Sell/Sell";
+import BuyDetailScreen from "../screen/BottomTab/Dashboard/Buy/BuyDetail";
 
 const _routes: any = {
   REGISTRATION_ROUTE: [
@@ -167,6 +170,18 @@ const _routes: any = {
     {
       name: ScreenNameEnum.FAQScreen,
       Component: FAQScreen,
+    },
+    {
+      name: ScreenNameEnum.BuyScreen,
+      Component: BuyScreen,
+    },
+     {
+      name: ScreenNameEnum.SellScreen,
+      Component: SellScreen,
+    },
+      {
+      name: ScreenNameEnum.BuyDetail,
+      Component: BuyDetailScreen,
     },
     {
       name: 'chooseLocation',
