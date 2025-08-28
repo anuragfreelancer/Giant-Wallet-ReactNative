@@ -8,7 +8,7 @@ import { fonts } from "../../../../constant";
 import ScreenNameEnum from "../../../../routes/screenName.enum";
 
 
-export default function BuyDetailScreen() {
+export default function SellDetailScreen() {
   const [amount, setAmount] = useState(0);
   const navigation = useNavigation()
   const balance = 10000; // Example Balance
@@ -24,7 +24,7 @@ export default function BuyDetailScreen() {
     <SafeAreaView style={styles.container}>
       <CustomHeader
         menuIcon={imageIndex.back}
-        label="Buy"
+        label="Sell"
         navigation={navigation}
         leftPress={true}
       />
@@ -35,28 +35,27 @@ export default function BuyDetailScreen() {
             Buy Bitcoin <Text style={{ fontSize: 12, color: "#777" }}>(BTC)</Text>
           </Text>
           <TouchableOpacity style={styles.sellBtn}  onPress={()=>navigation.navigate(ScreenNameEnum.SendEth)}>
-            <Text style={styles.sellBtnText}>Buy BTC</Text>
+            <Text style={styles.sellBtnText}>Sell BTC</Text>
           </TouchableOpacity>
         </View>
 
         {/* Enter Amount */}
         <View style={styles.amountBox}>
-          <Text
+          <TextInput
            style={styles.label}
-           >BTC Amount</Text>
-         <View style={styles.amountRow}>
-  <Text style={styles.amount}>$0.00</Text>
-  <Text style={styles.currency}>BTC</Text>
-</View>
-          </View>
+           placeholder="Enter Amount in INR"
+           keyboardType="number-pad"
+           />
+          <Text style={styles.amount}>${amount}</Text>
+        </View>
 
         {/* Min / Max */}
         <Text style={styles.limitText}>
-          Min {minLimit} BTC - Max {maxLimit.toLocaleString()} BTC
+          Min ${minLimit} - Max ${maxLimit.toLocaleString()}
         </Text>
 
         {/* Balance */}
-        <Text style={styles.balanceText}>Available Balance: ${balance.toLocaleString()}</Text>
+        <Text style={styles.balanceText}>Current Balance: ${balance.toLocaleString()}</Text>
 
         {/* Percentage Buttons */}
         <View style={styles.percentContainer}>
@@ -103,37 +102,20 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginVertical: 20,
   },
-   amountRow: {
-    flexDirection: "row",
-    // alignItems: "flex-start", // aligns BTC to the top of $0.00
-  },
-  amount: {
-    fontSize: 24,
-    fontFamily: fonts.medium,
-    color: "#000",
-  },
-  currency: {
-    fontSize: 16,
-    color: "#6C757D",
-    marginLeft: 4,
-    textAlignVertical: "top", 
-    marginTop:3
-  },
   subTitle: {
     fontSize: 18,
     fontFamily:fonts.medium,
     
   },
   sellBtn: {
-    backgroundColor: "#34A85333",
+    backgroundColor: "#FFEBEE",
     paddingHorizontal: 14,
     paddingVertical: 7,
     borderRadius: 20,
   },
   sellBtnText: {
-    color: "#34A853",
+    color: "red",
     fontFamily:fonts.medium,
-    
   },
   amountBox: {
     alignItems: "center",
@@ -146,12 +128,12 @@ const styles = StyleSheet.create({
     textAlign:'center'
 
   },
-  // amount: {
-  //   fontSize: 28,
-  //   fontFamily:fonts.medium,
+  amount: {
+    fontSize: 28,
+    fontFamily:fonts.medium,
     
-  //   marginTop: 10,
-  // },
+    marginTop: 10,
+  },
   limitText: {
     textAlign: "center",
     color: "#777",
@@ -173,7 +155,7 @@ const styles = StyleSheet.create({
   },
   percentBtn: {
     backgroundColor: "#f2f2f2",
-    paddingHorizontal: 9,
+    paddingHorizontal: 14,
     paddingVertical: 8,
     borderRadius: 20,
   },

@@ -1,80 +1,65 @@
-import React, { useState } from 'react';
-import { View, Text, Switch, TouchableOpacity, StyleSheet } from 'react-native';
-import CustomHeader from '../../compoent/CustomHeader';
-import imageIndex from '../../assets/imageIndex';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import StatusBarComponent from '../../compoent/StatusBarCompoent';
-import { color, fonts } from '../../constant';
-// If you want icons, install react-native-vector-icons, or use any icon library you prefer
-// import Icon from 'react-native-vector-icons/Ionicons';
+import React, { useState } from "react";
+import { View, Text, Switch, FlatList, StyleSheet } from "react-native";
+import CustomHeader from "../../compoent/CustomHeader";
+import imageIndex from "../../assets/imageIndex";
+import { SafeAreaView } from "react-native-safe-area-context";
+import StatusBarComponent from "../../compoent/StatusBarCompoent";
+import { color, fonts } from "../../constant";
+import SwitchToggle from "react-native-switch-toggle";
 
 const NotificationsSetting = () => {
-  // State for toggles
-  const [generalNotification, setGeneralNotification] = useState(true);
-  const [sound, setSound] = useState(false);
-  const [vibrate, setVibrate] = useState(false);
-  const [appUpdates, setAppUpdates] = useState(true);
+  // All switch states in single object
+  const [settings, setSettings] = useState({
+    generalNotification: true,
+    sound: false,
+    vibrate: false,
+    appUpdates: true,
+    newTips: false,
+  });
+
+  // Notification list config
+  const notificationOptions = [
+    { key: "generalNotification", label: "General Notification" },
+    { key: "sound", label: "Sound" },
+    { key: "vibrate", label: "Vibrate" },
+    { key: "appUpdates", label: "App Updates" },
+    { key: "newTips", label: "New Tips Available" },
+  ];
+
+  const handleToggle = (key: string) => {
+    setSettings(prev => ({ ...prev, [key]: !prev[key] }));
+  };
+
+  const renderItem = ({ item }: any) => (
+    <View style={styles.notificationOption}>
+      <Text style={styles.optionText}>{item.label}</Text>
+
+     
+        <SwitchToggle
+          switchOn={settings[item.key]}
+          onPress={() => handleToggle(item.key)}
+          containerStyle={styles.switchContainer}
+          circleStyle={styles.circle}
+          backgroundColorOn={color.primary}
+          backgroundColorOff="#D1D1D1"
+          circleColorOn="#fff"
+          circleColorOff="#fff"
+        />
+      
+    </View>
+  );
 
   return (
     <SafeAreaView style={styles.container}>
       <StatusBarComponent />
-      <View   >
-        <CustomHeader
-        
-          menuIcon={imageIndex.back} label="Notifications" />
+      <CustomHeader menuIcon={imageIndex.back} label="Notifications" />
 
-        {/* Body */}
-        <View style={{ marginTop: 40,marginHorizontal:15 }}>
-
-          <View style={styles.notificationOption}>
-            <Text style={styles.optionText}>General Notification</Text>
-            <Switch
-              value={generalNotification}
-              onValueChange={val => setGeneralNotification(val)}
-              trackColor={{ false: '#767577', true: color.primary }}
-              thumbColor={generalNotification ? '#fff' : '#fff'}
-            />
-          </View>
-          <View style={styles.notificationOption}>
-            <Text style={styles.optionText}>Sound</Text>
-            <Switch
-              value={sound}
-              onValueChange={val => setSound(val)}
-              trackColor={{ false: '#767577', true: color.primary }}
-              thumbColor={sound ? '#fff' : '#fff'}
-            />
-          </View>
-
-          <View style={styles.notificationOption}>
-            <Text style={styles.optionText}>Vibrate</Text>
-            <Switch
-              value={vibrate}
-              onValueChange={val => setVibrate(val)}
-              trackColor={{ false: '#767577', true: color.primary }}
-              thumbColor={vibrate ? '#fff' : '#fff'}
-            />
-          </View>
-
-          <View style={styles.notificationOption}>
-            <Text style={styles.optionText}>App Updates</Text>
-            <Switch
-              value={appUpdates}
-              onValueChange={val => setAppUpdates(val)}
-              trackColor={{ false: '#767577', true: color.primary }}
-              thumbColor={appUpdates ? '#fff' : '#fff'}
-            />
-          </View>
-          <View style={styles.notificationOption}>
-            <Text style={styles.optionText}>New Tips Available</Text>
-            <Switch
-              // value={appUpdates}
-              // onValueChange={val => setAppUpdates(val)}
-              trackColor={{ false: '#767577', true: color.primary }}
-              thumbColor={appUpdates ? '#fff' : '#fff'}
-            />
-          </View>
-        </View>
-      </View>
+      <FlatList
+        data={notificationOptions}
+        keyExtractor={item => item.key}
+        renderItem={renderItem}
+        contentContainerStyle={{ marginTop: 40, marginHorizontal: 15 }}
+      />
     </SafeAreaView>
   );
 };
@@ -84,34 +69,32 @@ export default NotificationsSetting;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: "#fff",
   },
-  header: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: 30,
-    justifyContent: 'space-between',
+  switchContainer: {
+    width: 45,
+    height: 27,
+    borderRadius: 18,
+    borderWidth: 3,
+    borderColor: "transparent",
+    padding: 2,
   },
-  hamburger: {
-    width: 24,
-    height: 24,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  headerTitle: {
-    fontSize: 18,
-    fontWeight: '600',
+  circle: {
+    width: 25,
+    height: 25,
+    borderRadius: 25,
+    right: 7,
   },
   notificationOption: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
     marginVertical: 10,
   },
   optionText: {
     fontSize: 16,
     color: "#1D3A70",
-    fontFamily:fonts.bold,
-    lineHeight:15
+    fontFamily: fonts.bold,
+    lineHeight: 15,
   },
 });

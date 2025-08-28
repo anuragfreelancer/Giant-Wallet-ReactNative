@@ -26,7 +26,7 @@ const ImagePickerModal: React.FC<ImagePickerModalProps> = ({
         <View style={styles.modalOverlay}>
           <View style={styles.modalContainer}>
             <View style={styles.handleBar} />
-            <Text allowFontScaling={false} style={styles.title}>Choisissez une option</Text>
+            <Text allowFontScaling={false} style={styles.title}>Choose an option</Text>
             <TouchableOpacity
               onPress={() => {
                 setModalVisible(false);
@@ -34,7 +34,7 @@ const ImagePickerModal: React.FC<ImagePickerModalProps> = ({
               }}
               style={styles.optionButton}
             >
-              <Text allowFontScaling={false} style={styles.optionText}>📷 Choisissez dans la galerie</Text>
+              <Text allowFontScaling={false} style={styles.optionText}>📷 Choose from gallery</Text>
             </TouchableOpacity>
             <TouchableOpacity
               onPress={() => {
@@ -43,7 +43,7 @@ const ImagePickerModal: React.FC<ImagePickerModalProps> = ({
               }}
               style={styles.optionButton}
             >
-              <Text allowFontScaling={false} style={styles.optionText}>📸 Prendre une photo</Text>
+              <Text allowFontScaling={false} style={styles.optionText}>📸 Take a photo</Text>
             </TouchableOpacity>
 
           </View>

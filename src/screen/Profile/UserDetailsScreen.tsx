@@ -92,7 +92,7 @@ const UserDetailsScreen = () => {
           ) : ( */}
             <Image
               // source={{ uri: image.path }}
-              source={imageIndex.dummyProfile}
+              source={imageIndex.dummy}
               style={styles.profileImage}
               resizeMode="cover"
             />
@@ -103,7 +103,7 @@ const UserDetailsScreen = () => {
             setIsModalVisible(true)
           }} >
             <Image
-              source={imageIndex.editCircle}
+              source={imageIndex.editSqr}
               style={{
                 height: 25,
                 width: 25,

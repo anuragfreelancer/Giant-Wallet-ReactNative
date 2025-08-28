@@ -64,7 +64,7 @@ export default function PasswordReset() {
                     onChangeText={setPhone}
                     placeholderTextColor='rgba(173, 164, 165, 1)'
                     style={styles.textInput}
-                    keyboardType='phone-pad'
+                    keyboardType='email-address'
                   />
                 </View>
               </View>

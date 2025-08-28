@@ -13,6 +13,7 @@ import imageIndex from "../../../../assets/imageIndex";
 import CustomHeader from "../../../../compoent/CustomHeader";
 import SearchBar from "../../../../compoent/SearchBar";
 import { color, fonts } from "../../../../constant";
+import ScreenNameEnum from "../../../../routes/screenName.enum";
 
 
 // Currency Data
@@ -42,7 +43,7 @@ const SellScreen = ({ navigation }) => {
     const renderItem = ({ item }) => (
         <TouchableOpacity
             style={styles.item}
-            onPress={() => setSelectedCurrency(item.id)}
+            onPress={() => navigation.navigate(ScreenNameEnum.SellDetail)}
         >
             <View style={styles.leftRow}>
                 <Image source={item.icon} style={styles.icon} />
@@ -64,7 +65,7 @@ const SellScreen = ({ navigation }) => {
             {/* Header */}
             <CustomHeader
                 menuIcon={imageIndex.back}
-                label="Buy"
+                label="Sell"
                 navigation={navigation}
                 leftPress={true}
             />

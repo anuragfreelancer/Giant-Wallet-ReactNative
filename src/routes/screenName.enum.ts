@@ -12,7 +12,12 @@ enum ScreenNameEnum {
   FAQScreen="FAQScreen",
   BuyScreen="BuyScreen",
   SellScreen = "SellScreen",
+SendScreen="SendScreen",
+sendPayment="sendPayment",
+confirmPayment="confirmPayment",
+
   BuyDetail = "BuyDetail",
+  SendEth="SendEth",
   SellDetail = "SellDetail",
   ConfirmSwapScreen="ConfirmSwapScreen",
   DonationTrackingDetail = "DonationTrackingDetail",

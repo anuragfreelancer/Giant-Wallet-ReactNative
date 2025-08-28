@@ -60,8 +60,7 @@ const styles = StyleSheet.create({
   },
   icon: {
     height: 35,
-    width: 80,
-    // marginLeft: 8,
+    width: 65,
   },
   iconR: {
     height: 25,
@@ -76,7 +75,7 @@ const styles = StyleSheet.create({
   rightIconsContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    minWidth:50
+    minWidth:65
   },
   txtHeading: {
     fontWeight: '700',

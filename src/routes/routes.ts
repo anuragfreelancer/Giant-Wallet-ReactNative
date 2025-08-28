@@ -35,6 +35,11 @@ import FAQScreen from "../screen/Profile/FAQ";
 import BuyScreen from "../screen/BottomTab/Dashboard/Buy/Buy";
 import SellScreen from "../screen/BottomTab/Dashboard/Sell/Sell";
 import BuyDetailScreen from "../screen/BottomTab/Dashboard/Buy/BuyDetail";
+import SendEth from "../screen/BottomTab/Dashboard/Buy/SendEth";
+import SellDetailScreen from "../screen/BottomTab/Dashboard/Sell/SellDetail";
+import SendScreen from "../screen/BottomTab/Dashboard/Buy/send";
+import sendPayment from "../screen/BottomTab/Dashboard/Buy/sendPayment";
+import confirmPayment from "../screen/BottomTab/Dashboard/Buy/confirmPayment";
 
 const _routes: any = {
   REGISTRATION_ROUTE: [
@@ -182,6 +187,26 @@ const _routes: any = {
       {
       name: ScreenNameEnum.BuyDetail,
       Component: BuyDetailScreen,
+    },
+      {
+      name: ScreenNameEnum.SendEth,
+      Component: SendEth,
+    },
+      {
+      name: ScreenNameEnum.SellDetail,
+      Component: SellDetailScreen,
+    },
+        {
+      name: ScreenNameEnum.SendScreen,
+      Component: SendScreen,
+    },
+        {
+      name: ScreenNameEnum.sendPayment,
+      Component: sendPayment,
+    },
+        {
+      name: ScreenNameEnum.confirmPayment,
+      Component: confirmPayment,
     },
     {
       name: 'chooseLocation',

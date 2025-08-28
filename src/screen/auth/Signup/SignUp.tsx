@@ -80,28 +80,28 @@ export default function Signup() {
         keyboardVerticalOffset={Platform.OS === 'ios' ? 50 : 0}
       >
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-          <ScrollView contentContainerStyle={{flex:1}}showsVerticalScrollIndicator={false}>
-           <View style={{marginLeft:15}}> 
-            {/* <CustomBackHeader menuIcon={imageIndex.back} label={""} /> */}
-</View>
+          <ScrollView showsVerticalScrollIndicator={false}>
+            <View style={{ marginLeft: 15 }}>
+              {/* <CustomBackHeader menuIcon={imageIndex.back} label={""} /> */}
+            </View>
             <View style={styles.mainContainer}>
-  <Image source={imageIndex.appLogo} style={styles.logo} resizeMode='contain' />
-        
+              <Image source={imageIndex.appLogo} style={styles.logo} resizeMode='contain' />
+
               <Text style={styles.txtHeading}>Sign Up</Text>
               <Text style={styles.txtDes}>Let's get started by creating your account</Text>
 
               <View style={styles.inputContainer}>
-              
+
                 <CustomInput
                   placeholder={"Full Name"}
                   leftIcon={<Icon source={imageIndex.user} size={20} />}
-                  // value={email}
-                  // keyboardType='email-address'
+                // value={email}
+                // keyboardType='email-address'
 
-                  // onChangeText={handleEmailChange}
+                // onChangeText={handleEmailChange}
                 />
                 {/* {emailError ? <Text style={styles.errorText}>{emailError}</Text> : null} */}
- <CustomInput
+                <CustomInput
                   placeholder={"Email Address"}
                   leftIcon={<Icon source={imageIndex.email} size={18} />}
                   // value={phone}
@@ -127,7 +127,7 @@ export default function Signup() {
                 />
                 {/* {passwordError ? <Text style={styles.errorText}>{passwordError}</Text> : null} */}
 
-             
+
               </View>
               <View style={{ width: '100%', marginBottom: 20, flexDirection: 'row', }}>
                 <Image source={imageIndex.check} style={{ height: 22, width: 22, }} />
@@ -141,14 +141,14 @@ export default function Signup() {
                 // onPress={handleSignup}
                 onPress={() => navigation.navigate(ScreenNameEnum.LocationAllow)}
               />
-
-             
-            </View>
-             <TouchableOpacity style={{  alignItems:'center' }} onPress={() => navigation.navigate(ScreenNameEnum.LoginScreen)}>
+              <TouchableOpacity style={{ alignItems: 'center', marginTop:15 }} onPress={() => navigation.navigate(ScreenNameEnum.LoginScreen)}>
                 <Text style={styles.signupText}>Alrady have an account? <Text style={{ color: color.primary }}> Login</Text> </Text>
               </TouchableOpacity>
+
+            </View>
+
           </ScrollView>
-          
+
         </TouchableWithoutFeedback>
       </KeyboardAvoidingView>
     </SafeAreaView>

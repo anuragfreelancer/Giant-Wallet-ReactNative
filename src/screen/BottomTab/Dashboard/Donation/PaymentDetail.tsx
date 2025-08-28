@@ -7,119 +7,129 @@ import {
     TextInput,
     ScrollView,
     Image,
+    KeyboardAvoidingView,
+    Platform,
+    TouchableWithoutFeedback,
+    Keyboard,
 } from "react-native";
 import imageIndex from "../../../../assets/imageIndex";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { fonts } from "../../../../constant";
 import { useNavigation } from "@react-navigation/native";
+import CustomButton from "../../../../compoent/CustomButton";
+import CustomHeader from "../../../../compoent/CustomHeader";
 
 const PaymentDetails = () => {
     const [selectedCard, setSelectedCard] = useState("hdfc");
-const navigation = useNavigation()
+    const navigation = useNavigation()
     return (
         <SafeAreaView style={styles.container}>
-            <ScrollView contentContainerStyle={{ padding: 20 }}>
-                {/* Header */}
-                <View style={styles.header}>
-                    <TouchableOpacity style={styles.backBtn} onPress={()=>navigation.goBack()}>
-                        <Image source={imageIndex.back} style={{ height: 30, width: 30 }} />
+            <CustomHeader label="Payment Details" menuIcon={imageIndex.back} />
+            <KeyboardAvoidingView
+                behavior={Platform.OS === 'ios' ? 'padding' : 'padding'}
+                style={{ flex: 1 }}
+                keyboardVerticalOffset={Platform.OS === 'ios' ? 50 : 0}
+            >
+                <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
 
-                    </TouchableOpacity>
-                    <Text style={styles.headerTitle}>Payment Details</Text>
-                </View>
+                    <ScrollView contentContainerStyle={{ padding: 20 }}>
+                        {/* Header */}
 
-                {/* Saved Cards */}
-                <Text style={styles.sectionTitle}>Credit & Debit Cards</Text>
 
-                {/* Axis Bank */}
-                <TouchableOpacity
-                    style={[
-                        styles.cardRow,
-                        selectedCard === "axis" && styles.cardSelected,
-                    ]}
-                    onPress={() => setSelectedCard("axis")}
-                >
-                    <View style={styles.cardLogo}>
-                        <Text style={{ fontWeight: "700", color: "#fff" }}>Axis</Text>
-                    </View>
-                    <Text style={styles.cardText}>Axis Bank **** **** **** 5393</Text>
-                    <View style={[styles.radio, selectedCard === "axis" && styles.radioActive]} />
-                </TouchableOpacity>
+                        {/* Saved Cards */}
+                        <Text style={styles.sectionTitle}>Credit & Debit Cards</Text>
 
-                {/* HDFC Bank */}
-                <TouchableOpacity
-                    style={[
-                        styles.cardRow,
-                        selectedCard === "hdfc" && styles.cardSelected,
-                    ]}
-                    onPress={() => setSelectedCard("hdfc")}
-                >
-                    <View style={styles.cardLogo}>
-                        <Text style={{ fontWeight: "700", color: "#fff" }}>VISA</Text>
-                    </View>
-                    <Text style={styles.cardText}>HDFC Bank **** **** **** 6246</Text>
-                    <View style={[styles.radio, selectedCard === "hdfc" && styles.radioActive]} />
-                </TouchableOpacity>
+                        {/* Axis Bank */}
+                        <TouchableOpacity
+                            style={[
+                                styles.cardRow,
+                                selectedCard === "axis" && styles.cardSelected,
+                            ]}
+                            onPress={() => setSelectedCard("axis")}
+                        >
+                            <View style={styles.cardLogo}>
+                                <Text style={{ fontWeight: "700", color: "#fff" }}>Axis</Text>
+                            </View>
+                            <Text style={styles.cardText}>Axis Bank **** **** **** 5393</Text>
+                            <View style={[styles.radio, selectedCard === "axis" && styles.radioActive]} />
+                        </TouchableOpacity>
 
-                {/* Add Card */}
-                <TouchableOpacity style={styles.addCardRow}>
-                    <View style={styles.addIcon}>
-                        <Text style={{ fontSize: 18, color: "#fff" }}>+</Text>
-                    </View>
-                    <Text style={styles.cardText}>Add New Card</Text>
-                </TouchableOpacity>
+                        {/* HDFC Bank */}
+                        <TouchableOpacity
+                            style={[
+                                styles.cardRow,
+                                selectedCard === "hdfc" && styles.cardSelected,
+                            ]}
+                            onPress={() => setSelectedCard("hdfc")}
+                        >
+                            <View style={styles.cardLogo}>
+                                <Text style={{ fontWeight: "700", color: "#fff" }}>VISA</Text>
+                            </View>
+                            <Text style={styles.cardText}>HDFC Bank **** **** **** 6246</Text>
+                            <View style={[styles.radio, selectedCard === "hdfc" && styles.radioActive]} />
+                        </TouchableOpacity>
 
-                {/* Card Number */}
-                <Text style={styles.sectionTitle}>Card Number</Text>
+                        {/* Add Card */}
+                        <TouchableOpacity style={styles.addCardRow}>
+                            <View style={styles.addIcon}>
+                                <Text style={{ fontSize: 18, color: "#fff" }}>+</Text>
+                            </View>
+                            <Text style={styles.cardText}>Add New Card</Text>
+                        </TouchableOpacity>
 
-                <TextInput
-                    style={styles.input}
-                    placeholder="Enter 12 digit card number"
-                    keyboardType="numeric"
-                    placeholderTextColor="#999"
-                />
+                        {/* Card Number */}
+                        <Text style={styles.sectionTitle}>Card Number</Text>
 
-                {/* Expiry & CVV */}
-                <View style={styles.row}>
-                    <View style={{flex: 0.6 }}>
-                        <Text style={styles.sectionTitle}>Valid Thru</Text>
-                        <View style={{ flexDirection: 'row', }}>
-                            <TextInput
-                                style={[styles.input, { flex: 1, marginRight: 10 }]}
-                                placeholder="Month"
-                                placeholderTextColor="#999"
-                            />
-                            <TextInput
-                                style={[styles.input, { flex: 1, marginRight: 10 }]}
-                                placeholder="Year"
-                                placeholderTextColor="#999"
-                            />
+                        <TextInput
+                            style={styles.input}
+                            placeholder="Enter 12 digit card number"
+                            keyboardType="numeric"
+                            placeholderTextColor="#999"
+                        />
+
+                        {/* Expiry & CVV */}
+                        <View style={styles.row}>
+                            <View style={{ flex: 0.6 }}>
+                                <Text style={styles.sectionTitle}>Valid Thru</Text>
+                                <View style={{ flexDirection: 'row', }}>
+                                    <TextInput
+                                        style={[styles.input, { flex: 1, marginRight: 10 }]}
+                                        placeholder="Month"
+                                        placeholderTextColor="#999"
+                                    />
+                                    <TextInput
+                                        style={[styles.input, { flex: 1, marginRight: 10 }]}
+                                        placeholder="Year"
+                                        placeholderTextColor="#999"
+                                    />
+                                </View>
+                            </View>
+                            <View style={{ flex: 0.4 }}>
+                                <Text style={styles.sectionTitle}>CVV</Text>
+
+                                <TextInput
+                                    style={[styles.input, { flex: 1 }]}
+                                    placeholder="CVV"
+                                    keyboardType="numeric"
+                                    placeholderTextColor="#999"
+                                />
+                            </View>
                         </View>
-                    </View>
-                    <View style={{flex:0.4}}>
-                        <Text style={styles.sectionTitle}>CVV</Text>
 
-                    <TextInput
-                        style={[styles.input, { flex: 1 }]}
-                        placeholder="CVV"
-                        keyboardType="numeric"
-                        placeholderTextColor="#999"
-                    />
-                    </View>
-                </View>
+                        {/* Cardholder Name */}
+                        <TextInput
+                            style={[styles.input, { marginTop: 10 }]}
+                            placeholder="Name on Card"
+                            placeholderTextColor="#999"
+                        />
 
-                {/* Cardholder Name */}
-                <TextInput
-                    style={[styles.input, {marginTop:10}]}
-                    placeholder="Name on Card"
-                    placeholderTextColor="#999"
-                />
-
-                {/* Pay Now Button */}
-                <TouchableOpacity style={styles.payBtn}>
-                    <Text style={styles.payText}>Pay Now</Text>
-                </TouchableOpacity>
-            </ScrollView>
+                        {/* Pay Now Button */}
+                        <TouchableOpacity style={styles.payBtn}>
+                            <Text style={styles.payText}>Pay Now</Text>
+                        </TouchableOpacity>
+                    </ScrollView>
+                </TouchableWithoutFeedback>
+            </KeyboardAvoidingView>
         </SafeAreaView>
     );
 };
@@ -144,7 +154,7 @@ const styles = StyleSheet.create({
         marginBottom: 10,
         borderWidth: 1,
         borderColor: '#b3b3b3',
-        marginTop:10
+        marginTop: 10
     },
     cardSelected: { borderWidth: 2, borderColor: "#E53935" },
     cardLogo: {
@@ -173,7 +183,7 @@ const styles = StyleSheet.create({
         borderRadius: 12,
         backgroundColor: "#f7f7f7",
         marginBottom: 20,
-        marginTop:10
+        marginTop: 10
     },
     addIcon: {
         width: 30,

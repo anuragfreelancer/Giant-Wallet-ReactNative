@@ -72,6 +72,8 @@ stars: require('./images/srars.png'),
 evmos: require('./images/evmos.png'),
 search: require('./images/search.png'),
 downRed: require('./images/downRed.png'),
+send: require('./images/send.png'),
+imports: require('./images/import.png'),
 
 
 

@@ -16,11 +16,11 @@ import { wp } from "../../../utils/Constant";
 
 // Sample data (use local icons/images in ./assets/)
 const menuItems = [
-    { id: "1", title: "Wallet", screen: ScreenNameEnum.OrederList },
-    { id: "2", title: "Select Country", screen: ScreenNameEnum.language },
+    { id: "1", title: "Wallet" },
+    { id: "2", title: "Select Currency", screen: ScreenNameEnum.language },
     { id: "3", title: "Change Password", screen: ScreenNameEnum.changePassword },
     { id: "4", title: "Notification", screen: ScreenNameEnum.NotificationsSetting },
-    { id: "5", title: "FAQ",  screen: ScreenNameEnum.FAQScreen },
+    { id: "5", title: "FAQ", screen: ScreenNameEnum.FAQScreen },
     { id: "6", title: "About us", screen: ScreenNameEnum.About },
     { id: "7", title: "Privacy Policy", screen: ScreenNameEnum.Policy },
     { id: "8", title: "Logout", },

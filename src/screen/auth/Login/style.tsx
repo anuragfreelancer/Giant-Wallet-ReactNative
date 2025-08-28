@@ -1,6 +1,5 @@
 import { StyleSheet } from "react-native";
 import { hp, wp } from "../../../utils/Constant";
-import ResponsiveSize from "../../../utils/ResponsiveSize";
 import { color, fonts } from "../../../constant";
 
 
