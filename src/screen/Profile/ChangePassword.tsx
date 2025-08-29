@@ -14,7 +14,6 @@ const ChangePasswordScreen = () => {
     const navigation = useNavigation()
     const [isLoading, setLoading] = useState(false)
     const isLogin = useSelector((state: any) => state?.auth);
-
     const [oldpass, setOldPass] = useState("");
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
@@ -41,16 +40,12 @@ const ChangePasswordScreen = () => {
 
     const handleSubmit = async () => {
         try {
+       
             let data = {
-                oldpassw: "1234567",
-                password: "1234567",
-                confirmPassword: "1234567"
+                oldpassw: oldpass,
+                password: password,
+                confirmPassword: confirmPassword
             }
-            // let data = {
-            //     oldpassw: oldpass,
-            //     password: password,
-            //     confirmPassword: confirmPassword
-            // }
 
             console.log("data", data)
             const response = await ChangePass_Api(data, isLogin.userData.id, confirmPasswordVisible, setLoading);
@@ -130,7 +125,7 @@ const ChangePasswordScreen = () => {
                     <CustomButton
                         title="Save"
                         onPress={() => validatePasswords()}
-                        buttonStyle={{
+                        style={{
                             alignSelf: 'center',
                             width: "100%"
                         }}
@@ -163,10 +158,10 @@ const styles = StyleSheet.create({
         marginBottom: 15,
         height: 60,
     },
-    input: {
+    2: {
         flex: 1,
         marginLeft: 10,
-        color: '#FF6F43',
+        color: '#000',
     },
 
 });

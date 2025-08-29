@@ -52,7 +52,7 @@ const faqs = [
     },
 ];
 
-const FAQScreen = ({ navigation }) => {
+const FAQScreen = ({ navigation }:any) => {
     const [expandedId, setExpandedId] = useState<string | null>(null);
     const toggleExpand = (id: string) => {
         LayoutAnimation.easeInEaseOut();

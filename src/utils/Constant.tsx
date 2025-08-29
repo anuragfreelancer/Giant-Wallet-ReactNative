@@ -28,7 +28,7 @@ const impactOptions = {
     light_both: 'impactlight',
     medium_both: 'impactMedium',
     heavy_both: 'impactHeavy',
-    rigid_both: 'rigid', 
+    rigid_both: 'rigid',
     soft_both: 'soft',
     notification_success_both: 'notificationSuccess',
     notification_warning_both: 'notificationWarning',

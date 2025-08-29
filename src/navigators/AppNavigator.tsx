@@ -7,13 +7,9 @@ import { PersistGate } from 'redux-persist/integration/react';
 import { persistor, store } from '../redux/store';
 import Toast from 'react-native-toast-message';
 import toastConfig from '../utils/customToast';
-import NetInfo from '@react-native-community/netinfo';
 import NetworkStatusModal from '../compoent/NetworkStatusModal';
 import { LanguageProvider } from '../localization/LanguageContext';
-// import messaging from '@react-native-firebase/messaging';
-import { Alert, PermissionsAndroid, Platform } from 'react-native';
  const AppNavigator: React.FC = () => {
-  const [isConnected, setIsConnected] = useState(true);
   const [modalVisible, setModalVisible] = useState(false);
   // const token =  messaging().getToken();
   // console.log(token)

@@ -6,6 +6,8 @@ import CustomHeader from "../../../compoent/CustomHeader";
 import { fonts } from "../../../constant";
 import { useNavigation } from "@react-navigation/native";
 import ScreenNameEnum from "../../../routes/screenName.enum";
+import { ethers } from "ethers";
+
 
 const tokens = [
   { id: "1", name: "GTAN", fullname: "Giant Token", price: "$ 63,910.82", change: "-1.4%", icon: imageIndex.giantToken },
@@ -18,6 +20,15 @@ const tokens = [
 export default function WalletHome() {
   const navigation = useNavigation()
   const [connected, setConnected] = useState(false)
+
+  // Generate a new random wallet
+  const createWallet = () => {
+    const wallet = ethers.Wallet.createRandom();
+    console.log("Address:", wallet.address);
+    console.log("Private Key:", wallet.privateKey);
+    console.log("Mnemonic:", wallet.mnemonic?.phrase);
+    return wallet;
+  };
   const renderToken = ({ item }) => (
     <View style={styles.tokenRow}>
       <Image source={item.icon} style={styles.tokenIcon} />
@@ -75,14 +86,14 @@ export default function WalletHome() {
           </TouchableOpacity>
         </View>
         :
-        <View style={{ padding: 20, alignItems: 'center'}}>
+        <View style={{ padding: 20, alignItems: 'center' }}>
 
 
           <Text style={styles.tokenFullname}>Current Balance</Text>
-          <Text style={[styles.tokenName, { fontSize: 26 }]}>$ 1500.00</Text>
+          <Text onPress={() => setConnected(true)} style={[styles.tokenName, { fontSize: 26 }]}>$ 1500.00</Text>
 
-          <View style={[styles.iconsRow, { justifyContent: 'space-between',  width: '100%', marginTop: 15 }]}>
-            <TouchableOpacity style={{ alignItems: 'center' }}  onPress={() => navigation.navigate(ScreenNameEnum.SendScreen)}>
+          <View style={[styles.iconsRow, { justifyContent: 'space-between', width: '100%', marginTop: 15 }]}>
+            <TouchableOpacity style={{ alignItems: 'center' }} onPress={() => navigation.navigate(ScreenNameEnum.SendScreen)}>
               <Image source={imageIndex.send} style={[styles.icon, { marginLeft: 0 }]} />
               <Text style={[styles.actionSubtitle1]}>Send</Text>
             </TouchableOpacity>
@@ -90,7 +101,8 @@ export default function WalletHome() {
               <Image source={imageIndex.download} style={[styles.icon, { marginLeft: 0 }]} />
               <Text style={[styles.actionSubtitle1]}>Recieve</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={{ alignItems: 'center' }} onPress={() => navigation.navigate(ScreenNameEnum.BuyScreen)}>
+            {/* <TouchableOpacity style={{ alignItems: 'center' }} onPress={() => navigation.navigate(ScreenNameEnum.BuyScreen)}> */}
+            <TouchableOpacity style={{ alignItems: 'center' }} onPress={() => createWallet()}>
 
               <Image source={imageIndex.imports} style={[styles.icon, { marginLeft: 0 }]} />
               <Text style={[styles.actionSubtitle1]}>Buy</Text>

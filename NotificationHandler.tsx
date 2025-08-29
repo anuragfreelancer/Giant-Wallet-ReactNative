@@ -45,8 +45,8 @@
 //   useEffect(() => {
 //     if (Platform.OS === 'android') {
 //       notifee.createChannel({
-//         id: 'HarjeetOverseas.channel',
-//         name: 'HarjeetOverseas Channel',
+//         id: 'GiantWallet.channel',
+//         name: 'GiantWallet Channel',
 //         importance: AndroidImportance.HIGH,
 //       }).then(() => {
 //         console.log('✅ Notifee channel created');
@@ -63,7 +63,7 @@
 //         title: remoteMessage?.notification?.title || 'New Notification',
 //         body: remoteMessage?.notification?.body || 'You have a new message',
 //         android: {
-//           channelId: 'HarjeetOverseas.channel',
+//           channelId: 'GiantWallet.channel',
 //           importance: AndroidImportance.HIGH,
 //           pressAction: { id: 'default' },
 //         },

@@ -7,7 +7,6 @@ import {
     Text
 } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context';
-import HTML from 'react-native-render-html';
 import Loading from '../../utils/Loader';
 import imageIndex from '../../assets/imageIndex'
 import StatusBarComponent from '../../compoent/StatusBarCompoent';
@@ -15,7 +14,7 @@ import CustomHeader from '../../compoent/CustomHeader';
 import { useNavigation } from '@react-navigation/native';
 import { Policies_Api } from '../../Api/apiRequest';
 import { hp } from '../../utils/Constant';
-const Policy = () => {
+const PrivacyPolicy = () => {
     const [isLoading, setLoading] = useState(false)
     const navigation = useNavigation()
     const [faqData, setFaqData] = useState([])
@@ -77,94 +76,15 @@ const Policy = () => {
                         in accordance with this Privacy Policy.
                         This Privacy Policy has been created with the help of the</Text>
                 </View>
-                {/* {faqData.length != 0 && (
-                )} */}
-
-                {/* {faqData &&
-                    <HTML
-                        source={{ html: faqData?.description || '<p>No content available</p>' }}
-                        contentWidth={width}
-                        tagsStyles={styles.htmlStyles}
-
-                    />
-
-                } */}
-
-                {/* {faqData.length != 0 && (
-                    <Text style={{marginTop:20, color: "black",fontWeight:"800" ,fontSize:18}}>Terms and Conditions</Text>
-                )}
-
-                {faqData &&
-                    <HTML
-                        source={{ html: faqData?.description || '<p>No content available</p>' }}
-                        contentWidth={width}
-                        tagsStyles={styles.htmlStyles}
-
-                    />
-
-                } */}
             </ScrollView>
         </SafeAreaView>
 
     )
 }
-const styles = StyleSheet.create({
-    htmlStyles: {
-        p: {
-            fontSize: 14,
-            color: '#333',
-            lineHeight: 24,
-            textAlign: 'justify',
-            fontWeight: "500",
-            marginTop: 8
-
-        },
-        h1: {
-            fontSize: 22,
-            fontWeight: '500',
-            color: '#000',
-            marginBottom: 10,
-        },
-        h2: {
-            fontSize: 18,
-            fontWeight: '500',
-            color: '#222',
-            marginBottom: 8,
-        },
-        a: {
-            color: '#007bff',
-            // textDecorationLine: 'underline',
-        },
-    },
+const styles = StyleSheet.create({     
     container: {
         flex: 1,
         backgroundColor: '#FFFFFF',
-    },
-    headerContainer: {
-        paddingHorizontal: 16,
-        paddingVertical: 2,
-        backgroundColor: '#FFF',
-        // Add shadow on iOS
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.1,
-        shadowRadius: 2,
-        // Add elevation on Android
-        elevation: 2,
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
-    header: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        height: 70,
-        alignItems: "center",
-        marginHorizontal: 20
-    },
-    headerTitle: {
-        fontSize: 18,
-        fontWeight: '600',
-        color: '#333',
     },
     contentContainer: {
         padding: 12,
@@ -177,20 +97,8 @@ const styles = StyleSheet.create({
         width: '80%',
         height: hp(30),
     },
-    sectionTitle: {
-        fontSize: 20,
-        fontWeight: '700',
-        color: 'black',
-        marginBottom: 10,
-        lineHeight: 30
-    },
-    bodyText: {
-        fontSize: 14,
-        lineHeight: 20,
-        color: '#666',
-        textAlign: 'justify',
-    },
+  
 
 });
 
-export default Policy
+export default PrivacyPolicy

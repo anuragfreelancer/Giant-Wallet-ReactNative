@@ -15,7 +15,7 @@ import { useNavigation } from "@react-navigation/native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import ImagePickerModal from "../../compoent/ImagePickerModal";
 
-const UserDetailsScreen = () => {
+const EditProfile = () => {
   const [fullName, setFullName] = useState('');
   const [email, setEmail] = useState('');
   const [isModalVisible, setIsModalVisible] = useState(false);
@@ -213,4 +213,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default UserDetailsScreen;
+export default EditProfile;

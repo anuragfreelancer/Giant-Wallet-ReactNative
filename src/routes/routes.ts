@@ -9,28 +9,16 @@ import OtpScreen from "../screen/auth/OTPScreen/OtpScreen";
 import PasswordReset from "../screen/auth/PasswordReset/PasswordReset";
 import SignUp from "../screen/auth/Signup/SignUp";
 import Splash from "../screen/auth/Splash";
-import ColorList from "../screen/BottomTab/Dashboard/ColorList";
 import CreatePin from "../screen/BottomTab/Dashboard/CreatePIN/CreatePin";
-import LoanForm from "../screen/BottomTab/Dashboard/LoanForm";
-import SubmittingScreen from "../screen/BottomTab/Dashboard/SubmittingScreen";
-import ProductDetailScreen from "../screen/BottomTab/ProductDetail/ProductDetails";
-import DocumentScreen from "../screen/BottomTab/ProfileTab/DocumentScreen";
-import OrderDetail from "../screen/BottomTab/ProfileTab/OrderDetail";
-import OrderList from "../screen/BottomTab/ProfileTab/OrderHistory";
 import ConfirmSwapScreen from "../screen/BottomTab/swap/ConfirmSwap";
-import About from "../screen/Profile/LegalPoliciesScreen";
 import NotificationsSetting from "../screen/Profile/NotificationsSetting";
-import Policy from "../screen/Profile/Policy";
-import UserDetailsScreen from "../screen/Profile/UserDetailsScreen";
 import ScreenNameEnum from "./screenName.enum";
 import EarnDetail from "../screen/BottomTab/Earn/EarnDetail";
-import ChangePasswordScreen from "../screen/Profile/ChangePassword";
 import DonationScreen from "../screen/BottomTab/Dashboard/Donation";
 import DonationDetailScreen from "../screen/BottomTab/Dashboard/DonationDetail";
 import DonationTrackingDetail from "../screen/BottomTab/Dashboard/TrackingDetail";
 import PaymentDetails from "../screen/BottomTab/Dashboard/Donation/PaymentDetail";
 import Notification from "../screen/Profile/Notification";
-import CurrencyScreen from "../screen/Profile/Currency";
 import FAQScreen from "../screen/Profile/FAQ";
 import BuyScreen from "../screen/BottomTab/Dashboard/Buy/Buy";
 import SellScreen from "../screen/BottomTab/Dashboard/Sell/Sell";
@@ -40,6 +28,7 @@ import SellDetailScreen from "../screen/BottomTab/Dashboard/Sell/SellDetail";
 import SendScreen from "../screen/BottomTab/Dashboard/Buy/send";
 import sendPayment from "../screen/BottomTab/Dashboard/Buy/sendPayment";
 import confirmPayment from "../screen/BottomTab/Dashboard/Buy/confirmPayment";
+import PrivacyPolicy from "../screen/Profile/PrivacyPolicy";
 
 const _routes: any = {
   REGISTRATION_ROUTE: [
@@ -87,6 +76,7 @@ const _routes: any = {
       name: ScreenNameEnum.LocationAllow,
       Component: LocationAllow,
     },
+//Profile 
 
     {
       name: ScreenNameEnum.BottomTabs,
@@ -97,14 +87,6 @@ const _routes: any = {
       Component: CreatePin,
     },
     {
-      name: ScreenNameEnum.ProductDetailScreen,
-      Component: ProductDetailScreen,
-    },
-    {
-      name: ScreenNameEnum.colorList,
-      Component: ColorList,
-    },
-    {
       name: ScreenNameEnum.ConfirmSwapScreen,
       Component: ConfirmSwapScreen,
     },
@@ -112,46 +94,7 @@ const _routes: any = {
       name: ScreenNameEnum.EarnDetail,
       Component: EarnDetail,
     },
-    {
-      name: ScreenNameEnum.LoanForm,
-      Component: LoanForm,
-    },
-    {
-      name: ScreenNameEnum.SubmittingScreen,
-      Component: SubmittingScreen,
-    },
-    {
-      name: ScreenNameEnum.personalInfo,
-      Component: UserDetailsScreen,
-    },
-    {
-      name: ScreenNameEnum.OrederList,
-      Component: OrderList,
-    },
-    {
-      name: ScreenNameEnum.OrderDetail,
-      Component: OrderDetail,
-    },
-    {
-      name: ScreenNameEnum.language,
-      Component: CurrencyScreen,
-    },
-    {
-      name: ScreenNameEnum.DocumentScreen,
-      Component: DocumentScreen,
-    },
-    {
-      name: ScreenNameEnum.About,
-      Component: About,
-    },
-    {
-      name: ScreenNameEnum.Policy,
-      Component: Policy,
-    },
-    {
-      name: ScreenNameEnum.changePassword,
-      Component: ChangePasswordScreen,
-    },
+   
     {
       name: ScreenNameEnum.DonationScreen,
       Component: DonationScreen,

@@ -65,7 +65,7 @@ const OnboardingScreen: React.FC<{ navigation: any }> = ({ navigation }) => {
                     <Text style={styles.skipText}>Skip</Text>
                 </TouchableOpacity>
             </ImageBackground> */}
-            <Text style={styles.title}>{item.title}{index == 0 && <Text style={{color:color.primary}}> HarjeetOverseas</Text> }</Text>
+            <Text style={styles.title}>{item.title}{index == 0 && <Text style={{color:color.primary}}> GiantWallet</Text> }</Text>
             <Text style={styles.description}>{item.description}</Text>
         </View>
     );

@@ -10,45 +10,21 @@ import ScreenNameEnum from '../routes/screenName.enum';
 
 // Define type for navigation params (you can customize this further)
 
-
 export type RegistrationStackParamList = {
   [ScreenNameEnum.SPLASH_SCREEN]: undefined;
   [ScreenNameEnum.OnboardingScreen]: undefined;
   [ScreenNameEnum.ChooseRoleScreen]: undefined;
-  [ScreenNameEnum.ReadyScreen]: undefined;
   [ScreenNameEnum.LoginScreen]: undefined;
   [ScreenNameEnum.SignUpScreen]: undefined;
   [ScreenNameEnum.OtpScreen]: undefined;
   [ScreenNameEnum.CreatePassword]: undefined;
   [ScreenNameEnum.PasswordReset]: undefined;
-  [ScreenNameEnum.DrawerNavgation]: undefined;
   [ScreenNameEnum.DashBoardScreen]: undefined;
-  [ScreenNameEnum.DashBoardDetail]: undefined;
-  [ScreenNameEnum.PatientScreen]: undefined;
-  [ScreenNameEnum.NewTripScreen]: undefined;
-  [ScreenNameEnum.AddPatient]: undefined;
-  [ScreenNameEnum.AddContract]: undefined;
-  [ScreenNameEnum.AddDriver]: undefined;
-  [ScreenNameEnum.SuccessScreen]: undefined;
-  [ScreenNameEnum.MapScreen]: undefined;
-  [ScreenNameEnum.Billing]: undefined;
   [ScreenNameEnum.setting]: undefined;
   [ScreenNameEnum.language]: undefined;
-  [ScreenNameEnum.personalInfo]: undefined;
   [ScreenNameEnum.changePassword]: undefined;
-
-  // Driver screens
-  [ScreenNameEnum.DriverHome]: undefined;
-  [ScreenNameEnum.TripDetail]: undefined;
-  [ScreenNameEnum.TripSuccess]: undefined;
-  [ScreenNameEnum.TripMap]: undefined;
-  [ScreenNameEnum.CaptureDoc]: undefined;
-  [ScreenNameEnum.CaptureSuccess]: undefined;
-  [ScreenNameEnum.Patient_Driver]: undefined;
-  [ScreenNameEnum.RaceDetail]: undefined;
-  "DrawerNavDriver":undefined;
-  "DrawerNav":undefined;
-
+  "DrawerNavDriver": undefined;
+  "DrawerNav": undefined;
 };
 
 const Stack = createNativeStackNavigator<RegistrationStackParamList>();
