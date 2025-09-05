@@ -5,8 +5,8 @@ import { hp, wp } from "../../../../utils/Constant";
 
 export const styles = StyleSheet.create({
   container: {
-    // backgroundColor: '#FFF',
-    paddingHorizontal: 15,
+    backgroundColor: '#FFF',
+    paddingHorizontal: 25,
     flex: 1,
   },
   safeArea: {
@@ -22,21 +22,27 @@ export const styles = StyleSheet.create({
     height: 32,
     width: 32,
   },
-   txtHeading: {
-    fontFamily:fonts.bold,
-    fontSize: 24,
-    lineHeight: 36,
-    color: 'rgba(0, 0, 0, 1)',
-    marginTop: 55,
-    textAlign:'center'
+ 
+  logo: {
+    height: hp(10),
+    width: hp(10),
+    marginBottom: 10,
+    marginTop:70
   },
-   txtDes:{
-        color:'#9DB2BF',
-        fontSize:14,
-        fontFamily:fonts.regular,
-        marginTop:15,
-        textAlign:'center'
-      },
+    txtHeading: {
+    fontSize: 30,
+    lineHeight: 45,
+    color: color.black,
+    marginTop: 7,
+    fontFamily:fonts.bold
+  },
+  txtDes:{
+    color:'#9DB2BF',
+    fontSize:14,
+    fontFamily:fonts.regular,
+    marginVertical:15,
+    marginLeft:5
+  },
   headerSection: {
     height: hp(15),
     marginTop: 5,

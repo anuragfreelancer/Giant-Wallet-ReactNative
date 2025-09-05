@@ -32,25 +32,31 @@ export const usePasswordReset = () => {
 
   const passFunction = async () => {
     try {
-     const trimmedPhone = phone.trim();
+     const trimmedEmail = email.trim();
+if (trimmedEmail === '') {
+      setEmailError(localizationStrings.emailRequired);
+      return;
+    }
 
+    if (!emailRegex.test(trimmedEmail)) {
+      setEmailError(localizationStrings.emailError);
+      return
+    } else {
+      setEmailError('');
+    }
     
-      const isPhoneValid = /^[0-9]{10,15}$/.test(trimmedPhone.replace(/[^0-9]/g, ''));
+      // const isPhoneValid = /^[0-9]{10,15}$/.test(trimmedPhone.replace(/[^0-9]/g, ''));
 
-     
 
-      
-   
+      const params = {
+        email:email,
+        type:"otp",
+        navigation,
+      };
 
-      // const params = {
-      //   [type]: contactValue,
-      //   type,
-      //   navigation,
-      // };
-
-      // console.log(params);
-      // await restEmailOtpScreen(params, setLoading);
-       navigation.navigate(ScreenNameEnum.OtpScreen)
+      console.log(params);
+      await restEmailOtpScreen(params, setLoading);
+      //  navigation.navigate(ScreenNameEnum.OtpScreen)
     } catch (error) {
       console.error('OTP error:', error);
     }

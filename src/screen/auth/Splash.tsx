@@ -22,17 +22,11 @@ const Splash: React.FC = () => {
   const isLogin = useSelector((state: any) => state.auth);
   const isFocus = useIsFocused();
   const checkLogout = async () => {
-    // if (isLogin?.isLogin) {
-    //   const userType = await AsyncStorage.getItem('userType');
-    //   if (userType == "User") {
-    //     navigation.replace('DrawerNav');
-    //   } else {
-    //     navigation.replace('DrawerNavDriver');
-
-    //   }
-    // } else {
+    if (isLogin?.token) {
+      navigation.replace(ScreenNameEnum.VerifyPin);
+    } else {
       navigation.replace(ScreenNameEnum.LoginScreen);
-    // }
+    }
   };
 
   useEffect(() => {
@@ -47,7 +41,7 @@ const Splash: React.FC = () => {
     <View style={styles.container}>
       <StatusBar barStyle={'light-content'} />
       <SafeAreaView>
-       
+
         <Image source={imageIndex.logo} style={styles.logo} resizeMode="contain" />
       </SafeAreaView>
     </View>

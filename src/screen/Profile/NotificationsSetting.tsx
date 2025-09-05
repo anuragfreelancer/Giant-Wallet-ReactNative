@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { View, Text, Switch, FlatList, StyleSheet } from "react-native";
+import { View, Text, FlatList, StyleSheet } from "react-native";
 import CustomHeader from "../../compoent/CustomHeader";
 import imageIndex from "../../assets/imageIndex";
 import { SafeAreaView } from "react-native-safe-area-context";

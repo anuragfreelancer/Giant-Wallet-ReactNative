@@ -15,20 +15,16 @@ import {
   useBlurOnFulfill,
   useClearByFocusCell,
 } from 'react-native-confirmation-code-field';
-import Loading from '../../../utils/Loader';
-import imageIndex from '../../../assets/imageIndex';
-import CustomButton from '../../../compoent/CustomButton';
-import StatusBarComponent from '../../../compoent/StatusBarCompoent';
-import { otp_Verify } from '../../../Api/apiRequest';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import localizationStrings from '../../../localization/LocalizationString';
 import { styles } from './style';
-import { useOtpVerification } from './useOTPVerivication';
-import CustomBackHeader from '../../../compoent/CustomBackHeader';
-import { hp } from '../../../utils/Constant';
-import ScreenNameEnum from '../../../routes/screenName.enum';
-
-export default function OtpScreen() {
+import { useCreatePin } from './useCreatePin';
+import StatusBarComponent from '../../../../compoent/StatusBarCompoent';
+import LoadingModal from '../../../../utils/Loader';
+import CustomButton from '../../../../compoent/CustomButton';
+import imageIndex from '../../../../assets/imageIndex';
+import ScreenNameEnum from '../../../../routes/screenName.enum';
+import { hp } from '../../../../utils/Constant';
+export default function CreatePinConfirm() {
   const {
     value,
     isLoading,
@@ -37,26 +33,25 @@ export default function OtpScreen() {
     props,
     getCellOnLayoutHandler,
     handleChangeText,
-    handleVerifyOTP,
+    handleVerifyPIN,
     navigation,
-    from
-  } = useOtpVerification()
+    type
+  } = useCreatePin()
+
   return (
     <SafeAreaView
       style={{ flex: 1, backgroundColor: "#fff" }}
 
     >
       <View style={styles.container}>
-        {isLoading && <Loading />}
+        {isLoading && <LoadingModal />}
         <StatusBarComponent />
         <ScrollView showsVerticalScrollIndicator={false}>
-          <CustomBackHeader menuIcon={imageIndex.back} label={""} />
-
-          <View style={styles.headerSection}>
-            <Text style={styles.txtHeading}>Check your mail </Text>
-            <Text style={styles.txtDes}>Please put the 4 digits sent to you
-            </Text>
-          </View>
+           <Image source={imageIndex.appLogo} style={styles.logo} resizeMode='contain' />
+                  
+            <Text style={styles.txtHeading}>Confirm Pin</Text>
+            <Text style={styles.txtDes}>Please confirm the 4 digits Set Login Pin
+           </Text>
 
           <View style={styles.otpFieldContainer}>
             <CodeField
@@ -80,24 +75,23 @@ export default function OtpScreen() {
             />
             {errorMessage ? <Text style={styles.errorText}>{errorMessage}</Text> : null}
           </View>
-          <Image source={imageIndex.otp} style={{ width: '80%', height: hp(30), alignSelf: 'center', marginBottom: 30 }} />
+
+           <Image source={imageIndex.otp} style={{ width: '80%', height: hp(30), alignSelf: 'center', marginBottom: 30 }} />
+          
+          <CustomButton
+            title={"Save"}
+//             onPress={() => {
+// navigation.navigate(ScreenNameEnum.BottomTabs)
+//             }
+//             }
+            onPress={handleVerifyPIN}
+            style={styles.submitButton}
+          />
 
         </ScrollView>
 
-        <CustomButton
-          title={"Submit"}
-          onPress={() => {
-            handleVerifyOTP()
-            //   if (from == "signup") {
-            //   navigation.navigate(ScreenNameEnum.LocationAllow)
-            // } else {
-            //   navigation.navigate(ScreenNameEnum.CreatePassword)
-            // }
-          }
-          }
-          // onPress={handleVerifyOTP}
-          style={styles.submitButton}
-        />
+
+
       </View>
     </SafeAreaView>
   );

@@ -12,7 +12,7 @@ export const useCreateNewPassword = () => {
 
   const navigation = useNavigation();
   const route = useRoute();
-  const { userId } = route?.params || {};
+  const { email } = route?.params || {};
 
   const handlePassText = (text: string) => {
     setPassword(text);
@@ -42,8 +42,9 @@ export const useCreateNewPassword = () => {
 
     try {
       const params = {
-        userId,
+        email,
         navigation,
+        password,
         confirmPassword,
       };
 

@@ -30,7 +30,8 @@ export default function Login() {
     loading,
     handleEmailChange,
     handlePasswordChange,
-    navigation
+    navigation,
+    handleLogin
   } = useLogin();
   return (
     <SafeAreaView
@@ -50,9 +51,8 @@ export default function Login() {
               value={email}
               onChangeText={handleEmailChange}
               keyboardType='email-address'
-
             />
-            {/* {emailError ? <Text style={styles.errorText}>{emailError}</Text> : null} */}
+            {emailError ? <Text style={styles.errorText}>{emailError}</Text> : null}
 
             <CustomInput
               placeholder={'Password'}
@@ -61,7 +61,7 @@ export default function Login() {
               value={password}
               onChangeText={handlePasswordChange}
             />
-            {/* {passwordError ? <Text style={styles.errorText}>{passwordError}</Text> : null} */}
+            {passwordError ? <Text style={styles.errorText}>{passwordError}</Text> : null}
 
             <TouchableOpacity
               onPress={() => navigation.navigate(ScreenNameEnum.PasswordReset)}
@@ -72,8 +72,9 @@ export default function Login() {
 
           <CustomButton
             title={"Login"}
-            onPress={() => navigation.navigate(ScreenNameEnum.BottomTabs)}
-          // onPress={handleLogin}
+            // onPress={() => navigation.navigate(ScreenNameEnum.BottomTabs)}
+            // onPress={() => navigation.navigate(ScreenNameEnum.CreatePin)}
+          onPress={handleLogin}
           />
 
           <View style={styles.signupContainer}>

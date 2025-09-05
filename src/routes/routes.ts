@@ -29,6 +29,14 @@ import SendScreen from "../screen/BottomTab/Dashboard/Buy/send";
 import sendPayment from "../screen/BottomTab/Dashboard/Buy/sendPayment";
 import confirmPayment from "../screen/BottomTab/Dashboard/Buy/confirmPayment";
 import PrivacyPolicy from "../screen/Profile/PrivacyPolicy";
+import CreatePinConfirm from "../screen/BottomTab/Dashboard/CreatePIN/CreatePinConfirm";
+import EditProfile from "../screen/Profile/EditProfile";
+import ChangePasswordScreen from "../screen/Profile/ChangePassword";
+import CurrencyScreen from "../screen/Profile/Currency";
+import AboutUs from "../screen/Profile/AboutUs";
+import ImportWallet from "../screen/BottomTab/Dashboard/ImportWallet";
+import VerifyPin from "../screen/BottomTab/Dashboard/CreatePIN/VerifyPin";
+import CointDetail from "../screen/BottomTab/Dashboard/CointDetail";
 
 const _routes: any = {
   REGISTRATION_ROUTE: [
@@ -77,7 +85,26 @@ const _routes: any = {
       Component: LocationAllow,
     },
 //Profile 
-
+    {
+      name: ScreenNameEnum.EditProfile,
+      Component: EditProfile,
+    },
+    {
+      name: ScreenNameEnum.changePassword,
+      Component: ChangePasswordScreen,
+    },
+    {
+      name: ScreenNameEnum.language,
+      Component: CurrencyScreen,
+    },
+    {
+      name: ScreenNameEnum.About,
+      Component: AboutUs,
+    },
+    {
+      name: ScreenNameEnum.PrivacyPolicy,
+      Component: PrivacyPolicy,
+    },
     {
       name: ScreenNameEnum.BottomTabs,
       Component: BottomTabs,
@@ -85,6 +112,22 @@ const _routes: any = {
     {
       name: ScreenNameEnum.CreatePin,
       Component: CreatePin,
+    },
+    {
+      name: ScreenNameEnum.CreatePinConfirm,
+      Component: CreatePinConfirm,
+    },
+    {
+      name: ScreenNameEnum.VerifyPin,
+      Component: VerifyPin,
+    },
+    {
+      name: ScreenNameEnum.importWallet,
+      Component: ImportWallet,
+    },
+    {
+      name: ScreenNameEnum.cointDetail,
+      Component: CointDetail,
     },
     {
       name: ScreenNameEnum.ConfirmSwapScreen,

@@ -21,6 +21,7 @@ export default function TokenInputCard({
   usdValue,
   onChangeAmount,
   onSelectToken,
+  image
 }: Props) {
   return (
     <View style={styles.container}>
@@ -32,10 +33,18 @@ export default function TokenInputCard({
         {/* Left Token Section */}
         <TouchableOpacity style={styles.tokenBox} onPress={onSelectToken}>
           {/* Example ETH Logo (replace with your asset) */}
+         {image ?
+         <Image
+            source={{uri:image}}
+            style={styles.tokenIcon}
+          />
+          :
           <Image
             source={imageIndex.etherum}
             style={styles.tokenIcon}
           />
+        }
+          
           <View style={{flexDirection:'row', alignItems:'center', marginTop:5}}>
           <Text style={styles.tokenText}>{token}</Text>
           <Image source={imageIndex.down} style={{height:22, width:22}}/>

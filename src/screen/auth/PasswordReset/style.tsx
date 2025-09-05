@@ -9,11 +9,12 @@ export const styles = StyleSheet.create({
     buttonContainer: {
         flexDirection: 'row',
         width: '100%',
-        marginTop: 30,
+        marginTop: 50,
         borderWidth: 1.8,
         borderRadius: 20,
         borderColor: color.primary,
-        paddingVertical: 15
+        paddingVertical: 15,
+      
     },
     bottomButton: {
         flex: 1,

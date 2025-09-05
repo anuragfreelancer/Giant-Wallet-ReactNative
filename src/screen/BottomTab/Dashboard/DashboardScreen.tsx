@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { View, Text, StyleSheet, Image, FlatList, TouchableOpacity } from "react-native";
+import React, { useEffect, useState } from "react";
+import { View, Text, StyleSheet, Image, FlatList, TouchableOpacity, Alert, StatusBar } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import imageIndex from "../../../assets/imageIndex";
 import CustomHeader from "../../../compoent/CustomHeader";
@@ -7,7 +7,8 @@ import { fonts } from "../../../constant";
 import { useNavigation } from "@react-navigation/native";
 import ScreenNameEnum from "../../../routes/screenName.enum";
 import { ethers } from "ethers";
-
+import Clipboard from "@react-native-clipboard/clipboard";
+import { Fetch_CointAPI } from "../../../Api/apiRequest";
 
 const tokens = [
   { id: "1", name: "GTAN", fullname: "Giant Token", price: "$ 63,910.82", change: "-1.4%", icon: imageIndex.giantToken },
@@ -20,31 +21,58 @@ const tokens = [
 export default function WalletHome() {
   const navigation = useNavigation()
   const [connected, setConnected] = useState(false)
+  const [coins, setCoins] = useState([]);
+const [loading, setLoading] = useState(false)
+  useEffect(() => {
+    fetchCoins();
+  }, []);
 
+  const fetchCoins = async () => {
+   const data = await Fetch_CointAPI(setLoading)
+   setCoins(data)
+  };
   // Generate a new random wallet
   const createWallet = () => {
     const wallet = ethers.Wallet.createRandom();
     console.log("Address:", wallet.address);
     console.log("Private Key:", wallet.privateKey);
     console.log("Mnemonic:", wallet.mnemonic?.phrase);
+    Alert.alert(
+      "Wallet Created",
+      `Address: ${wallet.address}\n\nMnemonic: ${wallet.mnemonic?.phrase}`,
+      [
+        {
+          text: "Copy Mnemonic",
+          onPress: () => {
+
+            Clipboard.setString(wallet.mnemonic?.phrase || "")
+            setConnected(true)
+          }
+
+        },
+        { text: "OK" },
+      ]
+    );
     return wallet;
   };
   const renderToken = ({ item }) => (
-    <View style={styles.tokenRow}>
-      <Image source={item.icon} style={styles.tokenIcon} />
+    <TouchableOpacity style={styles.tokenRow} onPress={()=>navigation.navigate(ScreenNameEnum.cointDetail, {id:item?.id})}>
+      <Image source={{ uri: item.image }} style={styles.tokenIcon} />
       <View style={styles.tokenInfo}>
-        <Text style={styles.tokenName}>{item.name}</Text>
-        <Text style={styles.tokenFullname}>{item.fullname}</Text>
+        {/* <Text style={styles.tokenName}>{item.name}</Text> */}
+        <Text style={styles.tokenName}>{item.symbol.toUpperCase()}</Text>
+        <Text style={styles.tokenFullname}>{item.name}</Text>
       </View>
       <View style={styles.tokenPriceSection}>
-        <Text style={styles.tokenPrice}>{item.price}</Text>
-        <Text style={styles.tokenChange}>{item.change}</Text>
+        <Text style={styles.tokenPrice}>${parseFloat(item.current_price)}</Text>
+        <Text style={[styles.tokenChange, { color: item.price_change_percentage_24h >= 0 ? "green" : "red" },]}>{parseFloat(item.price_change_percentage_24h).toFixed(2)}%</Text>
       </View>
-    </View>
+    </TouchableOpacity>
   );
 
   return (
     <SafeAreaView style={styles.container}>
+      <StatusBar barStyle={'dark-content'} backgroundColor={'#fff'}/>
       {/* Header */}
       <View style={styles.header}>
         <View style={{ flexDirection: 'row' }}>
@@ -67,9 +95,9 @@ export default function WalletHome() {
       </View>
 
       {/* Wallet Actions */}
-      {connected ?
-        <View>
-          <TouchableOpacity style={styles.actionCard} onPress={() => navigation.navigate(ScreenNameEnum.CreatePin)}>
+      {connected == false ?
+        <View style={{ marginTop: 25, marginBottom: 10 }}>
+          <TouchableOpacity style={styles.actionCard} onPress={() => createWallet()}>
             <Image source={imageIndex.add} style={styles.actionIcon} />
             <View>
               <Text style={styles.actionTitle}>Create new wallet</Text>
@@ -77,7 +105,7 @@ export default function WalletHome() {
             </View>
           </TouchableOpacity>
 
-          <TouchableOpacity style={styles.actionCard} onPress={() => navigation.navigate(ScreenNameEnum.BuyScreen)}>
+          <TouchableOpacity style={styles.actionCard} onPress={() => navigation.navigate(ScreenNameEnum.importWallet)}>
             <Image source={imageIndex.download} style={styles.actionIcon} />
             <View>
               <Text style={styles.actionTitle}>Add existing wallet</Text>
@@ -90,8 +118,7 @@ export default function WalletHome() {
 
 
           <Text style={styles.tokenFullname}>Current Balance</Text>
-          <Text onPress={() => setConnected(true)} style={[styles.tokenName, { fontSize: 26 }]}>$ 1500.00</Text>
-
+          <Text onPress={() => setConnected(false)} style={[styles.tokenName, { fontSize: 26 }]}>$ 1500.00</Text>
           <View style={[styles.iconsRow, { justifyContent: 'space-between', width: '100%', marginTop: 15 }]}>
             <TouchableOpacity style={{ alignItems: 'center' }} onPress={() => navigation.navigate(ScreenNameEnum.SendScreen)}>
               <Image source={imageIndex.send} style={[styles.icon, { marginLeft: 0 }]} />
@@ -103,7 +130,6 @@ export default function WalletHome() {
             </TouchableOpacity>
             {/* <TouchableOpacity style={{ alignItems: 'center' }} onPress={() => navigation.navigate(ScreenNameEnum.BuyScreen)}> */}
             <TouchableOpacity style={{ alignItems: 'center' }} onPress={() => createWallet()}>
-
               <Image source={imageIndex.imports} style={[styles.icon, { marginLeft: 0 }]} />
               <Text style={[styles.actionSubtitle1]}>Buy</Text>
             </TouchableOpacity>
@@ -119,7 +145,7 @@ export default function WalletHome() {
       {/* Popular Tokens */}
       <Text style={styles.sectionTitle}>Popular tokens</Text>
       <FlatList
-        data={tokens}
+        data={coins}
         renderItem={renderToken}
         keyExtractor={(item) => item.id}
         showsVerticalScrollIndicator={false}
@@ -136,7 +162,6 @@ const styles = StyleSheet.create({
   welcome: { fontSize: 16, fontFamily: fonts.bold, color: "#000" },
   iconsRow: { flexDirection: "row" },
   icon: { width: 40, height: 40, marginLeft: 12 },
-
   actionCard: {
     flexDirection: "row",
     alignItems: "center",
@@ -161,7 +186,7 @@ const styles = StyleSheet.create({
     borderBottomColor: "#eee",
     paddingHorizontal: 5
   },
-  tokenIcon: { width: 35, height: 35, marginRight: 12 },
+  tokenIcon: { width: 36, height: 36, marginRight: 12, borderRadius: 0, },
   tokenInfo: { flex: 1 },
   tokenName: { fontSize: 15, color: "#000", fontFamily: fonts.bold },
   tokenFullname: { fontSize: 13, color: "#666", fontFamily: fonts.regular },

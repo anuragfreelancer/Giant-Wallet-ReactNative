@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
     View,
     Text,
@@ -13,6 +13,9 @@ import { useNavigation } from "@react-navigation/native";
 import imageIndex from "../../assets/imageIndex";
 import { color, fonts } from "../../constant";
 import { wp } from "../../utils/Constant";
+import { logout } from "../../redux/feature/authSlice";
+import { useDispatch } from "react-redux";
+import LogoutModal from "../../compoent/LogoutModal";
 
 // Sample data (use local icons/images in ./assets/)
 const menuItems = [
@@ -22,16 +25,27 @@ const menuItems = [
     { id: "4", title: "Notification", screen: ScreenNameEnum.NotificationsSetting },
     { id: "5", title: "FAQ", screen: ScreenNameEnum.FAQScreen },
     { id: "6", title: "About us", screen: ScreenNameEnum.About },
-    { id: "7", title: "Privacy Policy", screen: ScreenNameEnum.Policy },
+    { id: "7", title: "Privacy Policy", screen: ScreenNameEnum.PrivacyPolicy },
     { id: "8", title: "Logout", },
 ];
 
 const ProfileScreen = () => {
     const navigation = useNavigation()
-    const renderItem = ({ item }:any) => (
+const dispatch = useDispatch()
+  const [isModalVisible, setModalVisible] = useState(false);
+      const handleLogout = () => {
+    dispatch(logout());
+    setModalVisible(false);
+    // AsyncStorage.removeItem('userRole');  // AsyncStorage में save
+    navigation.replace(ScreenNameEnum.LoginScreen);
+    // successToast(localizationStrings.logoutSuccess);
+  };
+    const renderItem = ({ item }: any) => (
         <TouchableOpacity
             style={styles.card}
-            onPress={() => item?.screen ? navigation.navigate(item.screen) : {}}
+            onPress={() => item?.screen ? navigation.navigate(item.screen) :
+                item?.title == "Logout" && setModalVisible(true)
+            }
         >
 
             <Text style={styles.cardText}>{item.title}</Text>
@@ -69,6 +83,14 @@ const ProfileScreen = () => {
                     contentContainerStyle={styles.flatListContent}
                 />
             </View>
+
+             <LogoutModal
+        visible={isModalVisible}
+        onClose={() => setModalVisible(false)}
+        onConfirm={() => {
+          handleLogout()
+        }}
+      />
         </SafeAreaView>
     );
 };

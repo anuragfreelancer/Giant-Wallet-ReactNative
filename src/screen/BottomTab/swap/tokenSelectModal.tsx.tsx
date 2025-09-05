@@ -38,7 +38,7 @@ const tokens = [
   { id: "5", name: "BNB", fullname: "BNB Smart Chain", price: "$ 23.00", change: "-1.4%", icon: imageIndex.bnb },
 ];
 
-export default function TokenSelectModal({ visible, onClose, onSelect }: Props) {
+export default function TokenSelectModal({ visible, onClose, onSelect, currentToken }: Props) {
 const navigation =useNavigation()
     const renderToken = ({ item }) => (
       <TouchableOpacity onPress={()=>{

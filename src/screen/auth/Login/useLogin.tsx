@@ -62,7 +62,7 @@ const handleLogin = async () => {
       const params = {
         email,
         password,
-        roleType: role,
+        // roleType: role,
         navigation,
         token,
       };

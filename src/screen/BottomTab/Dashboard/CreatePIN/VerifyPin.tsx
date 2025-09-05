@@ -2,33 +2,24 @@ import {
   View,
   Text,
   Image,
-  TouchableOpacity,
-  StyleSheet,
   ScrollView,
-  KeyboardAvoidingView,
-  ImageBackground,
 } from 'react-native';
-import React, { useState } from 'react';
+import React from 'react';
 import {
   CodeField,
   Cursor,
-  useBlurOnFulfill,
-  useClearByFocusCell,
 } from 'react-native-confirmation-code-field';
-import Loading from '../../../utils/Loader';
-import imageIndex from '../../../assets/imageIndex';
-import CustomButton from '../../../compoent/CustomButton';
-import StatusBarComponent from '../../../compoent/StatusBarCompoent';
-import { otp_Verify } from '../../../Api/apiRequest';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import localizationStrings from '../../../localization/LocalizationString';
 import { styles } from './style';
-import { useOtpVerification } from './useOTPVerivication';
-import CustomBackHeader from '../../../compoent/CustomBackHeader';
-import { hp } from '../../../utils/Constant';
-import ScreenNameEnum from '../../../routes/screenName.enum';
-
-export default function OtpScreen() {
+import { useCreatePin } from './useCreatePin';
+import StatusBarComponent from '../../../../compoent/StatusBarCompoent';
+import LoadingModal from '../../../../utils/Loader';
+import CustomButton from '../../../../compoent/CustomButton';
+import imageIndex from '../../../../assets/imageIndex';
+import ScreenNameEnum from '../../../../routes/screenName.enum';
+import { hp } from '../../../../utils/Constant';
+import { useSelector } from 'react-redux';
+export default function VerifyPin() {
   const {
     value,
     isLoading,
@@ -37,26 +28,24 @@ export default function OtpScreen() {
     props,
     getCellOnLayoutHandler,
     handleChangeText,
-    handleVerifyOTP,
+    handleVerifyPIN,
     navigation,
-    from
-  } = useOtpVerification()
+    verifyLogin
+  } = useCreatePin()
+
   return (
     <SafeAreaView
       style={{ flex: 1, backgroundColor: "#fff" }}
-
     >
       <View style={styles.container}>
-        {isLoading && <Loading />}
+        {isLoading && <LoadingModal />}
         <StatusBarComponent />
         <ScrollView showsVerticalScrollIndicator={false}>
-          <CustomBackHeader menuIcon={imageIndex.back} label={""} />
+          <Image source={imageIndex.appLogo} style={styles.logo} resizeMode='contain' />
 
-          <View style={styles.headerSection}>
-            <Text style={styles.txtHeading}>Check your mail </Text>
-            <Text style={styles.txtDes}>Please put the 4 digits sent to you
-            </Text>
-          </View>
+          <Text style={styles.txtHeading}>Verify Pin</Text>
+          <Text style={styles.txtDes}>Please put the 4 digits Set Login Pin
+          </Text>
 
           <View style={styles.otpFieldContainer}>
             <CodeField
@@ -67,6 +56,7 @@ export default function OtpScreen() {
               cellCount={4}
               keyboardType="number-pad"
               textContentType="oneTimeCode"
+              
               renderCell={({ index, symbol, isFocused }) => (
                 <View key={index} style={styles.cellWrapper}>
                   <Text
@@ -81,23 +71,19 @@ export default function OtpScreen() {
             {errorMessage ? <Text style={styles.errorText}>{errorMessage}</Text> : null}
           </View>
           <Image source={imageIndex.otp} style={{ width: '80%', height: hp(30), alignSelf: 'center', marginBottom: 30 }} />
+          <CustomButton
+            title={"Verify"}
+            onPress={() => {
+              verifyLogin()
+            }}
+            // onPress={handleVerifyOTP}
+            style={styles.submitButton}
+          />
 
         </ScrollView>
 
-        <CustomButton
-          title={"Submit"}
-          onPress={() => {
-            handleVerifyOTP()
-            //   if (from == "signup") {
-            //   navigation.navigate(ScreenNameEnum.LocationAllow)
-            // } else {
-            //   navigation.navigate(ScreenNameEnum.CreatePassword)
-            // }
-          }
-          }
-          // onPress={handleVerifyOTP}
-          style={styles.submitButton}
-        />
+
+
       </View>
     </SafeAreaView>
   );

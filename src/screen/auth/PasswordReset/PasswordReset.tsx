@@ -37,7 +37,7 @@ export default function PasswordReset() {
                 <Text style={styles.descriptionText}>Please put your mobile number to reset your password</Text>
               </View>
             </View>
-            <View style={styles.buttonContainer}>
+            {/* <View style={styles.buttonContainer}>
               <View style={styles.bottomButton}>
                 <Image source={imageIndex.sms} style={styles.buttonImage} />
                 <View style={styles.inputContainer}>
@@ -52,7 +52,7 @@ export default function PasswordReset() {
                   />
                 </View>
               </View>
-            </View>
+            </View> */}
              <View style={styles.buttonContainer}>
               <View style={styles.bottomButton}>
                 <Image source={imageIndex.mailCircle} style={styles.buttonImage} />
@@ -60,8 +60,8 @@ export default function PasswordReset() {
                   <Text style={styles.buttonText}>Email</Text>
                   <TextInput
                     placeholder='emample@gmail.com'
-                    value={phone}
-                    onChangeText={setPhone}
+                    value={email}
+                    onChangeText={handleIdentityText}
                     placeholderTextColor='rgba(173, 164, 165, 1)'
                     style={styles.textInput}
                     keyboardType='email-address'
@@ -69,6 +69,8 @@ export default function PasswordReset() {
                 </View>
               </View>
             </View>
+                        {emailError ? <Text style={styles.errorText}>{emailError}</Text> : null}
+            
   <Image source={imageIndex.smsImg} style={{width:'80%', height:hp(28), alignSelf:'center', marginTop:30}}/>
 
           </ScrollView>

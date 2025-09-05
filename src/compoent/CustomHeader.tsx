@@ -34,7 +34,6 @@ const CustomHeader: React.FC<Props> = ({ rightIcons = [], menuIcon, label , left
           {item?.type == "text"?
             <TouchableOpacity  key={index.toString()} onPress={item.onPress}>
             <Image source={imageIndex.notification} style={styles.iconR1} resizeMode="cover" />
-         
           </TouchableOpacity>
         :
           <TouchableOpacity key={index.toString()} onPress={item.onPress}>

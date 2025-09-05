@@ -95,7 +95,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#f0f0f0",
   },
   logoutButton: {
-    backgroundColor: color.buttonColor,
+    backgroundColor: color.primary,
   },
   buttonText: {
     fontSize: 16,

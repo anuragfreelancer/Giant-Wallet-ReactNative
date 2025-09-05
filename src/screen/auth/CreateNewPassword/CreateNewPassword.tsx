@@ -61,7 +61,7 @@ export default function CreatePassword() {
               onChangeText={handlePassText}
               secureTextEntryToggle
             />
-            {/* {passwordError ? <Text style={styles.errorText}>{passwordError}</Text> : null} */}
+            {passwordError ? <Text style={styles.errorText}>{passwordError}</Text> : null}
            
             <CustomInput
               placeholder={"Confirm Password"}
@@ -70,15 +70,15 @@ export default function CreatePassword() {
               onChangeText={handleCPassText}
               secureTextEntryToggle
             />
-            {/* {confirmPasswordError ? <Text style={styles.errorText}>{confirmPasswordError}</Text> : null} */}
+            {confirmPasswordError ? <Text style={styles.errorText}>{confirmPasswordError}</Text> : null}
           </View>
             {/* <Text style={[styles.description, {marginTop:15}]}>Alphanumeric and 8 characters in length</Text> */}
 
         </ScrollView>
 
         <CustomButton title={"Submit"} 
-        // onPress={handleSetPassword} 
-        onPress={()=>navigation.navigate(ScreenNameEnum.LoginScreen)}
+        onPress={handleSetPassword} 
+        // onPress={()=>navigation.navigate(ScreenNameEnum.LoginScreen)}
         />
       </SafeAreaView>
   );

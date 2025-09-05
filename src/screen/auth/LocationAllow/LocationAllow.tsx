@@ -26,6 +26,7 @@ import CustomBackHeader from '../../../compoent/CustomBackHeader';
 import { color } from '../../../constant';
 import ScreenNameEnum from '../../../routes/screenName.enum';
 import { hp } from '../../../utils/Constant';
+import { getLocation } from '../../../helper/helperFunction';
 
 export default function LocationAllow() {
   const {
@@ -39,30 +40,41 @@ export default function LocationAllow() {
     handleSetPassword,
     navigation
   } = useCreateNewPassword()
-
+  const [coords, setCoords] = useState<{
+    latitude: number;
+    longitude: number;
+  } | null>(null);
+  const fetchLocation = async () => {
+    try {
+      const location = await getLocation();
+      if (location) {
+        setCoords(location);
+        console.log(location, 'this is home');
+        navigation.navigate(ScreenNameEnum.CreatePin)
+      }
+    } catch (error) {
+      console.log('Error fetching location:', error);
+    }
+  };
   return (
-   
-      <SafeAreaView style={styles.container}>
-        <StatusBarComponent />
-        {isLoading && <Loading />}
-        <CustomBackHeader menuIcon={imageIndex.back} label={""} /> 
 
-        <ScrollView showsVerticalScrollIndicator={false}>
-          <View style={styles.headerContainer}>
-            <Text style={styles.title}>What is Your Location?</Text>
-            <Text style={styles.description}>Weyourbocation to slow evalu restaurant & products</Text>
-          </View>
-  <Image source={imageIndex.locationImg} style={{width:'80%', height:hp(55), alignSelf:'center', marginBottom:30, resizeMode:'contain'}}/>
+    <SafeAreaView style={styles.container}>
+      <StatusBarComponent />
+      {isLoading && <Loading />}
+      <CustomBackHeader menuIcon={imageIndex.back} label={""} />
+      <ScrollView showsVerticalScrollIndicator={false}>
+        <View style={styles.headerContainer}>
+          <Text style={styles.title}>What is Your Location?</Text>
+          <Text style={styles.description}>Allow location access to discover nearby foundations and donation opportunities around you.</Text>
+        </View>
+        <Image source={imageIndex.locationImg} style={{ width: '80%', height: hp(55), alignSelf: 'center', marginBottom: 30, resizeMode: 'contain' }} />
+      </ScrollView>
 
-        
-        </ScrollView>
-
-        <CustomButton title={"Allow Location Access"} 
-        // onPress={handleSetPassword} 
-        // onPress={()=>navigation.navigate(ScreenNameEnum.LoginScreen)}
-        />
-            <Text style={[styles.title, {fontSize:20, marginTop:10}]}>Inter Location Manually</Text>
-
-      </SafeAreaView>
+      <CustomButton title={"Allow Location Access"}
+        onPress={fetchLocation}
+      // onPress={()=>navigation.navigate(ScreenNameEnum.LoginScreen)}
+      />
+      {/* <Text style={[styles.title, {fontSize:20, marginTop:10}]}>Inter Location Manually</Text> */}
+    </SafeAreaView>
   );
 }

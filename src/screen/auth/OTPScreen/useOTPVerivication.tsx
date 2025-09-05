@@ -2,11 +2,13 @@ import { useState } from 'react';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { useBlurOnFulfill, useClearByFocusCell } from 'react-native-confirmation-code-field';
 import { otp_Verify } from '../../../Api/apiRequest';
+import ScreenNameEnum from '../../../routes/screenName.enum';
 
 export const useOtpVerification = (cellCount: number = 4) => {
   const navigation = useNavigation();
   const route = useRoute();
-  const { type } = route.params || {};
+  const { from } = route.params || {};
+  const { email } = route.params || {};
 
   const [value, setValue] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -17,22 +19,23 @@ export const useOtpVerification = (cellCount: number = 4) => {
 
   const handleChangeText = (text: string) => {
     setValue(text);
-    setErrorMessage(text.length < cellCount ? 'Veuillez saisir un code à 4 chiffres.' : '');
+    setErrorMessage(text.length < cellCount ? 'Please enter a 4-digit code.' : '');
   };
 
   const handleVerifyOTP = async () => {
     if (value.length !== cellCount) {
-      setErrorMessage('Veuillez saisir un code à 4 chiffres.');
+      setErrorMessage('Please enter a 4-digit code.');
       return;
     }
 
     setIsLoading(true);
     try {
-      // const params = { id, otp: value, navigation };
-      // await otp_Verify(params, setIsLoading);
+      const params = { email, otp: value, navigation, from:from, };
+      await otp_Verify(params, setIsLoading);
+    
     } catch (error) {
       console.error('OTP verification error:', error);
-      setErrorMessage('Une erreur s\'est produite. Veuillez réessayer.');
+      setErrorMessage('An error has occurred. Please try again.');
     }
   };
 
@@ -47,6 +50,6 @@ export const useOtpVerification = (cellCount: number = 4) => {
     handleChangeText,
     handleVerifyOTP,
     navigation,
-    type
+    from
   };
 };

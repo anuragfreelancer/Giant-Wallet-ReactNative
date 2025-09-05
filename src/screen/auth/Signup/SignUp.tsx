@@ -28,15 +28,9 @@ import { useDispatch } from 'react-redux';
 import CustomInput from '../../../compoent/CustomInput';
 import Icon from '../../../compoent/Icon';
 import { color } from '../../../constant';
-import localizationStrings from '../../../localization/LocalizationString';
-import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { RegistrationStackParamList } from '../../../navigators/RegistrationRoutes';
 import useSignup from './useSignup';
 import { styles } from './style';
-import CustomCheckbox from '../../../compoent/CustomCheckBox';
-import CustomHeader from '../../../compoent/CustomHeader';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import CustomBackHeader from '../../../compoent/CustomBackHeader';
 
 export default function Signup() {
 
@@ -95,37 +89,38 @@ export default function Signup() {
                 <CustomInput
                   placeholder={"Full Name"}
                   leftIcon={<Icon source={imageIndex.user} size={20} />}
-                // value={email}
-                // keyboardType='email-address'
-
-                // onChangeText={handleEmailChange}
+                value={fname}
+                onChangeText={handlefNameChange}
                 />
-                {/* {emailError ? <Text style={styles.errorText}>{emailError}</Text> : null} */}
+                {fnameError ? <Text style={styles.errorText}>{fnameError}</Text> : null}
                 <CustomInput
                   placeholder={"Email Address"}
                   leftIcon={<Icon source={imageIndex.email} size={18} />}
-                  // value={phone}
-                  // onChangeText={handlePhoneChange}
-                  keyboardType='email-address'
+                 value={email}
+                keyboardType='email-address'
+
+                onChangeText={handleEmailChange}
                 />
+                {emailError ? <Text style={styles.errorText}>{emailError}</Text> : null}
+
                 <CustomInput
                   placeholder={"Phone Number"}
                   leftIcon={<Icon source={imageIndex.phone} size={18} />}
-                  // value={phone}
-                  // onChangeText={handlePhoneChange}
+                  value={phone}
+                  onChangeText={handlePhoneChange}
                   keyboardType='phone-pad'
                 />
-                {/* {phoneError ? <Text style={styles.errorText}>{phoneError}</Text> : null} */}
+                {phoneError ? <Text style={styles.errorText}>{phoneError}</Text> : null}
 
                 <CustomInput
 
                   placeholder={"Password"}
                   secureTextEntryToggle
                   leftIcon={<Icon source={imageIndex.lock} size={20} />}
-                // value={password}
-                // onChangeText={handlePasswordChange}
+                value={password}
+                onChangeText={handlePasswordChange}
                 />
-                {/* {passwordError ? <Text style={styles.errorText}>{passwordError}</Text> : null} */}
+                {passwordError ? <Text style={styles.errorText}>{passwordError}</Text> : null}
 
 
               </View>
@@ -138,8 +133,8 @@ export default function Signup() {
 
               <CustomButton
                 title={"Sign Up"}
-                // onPress={handleSignup}
-                onPress={() => navigation.navigate(ScreenNameEnum.LocationAllow)}
+                onPress={handleSignup}
+                // onPress={() => navigation.navigate(ScreenNameEnum.OtpScreen, {from:'signup', })}
               />
               <TouchableOpacity style={{ alignItems: 'center', marginTop:15 }} onPress={() => navigation.navigate(ScreenNameEnum.LoginScreen)}>
                 <Text style={styles.signupText}>Alrady have an account? <Text style={{ color: color.primary }}> Login</Text> </Text>

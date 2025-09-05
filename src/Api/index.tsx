@@ -11,8 +11,8 @@ export interface ApiRequest {
   redirect?:any
 }
 
-export const base_url = 'https://server-php-8-3.technorizen.com/GiantWallet/api/';
-export const image_url = 'https://server-php-8-3.technorizen.com/GiantWallet/api/';
+export const base_url = 'https://giantwallet-main.onrender.com/api/v1/';
+export const image_url = 'https://giantwallet-main.onrender.com/api/v1';
 
  
 export const callMultipleApis = async (requests: ApiRequest[]) => {
