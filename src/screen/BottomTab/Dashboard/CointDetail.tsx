@@ -21,12 +21,12 @@ import { useRoute } from '@react-navigation/native';
 const { width } = Dimensions.get('window');
 
 const TokenDetailScreen = () => {
-  const [tokenData, setTokenData] = useState(null);
+  const [tokenData, setTokenData] = useState<any>(null);
   const [priceData, setPriceData] = useState([]);
   const [timeRange, setTimeRange] = useState('7');
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
-  const [error, setError] = useState(null);
+  const [error, setError] = useState<any>(null);
   const route = useRoute()
   const id = route?.params?.id ?? "bitcoin"
   console.log(id)
@@ -42,18 +42,15 @@ const TokenDetailScreen = () => {
         `https://api.coingecko.com/api/v3/coins/${tokenId}?localization=false&tickers=false&market_data=true&community_data=false&developer_data=false&sparkline=false`
       );
       const tokenJson = await tokenResponse.json();
-
       // Fetch historical price data
       const days = timeRange;
       const priceResponse = await fetch(
         `https://api.coingecko.com/api/v3/coins/${tokenId}/market_chart?vs_currency=usd&days=${days}&interval=${days === '1' ? 'hourly' : 'daily'}`
       );
       const priceJson = await priceResponse.json();
-
       setTokenData(tokenJson);
       setPriceData(priceJson.prices);
       setLoading(false)
-
     } catch (err) {
       setError('Failed to fetch data. Please try again.');
       console.error(err);
@@ -74,14 +71,14 @@ const TokenDetailScreen = () => {
     fetchTokenData();
   };
 
-  const formatPrice = (price) => {
+  const formatPrice = (price: any) => {
     return new Intl.NumberFormat('en-US', {
       style: 'currency',
       currency: 'USD',
     }).format(price);
   };
 
-  const formatNumber = (num) => {
+  const formatNumber = (num: number) => {
     if (num >= 1e9) {
       return (num / 1e9).toFixed(2) + 'B';
     }
@@ -94,11 +91,11 @@ const TokenDetailScreen = () => {
     return num.toFixed(2);
   };
 
-  const formatPercentage = (value) => {
+  const formatPercentage = (value: number) => {
     return `${value >= 0 ? '+' : ''}${value.toFixed(2)}%`;
   };
 
-  const getPriceChangeColor = (value) => {
+  const getPriceChangeColor = (value: number) => {
     return value >= 0 ? '#4cd964' : '#ff3b30';
   };
 
@@ -249,42 +246,42 @@ const TokenDetailScreen = () => {
           </View>
         }
         {/* Market Stats */}
-        {tokenData?.market_data && 
-        <View style={styles.statsContainer}>
-          <Text style={styles.sectionTitle}>Market Stats</Text>
-          <View style={styles.statsGrid}>
-            <View style={styles.statItem}>
-              <Text style={styles.statLabel}>Market Cap</Text>
-              <Text style={styles.statValue}>
-                {formatPrice(tokenData?.market_data?.market_cap.usd)}
-              </Text>
-              <Text style={styles.statRank}>Rank #{tokenData?.market_cap_rank}</Text>
-            </View>
-            <View style={styles.statItem}>
-              <Text style={styles.statLabel}>Volume (24h)</Text>
-              <Text style={styles.statValue}>
-                {formatPrice(tokenData?.market_data?.total_volume.usd)}
-              </Text>
-            </View>
-            <View style={styles.statItem}>
-              <Text style={styles.statLabel}>Circulating Supply</Text>
-              <Text style={styles.statValue}>
-                {formatNumber(tokenData?.market_data?.circulating_supply)}{' '}
-                {tokenData?.symbol?.toUpperCase()}
-              </Text>
-            </View>
-            <View style={styles.statItem}>
-              <Text style={styles.statLabel}>Total Supply</Text>
-              <Text style={styles.statValue}>
-                {tokenData?.market_data?.total_supply
-                  ? formatNumber(tokenData?.market_data?.total_supply)
-                  : '∞'}{' '}
-                {tokenData?.symbol?.toUpperCase()}
-              </Text>
+        {tokenData?.market_data &&
+          <View style={styles.statsContainer}>
+            <Text style={styles.sectionTitle}>Market Stats</Text>
+            <View style={styles.statsGrid}>
+              <View style={styles.statItem}>
+                <Text style={styles.statLabel}>Market Cap</Text>
+                <Text style={styles.statValue}>
+                  {formatPrice(tokenData?.market_data?.market_cap.usd)}
+                </Text>
+                <Text style={styles.statRank}>Rank #{tokenData?.market_cap_rank}</Text>
+              </View>
+              <View style={styles.statItem}>
+                <Text style={styles.statLabel}>Volume (24h)</Text>
+                <Text style={styles.statValue}>
+                  {formatPrice(tokenData?.market_data?.total_volume.usd)}
+                </Text>
+              </View>
+              <View style={styles.statItem}>
+                <Text style={styles.statLabel}>Circulating Supply</Text>
+                <Text style={styles.statValue}>
+                  {formatNumber(tokenData?.market_data?.circulating_supply)}{' '}
+                  {tokenData?.symbol?.toUpperCase()}
+                </Text>
+              </View>
+              <View style={styles.statItem}>
+                <Text style={styles.statLabel}>Total Supply</Text>
+                <Text style={styles.statValue}>
+                  {tokenData?.market_data?.total_supply
+                    ? formatNumber(tokenData?.market_data?.total_supply)
+                    : '∞'}{' '}
+                  {tokenData?.symbol?.toUpperCase()}
+                </Text>
+              </View>
             </View>
           </View>
-        </View>
-}
+        }
 
         {/* Price Changes */}
         <View style={[styles.statsContainer, { marginBottom: 40 }]}>

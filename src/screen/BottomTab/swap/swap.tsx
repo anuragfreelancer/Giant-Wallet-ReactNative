@@ -298,10 +298,6 @@ export default function SwapScreen() {
 
       />
 
-
-
-
-
       <TouchableOpacity onPress={handleSwapTokens}>
         <Image source={imageIndex.change} style={{ height: 40, width: 40, alignSelf: 'center', marginVertical: 40 }} />
 

@@ -9,6 +9,7 @@ import ScreenNameEnum from "../../../routes/screenName.enum";
 import { ethers } from "ethers";
 import Clipboard from "@react-native-clipboard/clipboard";
 import { Fetch_CointAPI } from "../../../Api/apiRequest";
+import LoadingModal from "../../../utils/Loader";
 
 const tokens = [
   { id: "1", name: "GTAN", fullname: "Giant Token", price: "$ 63,910.82", change: "-1.4%", icon: imageIndex.giantToken },
@@ -72,6 +73,7 @@ const [loading, setLoading] = useState(false)
 
   return (
     <SafeAreaView style={styles.container}>
+      {loading && <LoadingModal/>}
       <StatusBar barStyle={'dark-content'} backgroundColor={'#fff'}/>
       {/* Header */}
       <View style={styles.header}>
