@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import {
     View,
     Text,
@@ -9,13 +9,16 @@ import {
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import ScreenNameEnum from "../../routes/screenName.enum";
-import { useNavigation } from "@react-navigation/native";
+import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import imageIndex from "../../assets/imageIndex";
 import { color, fonts } from "../../constant";
 import { wp } from "../../utils/Constant";
 import { logout } from "../../redux/feature/authSlice";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import LogoutModal from "../../compoent/LogoutModal";
+import { GetUserApi } from "../../Api/apiRequest";
+import LoadingModal from "../../utils/Loader";
+
 
 // Sample data (use local icons/images in ./assets/)
 const menuItems = [
@@ -31,15 +34,31 @@ const menuItems = [
 
 const ProfileScreen = () => {
     const navigation = useNavigation()
-const dispatch = useDispatch()
-  const [isModalVisible, setModalVisible] = useState(false);
-      const handleLogout = () => {
-    dispatch(logout());
-    setModalVisible(false);
-    // AsyncStorage.removeItem('userRole');  // AsyncStorage में save
-    navigation.replace(ScreenNameEnum.LoginScreen);
-    // successToast(localizationStrings.logoutSuccess);
-  };
+    const dispatch = useDispatch()
+    const isLogin = useSelector((state: any) => state?.auth);
+    const [loading, setLoading] = useState(false)
+    const [user,setUser] = useState(null)
+    const [isModalVisible, setModalVisible] = useState(false);
+    const handleLogout = () => {
+        dispatch(logout());
+        setModalVisible(false);
+        // AsyncStorage.removeItem('userRole');  // AsyncStorage में save
+        navigation.replace(ScreenNameEnum.LoginScreen);
+        // successToast(localizationStrings.logoutSuccess);
+    };
+
+    useFocusEffect(
+    useCallback(() => {
+      getProfile();
+    }, [])
+  );
+  const  getProfile= async()=>{
+        const param = {
+            token: isLogin?.token
+        }
+       const dd = await GetUserApi(param, setLoading, dispatch)
+       setUser(dd)
+    }
     const renderItem = ({ item }: any) => (
         <TouchableOpacity
             style={styles.card}
@@ -60,14 +79,15 @@ const dispatch = useDispatch()
             {/* <Text style={styles.header}>Profile</Text> */}
 
             {/* Profile Info */}
+            {loading && <LoadingModal/>}
             <View style={styles.profileContainer}>
                 <Image
-                    source={imageIndex.dummy} // your local profile image
+                    source={{uri:user?.avatar}} // your local profile image
                     style={styles.profileImage}
                 />
                 <View>
-                    <Text style={styles.name}>Marcus Aminoff</Text>
-                    <Text style={styles.subtitle}>Mercedes</Text>
+                    <Text style={styles.name}>{user?.fullName}</Text>
+                    <Text style={styles.subtitle}>{user?.email}</Text>
                 </View>
                 <TouchableOpacity style={styles.updateBtn} onPress={() => navigation.navigate(ScreenNameEnum.EditProfile)}>
                     <Image source={imageIndex.editSqr} style={{ height: 25, width: 25 }} />
@@ -84,13 +104,13 @@ const dispatch = useDispatch()
                 />
             </View>
 
-             <LogoutModal
-        visible={isModalVisible}
-        onClose={() => setModalVisible(false)}
-        onConfirm={() => {
-          handleLogout()
-        }}
-      />
+            <LogoutModal
+                visible={isModalVisible}
+                onClose={() => setModalVisible(false)}
+                onConfirm={() => {
+                    handleLogout()
+                }}
+            />
         </SafeAreaView>
     );
 };

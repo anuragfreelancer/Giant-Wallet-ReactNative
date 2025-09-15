@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -13,6 +13,9 @@ import imageIndex from "../../assets/imageIndex";
 import { color, fonts } from "../../constant";
 import { SafeAreaView } from "react-native-safe-area-context";
 import SearchBar from "../../compoent/SearchBar";
+import { useSelector } from "react-redux";
+import { Fetch_CointAPI } from "../../Api/apiRequest";
+import LoadingModal from "../../utils/Loader";
 
 // Currency Data
 const currencies = [
@@ -28,14 +31,26 @@ const currencies = [
 ];
 
 const CurrencyScreen = ({ navigation }) => {
-  const [selectedCurrency, setSelectedCurrency] = useState("eth");
+  const [selectedCurrency, setSelectedCurrency] = useState("giant-token");
   const [search, setSearch] = useState("");
+    const [coins, setCoins] = useState([]);
+  const isLogin = useSelector((state: any) => state?.auth);
+
+  const [loading, setLoading] = useState(false)
+  useEffect(() => {
+    fetchCoins();
+  }, []);
+
+  const fetchCoins = async () => {
+    const data = await Fetch_CointAPI(setLoading)
+    setCoins(data)
+  };
 
   // Filtered list based on search
-  const filteredData = currencies.filter(
+  const filteredData = coins.filter(
     (item) =>
-      item.name.toLowerCase().includes(search.toLowerCase()) ||
-      item.subtitle.toLowerCase().includes(search.toLowerCase())
+      item?.name.toLowerCase().includes(search.toLowerCase()) ||
+      item?.symbol.toLowerCase().includes(search.toLowerCase())
   );
 
   const renderItem = ({ item }) => (
@@ -44,10 +59,10 @@ const CurrencyScreen = ({ navigation }) => {
       onPress={() => setSelectedCurrency(item.id)}
     >
       <View style={styles.leftRow}>
-        <Image source={item.icon} style={styles.icon} />
+        <Image source={{uri:item?.image}} style={styles.icon} />
         <View>
           <Text style={styles.label}>{item.name}</Text>
-          <Text style={styles.subtitle}>{item.subtitle}</Text>
+          <Text style={styles.subtitle}>{item.symbol}</Text>
         </View>
       </View>
       <View
@@ -64,6 +79,7 @@ const CurrencyScreen = ({ navigation }) => {
   return (
     <SafeAreaView style={styles.container}>
       {/* Header */}
+      {loading && <LoadingModal/>}
       <CustomHeader
         menuIcon={imageIndex.back}
         label="Select Currency"
@@ -82,6 +98,7 @@ const CurrencyScreen = ({ navigation }) => {
       {/* Currency List */}
       <FlatList
         data={filteredData}
+        showsVerticalScrollIndicator = {false}
         renderItem={renderItem}
         keyExtractor={(item) => item.id}
         contentContainerStyle={{ paddingVertical: 10, paddingHorizontal: 15 }}

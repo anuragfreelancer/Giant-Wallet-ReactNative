@@ -9,6 +9,7 @@ import { ChangePass_Api } from '../../Api/apiRequest';
 import Loading from '../../utils/Loader';
 import { useSelector } from 'react-redux';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { wp } from '../../utils/Constant';
 
 const ChangePasswordScreen = () => {
     const navigation = useNavigation()
@@ -40,15 +41,16 @@ const ChangePasswordScreen = () => {
 
     const handleSubmit = async () => {
         try {
-       
+
             let data = {
                 oldpassw: oldpass,
                 password: password,
-                confirmPassword: confirmPassword
+                confirmPassword: confirmPassword,
+                token: isLogin?.token
             }
 
             console.log("data", data)
-            const response = await ChangePass_Api(data, isLogin.userData.id, confirmPasswordVisible, setLoading);
+            const response = await ChangePass_Api(data, setLoading);
         } catch (error) {
         }
     }
@@ -65,54 +67,57 @@ const ChangePasswordScreen = () => {
                 <View style={{ marginTop: 35 }}>
 
                     <View style={styles.inputContainer}>
-                        <Image source={imageIndex.lock} style={styles.image} />
-                        <TextInput
-                            placeholder="Old Password"
-                            secureTextEntry={!passwordVisible}
-                            style={styles.input}
-                            // placeholderTextColor="#FF6F43"
-                            value={oldpass}
-                            onChangeText={setOldPass}
-                        />
+                        <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
+
+                            <Image source={imageIndex.lock} style={styles.image} />
+                            <TextInput
+                                placeholder="Old Password"
+                                secureTextEntry={!passwordVisible}
+                                style={styles.input}
+                                // placeholderTextColor="#FF6F43"
+                                value={oldpass}
+                                onChangeText={setOldPass}
+                            />
+                        </View>
 
 
 
                     </View>
+
                     <View style={styles.inputContainer}>
-                        <Image source={imageIndex.lock} style={styles.image} />
+                        <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
 
-                        <TextInput
-                            placeholder="New Password"
-                            secureTextEntry={!passwordVisible}
-                            // placeholderTextColor="#FF6F43"
-                            value={password}
-                            onChangeText={setPassword}
-                            style={styles.input}
+                            <Image source={imageIndex.lock} style={styles.image} />
 
-                        />
+                            <TextInput
+                                placeholder="New Password"
+                                secureTextEntry={!passwordVisible}
+                                // placeholderTextColor="#FF6F43"
+                                value={password}
+                                onChangeText={setPassword}
+                                style={styles.input}
 
+                            />
+                        </View>
                         <TouchableOpacity onPress={() => setPasswordVisible(!passwordVisible)}>
                             <Image source={!passwordVisible ? imageIndex.eyeoff : imageIndex.eyeoff} style={styles.image} />
 
                         </TouchableOpacity>
                     </View>
-
-                    {/* New Password */}
-
-
                     {/* Confirm Password */}
                     <View style={styles.inputContainer}>
-                        <Image source={imageIndex.lock} style={styles.image} />
-                        <TextInput
-                            placeholder="Confirm Password"
-                            secureTextEntry={!confirmPasswordVisible}
-                            // placeholderTextColor="#FF6F43"
-                            style={styles.input}
+                        <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
+                            <Image source={imageIndex.lock} style={styles.image} />
+                            <TextInput
+                                placeholder="Confirm Password"
+                                secureTextEntry={!confirmPasswordVisible}
+                                // placeholderTextColor="#FF6F43"
+                                style={styles.input}
 
-                            value={confirmPassword}
-                            onChangeText={setConfirmPassword}
-                        />
-
+                                value={confirmPassword}
+                                onChangeText={setConfirmPassword}
+                            />
+                        </View>
                         <TouchableOpacity onPress={() => setConfirmPasswordVisible(!confirmPasswordVisible)}>
                             <Image source={!confirmPasswordVisible ? imageIndex.eyeoff : imageIndex.eyeoff} style={styles.image} />
 
@@ -147,7 +152,6 @@ const styles = StyleSheet.create({
         marginBottom: 10,
         marginLeft: 5
     },
-
     image: { height: 22, width: 22 },
     inputContainer: {
         flexDirection: 'row',
@@ -157,6 +161,11 @@ const styles = StyleSheet.create({
         paddingHorizontal: 10,
         marginBottom: 15,
         height: 60,
+        justifyContent: 'space-between'
+    },
+    input: {
+        // backgroundColor:'red',
+        minWidth: wp(70)
     },
     2: {
         flex: 1,

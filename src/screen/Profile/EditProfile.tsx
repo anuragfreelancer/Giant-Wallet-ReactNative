@@ -16,18 +16,19 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import ImagePickerModal from "../../compoent/ImagePickerModal";
 
 const EditProfile = () => {
-  const [fullName, setFullName] = useState('');
+  const isLogin = useSelector((state: any) => state?.auth);
+
+  const [fullName, setFullName] = useState(isLogin?.userData?.fullName);
   const [email, setEmail] = useState('');
+  const [mobile, setMobile] = useState(isLogin?.userData?.phone);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [isLoading, setLoading] = useState(false)
-  const isLogins = useSelector((state: any) => state?.feature?.userGetData);
-  const isLogin = useSelector((state: any) => state?.auth);
   const [image, setImage] = useState<any>("");
-  const dispatch = useDispatch();
   const navigation = useNavigation()
+  console.log(isLogin?.userData)
   useEffect(() => {
-    setFullName(isLogins?.user_name?.toString()),
-      setEmail(isLogins?.email)
+    setFullName(isLogin?.userData?.fullName),
+      setEmail(isLogin?.userData?.email)
   }, [])
 
   const pickImageFromGallery = () => {
@@ -61,8 +62,8 @@ const EditProfile = () => {
       const params = {
         name: fullName,
         images: image,
-        userId: isLogin?.userData?.id
-
+        userId: isLogin?.userData?.id,
+        token: isLogin?.token
       };
       const response = await EditProfile_Api(params, setLoading, navigation);
       // dispatch(GetUserApi(isLogin?.userData?.id));
@@ -83,20 +84,28 @@ const EditProfile = () => {
         menuIcon={imageIndex.back} label="Profile" navigation={navigation} leftPress={true} />
       <View style={styles.container}>
         <View style={styles.profileContainer}>
-          {/* {!image ? (
+          {isLogin.userData.avatar ? (
             <Image
-              source={{ uri: isLogins.image }}
+              source={{ uri: isLogin?.userData?.avatar }}
               style={styles.profileImage}
               resizeMode="cover"
             />
-          ) : ( */}
-            <Image
-              // source={{ uri: image.path }}
-              source={imageIndex.dummy}
-              style={styles.profileImage}
-              resizeMode="cover"
-            />
-          {/* )} */}
+          ) : (
+            image.path ? 
+          <Image
+            source={{ uri: image.path }}
+            // source={imageIndex.dummy}
+            style={styles.profileImage}
+            resizeMode="cover"
+          />:
+           <Image
+            // source={{ uri: image.path }}
+            source={imageIndex.dummy}
+            style={styles.profileImage}
+            resizeMode="cover"
+          />
+
+         )} 
 
 
           <TouchableOpacity style={styles.editIcon} onPress={() => {
@@ -115,7 +124,7 @@ const EditProfile = () => {
           </TouchableOpacity>
         </View>
         <View style={{ marginTop: 45 }}>
-            <TextInputField
+          <TextInputField
             placeholder={'Full Name'}
             // firstLogo={true}
             // img={imageIndex.profile}
@@ -126,36 +135,36 @@ const EditProfile = () => {
             placeholder={'Email'}
             // firstLogo={true}
             // img={imageIndex.}
-            // text={email}
-            // onChangeText={setEmail}
-            // editable={false}
+            text={email}
+            onChangeText={setEmail}
+            editable={false}
           />
-           <TextInputField
+          <TextInputField
             placeholder={'Mobile'}
-            // firstLogo={true}
-            // img={imageIndex.}
-            // text={email}
-            // onChangeText={setEmail}
-            // editable={false}
+          // firstLogo={true}
+          // img={imageIndex.}
+          text={mobile}
+          onChangeText={setMobile}
+          editable={false}
           />
-           <TextInputField
+          {/* <TextInputField
             placeholder={'DOB'}
-            // firstLogo={true}
-            // img={imageIndex.}
-            // text={email}
-            // onChangeText={setEmail}
+            firstLogo={true}
+            img={imageIndex.}
+            text={email}
+            onChangeText={setEmail}
             editable={true}
-          />
-        
+          /> */}
+
           {/* type */}
 
-         
+
         </View>
- <CustomButton
-            title="Edit"
-            // onPress={() => handleSubmit()}
-            style={{ marginTop: 45, width:'90%' }}
-          />
+        <CustomButton
+          title="Update"
+          onPress={() => handleSubmit()}
+          style={{ marginTop: 45, width: '90%' }}
+        />
       </View>
       <ImagePickerModal
         modalVisible={isModalVisible}

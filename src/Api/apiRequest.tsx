@@ -370,39 +370,62 @@ const VerifyLoginPin = (
     }
 };
 
-const Fetch_CointAPI = (
+const Fetch_CointAPI = async (
     setLoading: (loading: boolean) => void,
 ) => {
     try {
-        setLoading(true)
+        setLoading(true);
+
         const myHeaders = new Headers();
         myHeaders.append("x-cg-demo-api-key", "CG-K2sv8oGmXdaEGa7PmQ4nCzpt");
 
         const requestOptions = {
             method: "GET",
             headers: myHeaders,
-            redirect: "follow"
         };
-        const respons = fetch(`https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=50&page=1`, requestOptions)
-            .then((response) => response.text())
-            .then((res) => {
-                const response = JSON.parse(res);
 
-                setLoading(false)
+        // Fetch both GTAN token and top tokens in parallel
+        const [gtanResponse, tokensResponse] = await Promise.all([
+            fetch(`https://api.coingecko.com/api/v3/coins/giant-token`, requestOptions),
+            fetch(
+                `https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=50&page=1`,
+                requestOptions
+            ),
+        ]);
 
-                return response
+        const [gtanData, tokensData] = await Promise.all([
+            gtanResponse.json(),
+            tokensResponse.json(),
+        ]);
 
-            })
-            .catch((error) =>
-                console.error(error));
-        return respons
+        setLoading(false);
+
+        // Some CoinGecko endpoints return single object vs. array → normalize
+        // const gtanItem = gtanData?.id ? gtanData : null;
+
+        const gtanItem = {
+            id: gtanData.id,
+            symbol: gtanData.symbol,
+            name: gtanData.name,
+            image: gtanData.image?.thumb,
+            current_price: gtanData.market_data?.current_price?.usd || 0,
+            price_change_percentage_24h: gtanData.market_data?.price_change_percentage_24h || 0,
+        };
+        const tokens = Array.isArray(tokensData) ? tokensData : [];
+
+        // Remove GTAN from tokens if it already exists (avoid duplication)
+        const filteredTokens = tokens.filter((t) => t.id !== "giant-token");
+        console.log(gtanItem)
+        // Final array with GTAN at the top
+        return gtanItem ? [gtanItem, ...filteredTokens] : filteredTokens;
     } catch (error) {
-        setLoading(false)
-        errorToast(
-            'Network error',
-        );
+        setLoading(false);
+        console.error("Network error", error);
+        errorToast("Network error");
+        throw error;
     }
 };
+
 
 const Policies_Api = (
     setLoading: (loading: boolean) => void,
@@ -451,6 +474,8 @@ const EditProfile_Api = (
         setLoading(true)
         const myHeaders = new Headers();
         myHeaders.append("Accept", "application/json");
+        myHeaders.append("Authorization", param?.token);
+
         const formData = new FormData();
         if (param.images) {
             formData.append("image", {
@@ -459,28 +484,28 @@ const EditProfile_Api = (
                 name: 'image.jpg'
             });
         }
-        formData.append("first_name", param?.first_name);
-        formData.append("last_name", param?.last_name);
-        formData.append("user_id", param?.userId);
-        formData.append("license_date", param?.date ?? null);
+        formData.append("fullName", param?.name);
+        // formData.append("last_name", param?.last_name);
+        // formData.append("user_id", param?.userId);
+        // formData.append("license_date", param?.date ?? null);
         const requestOptions = {
-            method: "POST",
+            method: "PATCH",
             headers: myHeaders,
             body: formData,
         };
         console.log(formData)
-        const respons = fetch(`${base_url}/update_profile`, requestOptions)
+        const respons = fetch(`${base_url}user/update-profile`, requestOptions)
             .then((response) => response.text())
             .then((res) => {
                 const response = JSON.parse(res);
-                if (response.status == '1') {
+                if (response.statusCode == 200) {
                     setLoading(false)
                     successToast(
                         response?.message
                     );
-                    getSuccess({
-                        userGetData: response.result,
-                    })
+                    // getSuccess({
+                    //     userGetData: response.result,
+                    // })
                     console.log(response)
 
                     return response
@@ -503,27 +528,29 @@ const EditProfile_Api = (
     }
 };
 
-const GetUserApi = async (params: any, setLoading: (loading: boolean) => void) => {
+const GetUserApi = async (params: any, setLoading: (loading: boolean) => void, dispatch: any) => {
     // const dispatch = useDispatch()
     try {
         setLoading(true)
 
         const myHeaders = new Headers();
         myHeaders.append("Accept", "application/json");
-        const formdata = new FormData();
-        formdata.append("user_id", params);
+        myHeaders.append("Authorization", params?.token);
+        // const formdata = new FormData();
+        // formdata.append("user_id", params);
         const requestOptions = {
-            method: "POST",
+            method: "GET",
             headers: myHeaders,
-            body: formdata,
+            // body: formdata,
         };
-        const response = await fetch(`${base_url}/get_profile`, requestOptions);
+        const response = await fetch(`${base_url}user/my-profile`, requestOptions);
         const resText = await response.text();
         const responseData = JSON.parse(resText);
         console.log(responseData)
-        if (responseData.status === '1') {
+        if (responseData.statusCode === 200) {
             setLoading(false)
-            return { userGetData: responseData.result, };
+            dispatch(loginSuccess({ userData: responseData?.data, token: params?.token }));
+            return responseData.data;
         } else {
             errorToast(responseData.message);
             setLoading(false)
@@ -538,6 +565,84 @@ const GetUserApi = async (params: any, setLoading: (loading: boolean) => void) =
     }
 }
 
+
+
+const GetFoundationApi = async (params: any, setLoading: (loading: boolean) => void) => {
+    // const dispatch = useDispatch()
+    try {
+        setLoading(true)
+
+        const myHeaders = new Headers();
+        myHeaders.append("Accept", "application/json");
+        myHeaders.append("Authorization", params?.token);
+        // const formdata = new FormData();
+        // formdata.append("user_id", params);
+        const requestOptions = {
+            method: "GET",
+            headers: myHeaders,
+            // body: formdata,
+        };
+        const response = await fetch(`${base_url}admin/foundation`, requestOptions);
+        const resText = await response.text();
+        const responseData = JSON.parse(resText);
+        console.log(responseData)
+        if (responseData.statusCode === 200) {
+            setLoading(false)
+            return responseData.data;
+        } else {
+            errorToast(responseData.message);
+            setLoading(false)
+
+            //   return thunkApi.rejectWithValue(responseData);
+        }
+    } catch (error) {
+        errorToast('Network error');
+        setLoading(false)
+
+        // return thunkApi.rejectWithValue(error);
+    }
+}
+const GetCompaignAPI = async (params: any, setLoading: (loading: boolean) => void) => {
+    // const dispatch = useDispatch()
+    try {
+        setLoading(true)
+
+        const myHeaders = new Headers();
+        myHeaders.append("Accept", "application/json");
+        myHeaders.append("Content-Type", "application/json");
+        //  myHeaders.append("Authorization", params?.token);
+        // const formdata = new FormData();
+        // formdata.append("user_id", params);
+
+        const raw = JSON.stringify({
+            "foundationId": "68bffbce17d798a03f456be4",
+            "campaignId": ""
+        });
+        const requestOptions = {
+            method: "POST",
+            headers: myHeaders,
+            body: raw,
+        };
+        const response = await fetch(`${base_url}admin/getcampaign`, requestOptions);
+        const resText = await response.text();
+        const responseData = JSON.parse(resText);
+        console.log(responseData)
+        if (responseData.statusCode === 200) {
+            setLoading(false)
+            return responseData;
+        } else {
+            errorToast(responseData.message);
+            setLoading(false)
+
+            //   return thunkApi.rejectWithValue(responseData);
+        }
+    } catch (error) {
+        errorToast('Network error');
+        setLoading(false)
+
+        // return thunkApi.rejectWithValue(error);
+    }
+}
 const Support_Api = (
     supportHelp: any,
     setLoading: (loading: boolean) => void,
@@ -587,33 +692,35 @@ const Support_Api = (
 };
 const ChangePass_Api = (
     data: any,
-    id: any,
     setLoading: (loading: boolean) => void,
 ) => {
     try {
         setLoading(true)
         const myHeaders = new Headers();
         myHeaders.append("Accept", "application/json");
-        const formData = new FormData();
-        formData.append("old_password", data?.oldpassw);
-        formData.append("password", data?.password);
-        formData.append("confirm_password", data?.confirmPassword);
-        formData.append("user_id", id);
+        myHeaders.append("Authorization", data?.token);
+        myHeaders.append("Content-Type", "application/json");
+        // const formData = new FormData();
+        // formData.append("oldPassword", data?.oldpassw);
+        // formData.append("newPassword", data?.password);
+        // formData.append("confirmPassword", data?.confirmPassword);
+        const raw = JSON.stringify({
+            "oldPassword": data?.oldpassw,
+            "newPassword": data?.password,
+            "confirmPassword": data?.confirmPassword
+        });
+
         const requestOptions = {
-            method: "POST",
+            method: "PATCH",
             headers: myHeaders,
-            body: formData,
+            body: raw,
         };
-        const respons = fetch(`${base_url}change_password`, requestOptions)
+        const respons = fetch(`${base_url}user/change-password`, requestOptions)
             .then((response) => response.text())
             .then((res) => {
                 const response = JSON.parse(res)
-                if (response?.status === "0") {
-                    errorToast(
-                        response.error,
-                    );
-                }
-                if (response?.status == '1') {
+
+                if (response?.statusCode == 200) {
                     setLoading(false)
                     successToast(
                         response?.message
@@ -622,13 +729,15 @@ const ChangePass_Api = (
                 } else {
                     setLoading(false);
                     errorToast(
-                        response.error,
+                        response.message,
                     );
                     return response
                 }
             })
             .catch((error) =>
-                console.error(error));
+                setLoading(false));
+
+
         return respons
     } catch (error) {
         setLoading(false)
@@ -671,6 +780,6 @@ export {
     ChangePass_Api, EditProfile_Api, updatePassword,
     restEmailOtpScreen, LoginCustomer, otp_Verify,
     CreateLoginPin, VerifyLoginPin,
-    Fetch_CointAPI
+    Fetch_CointAPI, GetFoundationApi, GetCompaignAPI
 
 }  

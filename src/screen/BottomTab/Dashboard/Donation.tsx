@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -13,12 +13,16 @@ import imageIndex from "../../../assets/imageIndex";
 import { color, fonts } from "../../../constant";
 import { useNavigation } from "@react-navigation/native";
 import ScreenNameEnum from "../../../routes/screenName.enum";
+import { GetCompaignAPI, GetFoundationApi } from "../../../Api/apiRequest";
+import { useSelector } from "react-redux";
+import LoadingModal from "../../../utils/Loader";
 
 const stories = [
   { id: "1", image: imageIndex.v1 },
   { id: "2", image: imageIndex.v2 },
   { id: "3", image: imageIndex.v3 },
   { id: "4", image: imageIndex.v4 },
+  
 ];
 
 const donations = [
@@ -36,20 +40,54 @@ const donations = [
     date: "June 18, 2023",
     image: imageIndex.l2,
   },
+    { id: "1", image: imageIndex.v1 },
+  { id: "2", image: imageIndex.v2 },
+  { id: "3", image: imageIndex.v3 },
+  { id: "4", image: imageIndex.v4 },
+    { id: "1", image: imageIndex.v1 },
+  { id: "2", image: imageIndex.v2 },
+  { id: "3", image: imageIndex.v3 },
+  { id: "4", image: imageIndex.v4 },
 ];
 
+type CompaignType = {
+  id: string;
+  title?: string;
+  description?: string;
+  image?: string;
+  // add other properties if needed
+};
+
 export default function DonationScreen() {
-    const navigation = useNavigation()
+  const isLogin = useSelector((state: any) => state?.auth);
+  const [data, setData] = useState<any[]>([])
+  const [compaign, setCompaign] = useState<CompaignType[]>([])
+  const [loading, setLoading] = useState(false)
+  const navigation = useNavigation()
+  useEffect(() => {
+    fetchData()
+  },[])
+  const fetchData = async () => {
+    const param = {
+      token: isLogin?.token
+    }
+   const data = await GetFoundationApi(param, setLoading)
+   setData(data)
+   const data2 = await GetCompaignAPI(param, setLoading)
+console.log('data2', data2?.data)
+setCompaign(data2?.data)
+  }
   return (
     <SafeAreaView style={styles.container}>
+      {loading && <LoadingModal/>}
       <ScrollView showsVerticalScrollIndicator={false}>
         {/* Header Actions */}
         <View style={styles.header}>
-          <TouchableOpacity style={styles.iconButton} onPress={()=>navigation.goBack()}>
-            <Image source={imageIndex.back} style={{height:30, width:30}}/>
+          <TouchableOpacity style={styles.iconButton} onPress={() => navigation.goBack()}>
+            <Image source={imageIndex.back} style={{ height: 30, width: 30 }} />
           </TouchableOpacity>
-          <TouchableOpacity style={styles.iconButton} onPress={()=>navigation.navigate(ScreenNameEnum.DonationTrackingDetail)}>
-                       <Image source={imageIndex.locationCircle} style={{height:30, width:30}}/>
+          <TouchableOpacity style={styles.iconButton} onPress={() => navigation.navigate(ScreenNameEnum.DonationTrackingDetail)}>
+            <Image source={imageIndex.locationCircle} style={{ height: 30, width: 30 }} />
 
           </TouchableOpacity>
         </View>
@@ -62,11 +100,11 @@ export default function DonationScreen() {
           />
           <Image source={imageIndex.overlay} style={styles.bannerOverlay} />
           <View style={styles.bannerContent}>
-            <Text style={styles.bannerTitle}>By Smile Foundation</Text>
+            <Text style={styles.bannerTitle}>{data[0]?.name }</Text>
             <Text style={styles.bannerSubtitle}>
-              Lorem ipsum dolor sit amet
+             { data[0]?.description}
             </Text>
-            <TouchableOpacity style={styles.visitButton} onPress={()=>navigation.navigate(ScreenNameEnum.DonationDetail)}>
+            <TouchableOpacity style={styles.visitButton} onPress={() => navigation.navigate(ScreenNameEnum.DonationTrackingDetail)}>
               <Text style={styles.visitButtonText}>VISIT NOW</Text>
             </TouchableOpacity>
           </View>
@@ -79,7 +117,7 @@ export default function DonationScreen() {
             <View key={story.id} style={styles.storyCard}>
               <Image source={story.image} style={styles.storyImage} />
               <View style={styles.playOverlay}>
-                <Image source={imageIndex.videoIcon} style={styles.playIcon}/>
+                <Image source={imageIndex.videoIcon} style={styles.playIcon} />
               </View>
             </View>
           ))}
@@ -88,20 +126,26 @@ export default function DonationScreen() {
         {/* Needed Donation */}
         <Text style={styles.sectionTitle}>Needed Donation</Text>
         <FlatList
-          data={donations}
-          keyExtractor={(item) => item.id}
-          renderItem={({ item }) => (
-            <TouchableOpacity style={styles.donationCard}>
-              <Image source={item.image} style={styles.donationImage} />
-              <View style={styles.donationInfo}>
+          data={compaign}
+          keyExtractor={(item, index) => item.id}
+          renderItem={({ item, index }) => (
+            <TouchableOpacity style={styles.donationCard} onPress={() => navigation.navigate(ScreenNameEnum.DonationDetail, { item })}>
+              { item?.image &&
+                <Image source={{uri:item.image}} style={styles.donationImage} />
+           
+              }
+                {/* <Image source={donations[index].image} style={styles.donationImage} /> */}
+
+           <View style={styles.donationInfo}>
                 <Text style={styles.donationTitle} numberOfLines={2}>
-                  {item.title}
+                  {item?.title}
                 </Text>
-                <Text style={styles.donationMeta}>
-                  {item.author} / {item.date}
+                <Text style={styles.donationMeta} numberOfLines={2}>
+                  {item?.description} 
+                  {/* / {item.date} */}
                 </Text>
               </View>
-              <Image source={imageIndex.next} style={{height:25, width:25}}/>
+              <Image source={imageIndex.next} style={{ height: 25, width: 25, marginLeft:5 }} />
             </TouchableOpacity>
           )}
         />
@@ -112,7 +156,6 @@ export default function DonationScreen() {
 
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: "#fff" },
-
   header: {
     flexDirection: "row",
     justifyContent: "space-between",
@@ -120,7 +163,7 @@ const styles = StyleSheet.create({
     paddingTop: 8,
   },
   iconButton: {
-   marginBottom:20
+    marginBottom: 20
   },
   iconText: { fontSize: 18 },
 
@@ -134,8 +177,8 @@ const styles = StyleSheet.create({
   bannerOverlay: {
     ...StyleSheet.absoluteFillObject,
     backgroundColor: "rgba(0,0,0,0.3)",
-    height:'100%',
-    width:'100%'
+    height: '100%',
+    width: '100%'
   },
   bannerContent: {
     position: "absolute",
@@ -143,10 +186,10 @@ const styles = StyleSheet.create({
     left: 16,
     right: 16,
   },
-  bannerTitle: { fontSize: 16, fontFamily:fonts.bold, color: "#fff" },
-  bannerSubtitle: { fontSize: 12, color: "#eee", marginBottom: 6, fontFamily:fonts.medium, },
+  bannerTitle: { fontSize: 16, fontFamily: fonts.bold, color: "#fff" },
+  bannerSubtitle: { fontSize: 12, color: "#eee", marginBottom: 6, fontFamily: fonts.medium, },
   visitButton: {
-    backgroundColor:color.primary,
+    backgroundColor: color.primary,
     paddingHorizontal: 14,
     paddingVertical: 6,
     borderRadius: 20,
@@ -156,7 +199,7 @@ const styles = StyleSheet.create({
 
   sectionTitle: {
     fontSize: 18,
-    fontFamily:fonts.bold,
+    fontFamily: fonts.bold,
     marginHorizontal: 16,
     marginVertical: 12,
   },
@@ -182,7 +225,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     backgroundColor: "rgba(0,0,0,0.2)",
   },
-  playIcon: { height:45, width:45 },
+  playIcon: { height: 45, width: 45 },
 
   donationCard: {
     flexDirection: "row",
@@ -193,9 +236,9 @@ const styles = StyleSheet.create({
     padding: 10,
     borderRadius: 12,
   },
-  donationImage: { width: 100, height: 100, borderRadius: 10, marginRight: 12 },
+  donationImage: { width: 90, height: 90, borderRadius: 10, marginRight: 12 },
   donationInfo: { flex: 1 },
-  donationTitle: { fontSize: 14, fontFamily:fonts.bold, color: "#000" },
-  donationMeta: { fontSize: 12, color: "#666", marginTop: 2, fontFamily:fonts.medium, },
+  donationTitle: { fontSize: 14, fontFamily: fonts.bold, color: "#000" , marginRight:15},
+  donationMeta: { fontSize: 12, color: "#666", marginTop: 2, fontFamily: fonts.medium, },
   arrow: { fontSize: 20, color: "#aaa", marginLeft: 8 },
 });

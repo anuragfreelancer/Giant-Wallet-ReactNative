@@ -60,11 +60,10 @@ export default function ConfirmSwapScreen({ navigation }: any) {
             </ScrollView>
 
             {/* Swap Button */}
-            <CustomButton title="Confirm" style={styles.swapButton} />
+            <CustomButton title="Confirm" style={styles.swapButton}/>
         </SafeAreaView>
     );
 }
-
 const styles = StyleSheet.create({
     container: {
         flex: 1,
@@ -102,7 +101,6 @@ const styles = StyleSheet.create({
         fontSize: 14,
         color: "#111827",
         fontFamily: fonts.medium,
-
     },
     value: {
         fontSize: 14,
@@ -113,7 +111,6 @@ const styles = StyleSheet.create({
     highlight: {
         color: color.primary,
         fontFamily: fonts.bold,
-
     },
     swapButton: {
         width: wp(100) - 40,

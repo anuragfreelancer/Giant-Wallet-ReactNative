@@ -3,17 +3,20 @@ import { View, Text, StyleSheet, Image, TouchableOpacity, ScrollView } from "rea
 import imageIndex from "../../../assets/imageIndex";
 import { fonts } from "../../../constant";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, useRoute } from "@react-navigation/native";
 import ScreenNameEnum from "../../../routes/screenName.enum";
 import CustomButton from "../../../compoent/CustomButton";
 import DonateModal from "./Donation/DonationModal";
 
 const DonationDetailScreen = () => {
     const [modalVisible, setModalVisible] = useState(false);
-const navigation = useNavigation()
-    const handleDonate = (amount) => {
+    const navigation = useNavigation()
+    const route = useRoute();
+    const item = route.params?.item;
+    console.log('item', item)
+    const handleDonate = (amount: any) => {
         console.log("Donated Amount:", amount);
-navigation.navigate(ScreenNameEnum.PaymentDetails)
+        navigation.navigate(ScreenNameEnum.PaymentDetails)
         // You can call API here
     };
     return (
@@ -25,29 +28,36 @@ navigation.navigate(ScreenNameEnum.PaymentDetails)
                 </TouchableOpacity>
 
                 {/* Title & Subtitle */}
-                <Text style={styles.title}>Education kits for poor childrens</Text>
-                <Text style={styles.subtitle}>by Smile Foundation</Text>
+                <Text style={styles.title}>{item?.title}</Text>
+                <Text style={styles.subtitle}>by {item?.foundationName}</Text>
 
                 {/* Banner Image */}
-                <Image source={imageIndex.l1} style={styles.bannerImage} />
-
+                <Image source={{uri:item?.image}} style={styles.bannerImage} />
                 {/* About Section */}
                 <Text style={styles.sectionTitle}>About</Text>
                 <Text style={styles.aboutText}>
-                    Smile foundation is directly benefitting over 150000 children and their families.
-                    Education is both the means as well as empowers an individual to earn his livelihood.
+                    {item?.description}
                 </Text>
 
                 {/* Participants */}
                 <Text style={styles.sectionTitle}>Participants</Text>
-                <View style={styles.participantRow}>
-                    <Image source={imageIndex.l2} style={styles.participantImg} />
-                    <Image source={imageIndex.l3} style={styles.participantImg} />
-                    <Image source={imageIndex.l4} style={styles.participantImg} />
-                    <View style={styles.moreCircle}>
-                        <Text style={styles.moreText}>10+</Text>
-                    </View>
-                </View>
+<View style={styles.participantRow}>
+  {item?.participants.slice(0, 3).map((imgSrc: { avatar: string; }, index: React.Key | null | undefined) => (
+    <Image
+      key={index}
+      source={{ uri: encodeURI(imgSrc.avatar) }}
+      style={styles.participantImg}
+    />
+  ))}
+
+  {item?.participants.length > 3 && (
+    <View style={styles.moreCircle}>
+      <Text style={styles.moreText}>
+        +{item?.participants.length - 3}
+      </Text>
+    </View>
+  )}
+</View>
 
                 {/* Buttons */}
                 <CustomButton title="Donate Now" style={{ marginTop: 20 }} onPress={() => setModalVisible(true)} />
@@ -118,7 +128,7 @@ const styles = StyleSheet.create({
         borderRadius: 20,
         marginRight: -10,
         borderWidth: 2,
-        borderColor: "#fff",
+        borderColor: "#f2f2f2",
     },
     moreCircle: {
         width: 40,

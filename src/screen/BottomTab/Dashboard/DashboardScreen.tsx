@@ -10,6 +10,7 @@ import { ethers } from "ethers";
 import Clipboard from "@react-native-clipboard/clipboard";
 import { Fetch_CointAPI } from "../../../Api/apiRequest";
 import LoadingModal from "../../../utils/Loader";
+import { useSelector } from "react-redux";
 
 const tokens = [
   { id: "1", name: "GTAN", fullname: "Giant Token", price: "$ 63,910.82", change: "-1.4%", icon: imageIndex.giantToken },
@@ -23,18 +24,21 @@ export default function WalletHome() {
   const navigation = useNavigation()
   const [connected, setConnected] = useState(false)
   const [coins, setCoins] = useState([]);
-const [loading, setLoading] = useState(false)
+  const isLogin = useSelector((state: any) => state?.auth);
+
+  const [loading, setLoading] = useState(false)
   useEffect(() => {
     fetchCoins();
   }, []);
 
   const fetchCoins = async () => {
-   const data = await Fetch_CointAPI(setLoading)
-   setCoins(data)
+    const data = await Fetch_CointAPI(setLoading)
+    setCoins(data)
   };
   // Generate a new random wallet
-  const createWallet = () => {
-    const wallet = ethers.Wallet.createRandom();
+  const createWallet = async () => {
+    await setLoading(true)
+    const wallet = await ethers.Wallet.createRandom();
     console.log("Address:", wallet.address);
     console.log("Private Key:", wallet.privateKey);
     console.log("Mnemonic:", wallet.mnemonic?.phrase);
@@ -54,14 +58,15 @@ const [loading, setLoading] = useState(false)
         { text: "OK" },
       ]
     );
+    setLoading(false)
     return wallet;
   };
-  const renderToken = ({ item }) => (
-    <TouchableOpacity style={styles.tokenRow} onPress={()=>navigation.navigate(ScreenNameEnum.cointDetail, {id:item?.id})}>
-      <Image source={{ uri: item.image }} style={styles.tokenIcon} />
+  const renderToken = ({ item }:any) => (
+    <TouchableOpacity style={styles.tokenRow} onPress={() => navigation.navigate(ScreenNameEnum.cointDetail, { id: item?.id })}>
+      <Image source={{ uri: item.image.thumb  || item.image }} style={styles.tokenIcon} />
       <View style={styles.tokenInfo}>
         {/* <Text style={styles.tokenName}>{item.name}</Text> */}
-        <Text style={styles.tokenName}>{item.symbol.toUpperCase()}</Text>
+        <Text style={styles.tokenName}>{item?.symbol}</Text>
         <Text style={styles.tokenFullname}>{item.name}</Text>
       </View>
       <View style={styles.tokenPriceSection}>
@@ -73,15 +78,15 @@ const [loading, setLoading] = useState(false)
 
   return (
     <SafeAreaView style={styles.container}>
-      {loading && <LoadingModal/>}
-      <StatusBar barStyle={'dark-content'} backgroundColor={'#fff'}/>
+      {loading && <LoadingModal />}
+      <StatusBar barStyle={'dark-content'} backgroundColor={'#fff'} />
       {/* Header */}
       <View style={styles.header}>
         <View style={{ flexDirection: 'row' }}>
-          <Image source={imageIndex.dummy} style={styles.profileImage} />
+          <Image source={{ uri: isLogin?.userData?.avatar }} style={styles.profileImage} />
           <View>
             <Text style={styles.welcome}>Welcome</Text>
-            <Text style={styles.userName}>Ashlynn Korsgaard</Text>
+            <Text style={styles.userName}>{isLogin?.userData?.fullName}</Text>
           </View>
         </View>
         <View style={styles.iconsRow}>

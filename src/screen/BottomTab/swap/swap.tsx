@@ -128,7 +128,7 @@ const TokenInputCard1 = ({
   usdValue,
   onChangeAmount,
   onSelectToken
-}) => (
+}:any) => (
   <View style={styles.tokenCard}>
     <Text style={styles.cardLabel}>{label}</Text>
     <View style={styles.cardContent}>
@@ -154,7 +154,7 @@ const TokenInputCard1 = ({
   </View>
 );
 
-const TokenSelectModal1 = ({ visible, onClose, onSelect, currentToken }) => {
+const TokenSelectModal1 = ({ visible, onClose, onSelect, currentToken }:any) => {
   const [searchQuery, setSearchQuery] = useState("");
 
   const filteredTokens = tokenData.filter(token =>
@@ -208,7 +208,7 @@ const TokenSelectModal1 = ({ visible, onClose, onSelect, currentToken }) => {
                     styles.tokenChange,
                     { color: item.price_change_percentage_24h >= 0 ? '#4cd964' : '#ff3b30' }
                   ]}>
-                    {parseFloat(item.price_change_percentage_24h).toFixed(2)}%
+                    {parseFloat(item?.price_change_percentage_24h).toFixed(2)}%
                   </Text>
                 </View>
               </TouchableOpacity>
@@ -259,7 +259,7 @@ export default function SwapScreen() {
     }
   }, [fromAmount, fromToken, toToken]);
 
-  const handleTokenSelect = (tokenSymbol, isFromToken) => {
+  const handleTokenSelect = (tokenSymbol:any, isFromToken: boolean) => {
     console.log(tokenSymbol)
     if (isFromToken) {
       setFromToken(tokenSymbol.symbol);

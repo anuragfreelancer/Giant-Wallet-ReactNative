@@ -12,6 +12,7 @@ interface Props {
   usdValue: string;
   onChangeAmount?: (val: string) => void;
   onSelectToken?: () => void;
+  image?:any
 }
 
 export default function TokenInputCard({

@@ -16,12 +16,13 @@ import StatusBarComponent from "../../../compoent/StatusBarCompoent";
 import { color } from "../../../constant";
 import CustomHeader from "../../../compoent/CustomHeader";
 import imageIndex from "../../../assets/imageIndex";
+import LoadingModal from "../../../utils/Loader";
 
 const ImportWallet = () => {
   const [wallet, setWallet] = useState(null);
   const [mnemonic, setMnemonic] = useState("");
   const [isImporting, setIsImporting] = useState(false);
-
+const [loading, setLoading] = useState(false)
   const importWalletFromPhrase = () => {
     if (!mnemonic.trim()) {
       Alert.alert("Error", "Please enter your mnemonic phrase");
@@ -29,15 +30,22 @@ const ImportWallet = () => {
     }
 
     setIsImporting(true);
-    
+    setLoading(true)
     try {
+      setLoading(true)
       const importedWallet = ethers.Wallet.fromPhrase(mnemonic.trim());
       setWallet(importedWallet);
       Alert.alert("Success", "Wallet imported successfully!");
+    
+      
     } catch (error) {
       Alert.alert("Invalid Phrase", "Please check your mnemonic phrase and try again");
+     
+      
     } finally {
       setIsImporting(false);
+      setLoading(false)
+
     }
   };
 
@@ -48,6 +56,7 @@ const ImportWallet = () => {
 
   return (
     <SafeAreaView style={styles.safeArea}>
+      {loading && <LoadingModal/>}
       <StatusBarComponent/>
       <KeyboardAvoidingView 
         style={{flex: 1}}
