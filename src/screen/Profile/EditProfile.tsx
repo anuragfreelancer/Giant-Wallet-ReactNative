@@ -10,7 +10,6 @@ import ImagePicker from "react-native-image-crop-picker";
 // import ImagePickerModal from "../../compoent/ImagePickerModal";
 import { EditProfile_Api } from "../../Api/apiRequest";
 import LoadingModal from "../../utils/Loader";
-import { GetUserApi } from "../../redux/feature/getSliceUser";
 import { useNavigation } from "@react-navigation/native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import ImagePickerModal from "../../compoent/ImagePickerModal";
@@ -71,7 +70,6 @@ const EditProfile = () => {
     }
   }
 
-
   return (
     <SafeAreaView style={{
       flex: 1,
@@ -84,30 +82,28 @@ const EditProfile = () => {
         menuIcon={imageIndex.back} label="Profile" navigation={navigation} leftPress={true} />
       <View style={styles.container}>
         <View style={styles.profileContainer}>
-          {isLogin.userData.avatar ? (
-            <Image
-              source={{ uri: isLogin?.userData?.avatar }}
-              style={styles.profileImage}
-              resizeMode="cover"
-            />
-          ) : (
-            image.path ? 
-          <Image
-            source={{ uri: image.path }}
-            // source={imageIndex.dummy}
-            style={styles.profileImage}
-            resizeMode="cover"
-          />:
-           <Image
-            // source={{ uri: image.path }}
-            source={imageIndex.dummy}
-            style={styles.profileImage}
-            resizeMode="cover"
-          />
-
-         )} 
-
-
+          {
+            image.path ?
+              <Image
+                source={{ uri: image.path }}
+                // source={imageIndex.dummy}
+                style={styles.profileImage}
+                resizeMode="cover"
+              /> :
+              isLogin.userData.avatar ? (
+                <Image
+                  source={{ uri: isLogin?.userData?.avatar }}
+                  style={styles.profileImage}
+                  resizeMode="cover"
+                />
+              ) : (
+                <Image
+                  // source={{ uri: image.path }}
+                  source={imageIndex.dummy}
+                  style={styles.profileImage}
+                  resizeMode="cover"
+                />
+              )}
           <TouchableOpacity style={styles.editIcon} onPress={() => {
             setIsModalVisible(true)
           }} >
@@ -141,11 +137,11 @@ const EditProfile = () => {
           />
           <TextInputField
             placeholder={'Mobile'}
-          // firstLogo={true}
-          // img={imageIndex.}
-          text={mobile}
-          onChangeText={setMobile}
-          editable={false}
+            // firstLogo={true}
+            // img={imageIndex.}
+            text={mobile}
+            onChangeText={setMobile}
+            editable={false}
           />
           {/* <TextInputField
             placeholder={'DOB'}

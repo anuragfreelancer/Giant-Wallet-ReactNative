@@ -37,6 +37,9 @@ import AboutUs from "../screen/Profile/AboutUs";
 import ImportWallet from "../screen/BottomTab/Dashboard/ImportWallet";
 import VerifyPin from "../screen/BottomTab/Dashboard/CreatePIN/VerifyPin";
 import CointDetail from "../screen/BottomTab/Dashboard/CointDetail";
+import TokenPinScreen from "../screen/Profile/tokenPin";
+import ImportTokenScreen from "../screen/Profile/ImportToken";
+import ImportCustomTokenScreen from "../screen/Profile/ImportCustomTOken";
 
 const _routes: any = {
   REGISTRATION_ROUTE: [
@@ -136,6 +139,18 @@ const _routes: any = {
     {
       name: ScreenNameEnum.EarnDetail,
       Component: EarnDetail,
+    },
+    {
+      name: ScreenNameEnum.TokenPinScreen,
+      Component: TokenPinScreen,
+    },
+    {
+      name: ScreenNameEnum.ImportCustomTokenScreen,
+      Component: ImportCustomTokenScreen,
+    },
+    {
+      name: ScreenNameEnum.ImportTokenScreen,
+      Component: ImportTokenScreen,
     },
    
     {

@@ -11,6 +11,7 @@ import Clipboard from "@react-native-clipboard/clipboard";
 import { Fetch_CointAPI } from "../../../Api/apiRequest";
 import LoadingModal from "../../../utils/Loader";
 import { useSelector } from "react-redux";
+import TooltipMenu from "../../../compoent/CustomTooltip";
 
 const tokens = [
   { id: "1", name: "GTAN", fullname: "Giant Token", price: "$ 63,910.82", change: "-1.4%", icon: imageIndex.giantToken },
@@ -25,7 +26,7 @@ export default function WalletHome() {
   const [connected, setConnected] = useState(false)
   const [coins, setCoins] = useState([]);
   const isLogin = useSelector((state: any) => state?.auth);
-
+console.log(isLogin)
   const [loading, setLoading] = useState(false)
   useEffect(() => {
     fetchCoins();
@@ -53,7 +54,6 @@ export default function WalletHome() {
             Clipboard.setString(wallet.mnemonic?.phrase || "")
             setConnected(true)
           }
-
         },
         { text: "OK" },
       ]
@@ -150,7 +150,10 @@ export default function WalletHome() {
 
       }
       {/* Popular Tokens */}
+      <View style={{flexDirection:"row", justifyContent:'space-between'}}>
       <Text style={styles.sectionTitle}>Popular tokens</Text>
+      <TooltipMenu/>
+      </View>
       <FlatList
         data={coins}
         renderItem={renderToken}

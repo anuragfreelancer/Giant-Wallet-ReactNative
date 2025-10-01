@@ -59,7 +59,8 @@ export default function Signup() {
     handleLNameChange,
     phone,
     phoneError,
-    handlePhoneChange
+    handlePhoneChange,
+    GoogleAuth
   } = useSignup();
   return (
     <SafeAreaView
@@ -139,11 +140,17 @@ export default function Signup() {
               <TouchableOpacity style={{ alignItems: 'center', marginTop:15 }} onPress={() => navigation.navigate(ScreenNameEnum.LoginScreen)}>
                 <Text style={styles.signupText}>Alrady have an account? <Text style={{ color: color.primary }}> Login</Text> </Text>
               </TouchableOpacity>
-
+  <TouchableOpacity style={styles.button} activeOpacity={0.8} onPress={GoogleAuth}>
+            <View style={styles.inner}>
+              <Image
+                source={imageIndex.google} // <-- add your Google icon here
+                style={styles.icon}
+              />
+              <Text style={styles.text}>Sign up with Google</Text>
             </View>
-
+          </TouchableOpacity>
+            </View>
           </ScrollView>
-
         </TouchableWithoutFeedback>
       </KeyboardAvoidingView>
     </SafeAreaView>

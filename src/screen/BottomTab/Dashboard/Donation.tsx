@@ -86,7 +86,7 @@ setCompaign(data2?.data)
           <TouchableOpacity style={styles.iconButton} onPress={() => navigation.goBack()}>
             <Image source={imageIndex.back} style={{ height: 30, width: 30 }} />
           </TouchableOpacity>
-          <TouchableOpacity style={styles.iconButton} onPress={() => navigation.navigate(ScreenNameEnum.DonationTrackingDetail)}>
+          <TouchableOpacity style={styles.iconButton} onPress={() => navigation.navigate(ScreenNameEnum.DonationTrackingDetail, {item:data[0]})}>
             <Image source={imageIndex.locationCircle} style={{ height: 30, width: 30 }} />
 
           </TouchableOpacity>
@@ -95,16 +95,16 @@ setCompaign(data2?.data)
         {/* Hero Banner */}
         <View style={styles.banner}>
           <Image
-            source={imageIndex.banner}
+            source={data[0]?.logo? {uri:data[0]?.logo} : imageIndex.banner}
             style={styles.bannerImage}
           />
-          <Image source={imageIndex.overlay} style={styles.bannerOverlay} />
+          <Image source={data[0]?.logo? {uri:data[0]?.logo} : imageIndex.overlay} style={styles.bannerOverlay} />
           <View style={styles.bannerContent}>
             <Text style={styles.bannerTitle}>{data[0]?.name }</Text>
             <Text style={styles.bannerSubtitle}>
              { data[0]?.description}
             </Text>
-            <TouchableOpacity style={styles.visitButton} onPress={() => navigation.navigate(ScreenNameEnum.DonationTrackingDetail)}>
+            <TouchableOpacity style={styles.visitButton} onPress={() => navigation.navigate(ScreenNameEnum.DonationTrackingDetail,{item:data[0]})}>
               <Text style={styles.visitButtonText}>VISIT NOW</Text>
             </TouchableOpacity>
           </View>
@@ -123,6 +123,35 @@ setCompaign(data2?.data)
           ))}
         </View>
 
+ {/* Pinned Feed */}
+        <Text style={styles.sectionTitle}>Pinned Feed</Text>
+        {/* <FlatList
+          data={[compaign[0], compaign[1]]}
+          keyExtractor={(item, index) => index}
+          renderItem={({ item, index }) => (
+            <TouchableOpacity style={styles.donationCard} onPress={() => navigation.navigate(ScreenNameEnum.DonationDetail, { item })}>
+              { item?.image &&
+              <View>
+                
+                <Image source={{uri:item.image}} style={styles.donationImage} />
+                <View style={styles.donationIcon}>
+                <Image source={imageIndex.pin} style={styles.icond} />
+         </View>
+           </View>
+              }
+            
+           <View style={styles.donationInfo}>
+                <Text style={styles.donationTitle} numberOfLines={2}>
+                  {item?.title}
+                </Text>
+                <Text style={styles.donationMeta} numberOfLines={2}>
+                  {item?.description} 
+                </Text>
+              </View>
+              <Image source={imageIndex.next} style={{ height: 25, width: 25, marginLeft:5 }} />
+            </TouchableOpacity>
+          )}
+        /> */}
         {/* Needed Donation */}
         <Text style={styles.sectionTitle}>Needed Donation</Text>
         <FlatList
@@ -173,12 +202,13 @@ const styles = StyleSheet.create({
     overflow: "hidden",
     position: "relative",
   },
-  bannerImage: { width: "100%", height: 160, borderRadius: 16 },
+  bannerImage: { width: "100%", height: 160, borderRadius: 16, opacity:0.5, backgroundColor:'#000' },
   bannerOverlay: {
     ...StyleSheet.absoluteFillObject,
     backgroundColor: "rgba(0,0,0,0.3)",
     height: '100%',
-    width: '100%'
+    width: '100%',
+    opacity:0.5
   },
   bannerContent: {
     position: "absolute",
@@ -237,6 +267,8 @@ const styles = StyleSheet.create({
     borderRadius: 12,
   },
   donationImage: { width: 90, height: 90, borderRadius: 10, marginRight: 12 },
+  donationIcon: {  position:'absolute', bottom:5, right:10, backgroundColor:'#ffffff38', padding:5, borderRadius:30 },
+ icond:{width: 25, height: 25},
   donationInfo: { flex: 1 },
   donationTitle: { fontSize: 14, fontFamily: fonts.bold, color: "#000" , marginRight:15},
   donationMeta: { fontSize: 12, color: "#666", marginTop: 2, fontFamily: fonts.medium, },

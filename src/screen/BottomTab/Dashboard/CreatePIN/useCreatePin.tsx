@@ -19,9 +19,11 @@ export const useCreatePin = (cellCount: number = 4) => {
   const ref = useBlurOnFulfill({ value, cellCount });
   const [props, getCellOnLayoutHandler] = useClearByFocusCell({ value, setValue });
 
-  const handleChangeText = (text: string) => {
-    setValue(text);
-    setErrorMessage(text.length < cellCount ? 'Please enter a 4-digit pin.' : '');
+  const handleChangeText = async(text: string) => {
+   setValue(text);
+     setErrorMessage(text.length < cellCount ? 'Please enter a 4-digit pin.' : '');
+    console.log(text.length)
+    
   };
   const sendConfirm = () => {
     if (value.length !== cellCount) {

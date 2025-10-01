@@ -60,6 +60,64 @@ const LoginCustomer = (
         );
     }
 };
+
+
+const LoginWithGoogleCustomer = (
+    param: any,
+    setLoading: (loading: boolean) => void,
+    dispatch: any) => {
+    try {
+        setLoading(true)
+        const myHeaders = new Headers();
+        myHeaders.append("Content-Type", "application/json");
+
+        const raw = JSON.stringify({
+            "email": param?.email,
+            "password": param?.password
+        });
+        const requestOptions = {
+            method: "POST",
+            headers: myHeaders,
+            // body: raw,
+        };
+        // console.log(param)
+        const respons = fetch(`${base_url}google-auth/user/login/${param?.gtoken}`, requestOptions)
+            .then((response) => response.text())
+            .then((res) => {
+                const response = JSON.parse(res)
+                if (response.statusCode == 200) {
+                    setLoading(false)
+                    console.log(response)
+                    // successToast(
+                    //     response?.message
+                    // );
+                    dispatch(loginSuccess({ userData: response?.data, token: response?.data?.token, }));
+                    if (response?.data?.isPinCreated == true) {
+                        param?.navigation.navigate(ScreenNameEnum.VerifyPin)
+                    } else {
+                        param?.navigation.navigate(ScreenNameEnum.LocationAllow)
+
+                    }
+                    console.log(response)
+                    return response
+                } else {
+                    setLoading(false)
+                    errorToast(
+                        response.message,
+                    );
+                    return response
+                }
+            })
+            .catch((error) =>
+                console.error(error));
+        return respons
+    } catch (error) {
+        setLoading(false)
+        errorToast(
+            'Network error',
+        );
+    }
+};
 const SinupCustomer = (params: any,
     setLoading: (loading: boolean) => void,) => {
     try {
@@ -107,6 +165,59 @@ const SinupCustomer = (params: any,
         errorToast(
             'Network error',
         );
+    }
+};
+
+const SinupGoogleCustomer = (params: any,
+    setLoading: (loading: boolean) => void,) => {
+    try {
+        setLoading(true)
+        const myHeaders = new Headers();
+        myHeaders.append("Accept", "application/json");
+        myHeaders.append("Content-Type", "application/json");
+
+        const raw = JSON.stringify({
+            "fullName": params?.fname,
+            "email": params?.email,
+            "phone": params?.phone,
+            "password": params?.password
+        });
+        const requestOptions = {
+            method: "POST",
+            headers: myHeaders,
+            // body: raw,
+        };
+        // console.log(formdata)
+        const respons = fetch(`${base_url}google-auth/user/register/${params.gtoken}`, requestOptions)
+            .then((response) => response.text())
+            .then((res) => {
+                const response = JSON.parse(res)
+                if (response.statusCode == 200) {
+                    successToast(
+                        response?.message
+                    );
+                    console.log(response)
+                    LoginWithGoogleCustomer(params, setLoading, params.dispatch)
+                    // params?.navigation.navigate(ScreenNameEnum.LoginScreen)
+                    // params.navigation.navigate(ScreenNameEnum.LoginScreen);
+                    return response
+                } else {
+                    errorToast(
+                        response.message,
+                    );
+                    console.log(response)
+setLoading(false)
+                    return response
+                }
+            })
+            .catch((error) => console.error(error));
+        return respons
+    } catch (error) {
+        errorToast(
+            'Network error',
+        );
+setLoading(false)
+
     }
 };
 
@@ -592,8 +703,6 @@ const GetFoundationApi = async (params: any, setLoading: (loading: boolean) => v
         } else {
             errorToast(responseData.message);
             setLoading(false)
-
-            //   return thunkApi.rejectWithValue(responseData);
         }
     } catch (error) {
         errorToast('Network error');
@@ -610,20 +719,19 @@ const GetCompaignAPI = async (params: any, setLoading: (loading: boolean) => voi
         const myHeaders = new Headers();
         myHeaders.append("Accept", "application/json");
         myHeaders.append("Content-Type", "application/json");
-        //  myHeaders.append("Authorization", params?.token);
+         myHeaders.append("Authorization", "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4YmU4NWZkNTVkYTYxY2ZkOWJjYWE2MCIsInJvbGUiOiJhZG1pbiIsImVtYWlsIjoiYWRtaW5uQHlvcG1haWwuY29tIiwiaWF0IjoxNzU4ODg1NDgzLCJleHAiOjE3NjE0Nzc0ODN9.v0MTJPtRVQc6hLx4RIBK90AtrezXtPMzYIW6fk23G3I");
         // const formdata = new FormData();
         // formdata.append("user_id", params);
 
         const raw = JSON.stringify({
-            "foundationId": "68bffbce17d798a03f456be4",
-            "campaignId": ""
+            "foundationId": "68dbc9ff08fa292f7f00cbe0",
         });
         const requestOptions = {
             method: "POST",
             headers: myHeaders,
             body: raw,
         };
-        const response = await fetch(`${base_url}admin/getcampaign`, requestOptions);
+        const response = await fetch(`${base_url}admin/campaigns`, requestOptions);
         const resText = await response.text();
         const responseData = JSON.parse(resText);
         console.log(responseData)
@@ -633,10 +741,13 @@ const GetCompaignAPI = async (params: any, setLoading: (loading: boolean) => voi
         } else {
             errorToast(responseData.message);
             setLoading(false)
+            return responseData;
 
             //   return thunkApi.rejectWithValue(responseData);
         }
     } catch (error) {
+        console.log(error)
+
         errorToast('Network error');
         setLoading(false)
 
@@ -780,6 +891,7 @@ export {
     ChangePass_Api, EditProfile_Api, updatePassword,
     restEmailOtpScreen, LoginCustomer, otp_Verify,
     CreateLoginPin, VerifyLoginPin,
-    Fetch_CointAPI, GetFoundationApi, GetCompaignAPI
+    Fetch_CointAPI, GetFoundationApi, GetCompaignAPI,
+    LoginWithGoogleCustomer, SinupGoogleCustomer
 
 }  

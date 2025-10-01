@@ -10,103 +10,107 @@ import {
 import { SafeAreaView } from "react-native-safe-area-context";
 import imageIndex from "../../../assets/imageIndex";
 import { fonts } from "../../../constant";
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, useRoute } from "@react-navigation/native";
 
 const images = [
   imageIndex.l1,
   imageIndex.l2,
   imageIndex.l3,
- imageIndex.l4,
+  imageIndex.l4,
   imageIndex.l1,
 ];
 
 export default function DonationTrackingDetail() {
-    const navigation = useNavigation()
+  const navigation = useNavigation()
+  const route = useRoute()
+  const item = route?.params?.item
+  console.log(item)
   return (
-     <ScrollView showsVerticalScrollIndicator={false}>
-        {/* Header Image */}
-        <View style={styles.heroContainer}>
-          <Image source={images[0]} style={styles.heroImage} />
-          <View style={styles.headerButtons}>
-            <TouchableOpacity style={styles.iconButton} onPress={()=>navigation.goBack()}>
-                     <Image source={imageIndex.back} style={{height:30, width:30}}/>
-             
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.iconButton}>
-              <Text style={styles.iconText}>⤴</Text>
-            </TouchableOpacity>
+    <ScrollView showsVerticalScrollIndicator={false}>
+      {/* Header Image */}
+      <View style={styles.heroContainer}>
+        <Image source={{uri:item?.logo}} style={styles.heroImage} />
+        <View style={styles.headerButtons}>
+          <TouchableOpacity style={styles.iconButton} onPress={() => navigation.goBack()}>
+            <Image source={imageIndex.back} style={{ height: 30, width: 30 }} />
+
+          </TouchableOpacity>
+          
+          <TouchableOpacity style={styles.iconButton}>
+                        <Image source={imageIndex.pinSqr} style={{ height: 30, width: 30 }} />
+          </TouchableOpacity>
+        </View>
+      </View>
+
+      {/* Content */}
+      <View style={styles.content}>
+        <Text style={styles.title}>
+          {item?.name}
+        </Text>
+        <Text style={styles.byText}>{item?.description}</Text>
+
+        {/* Avatars */}
+        <View style={styles.avatarsRow}>
+          {images.slice(1).map((img, idx) => (
+            <Image key={idx} source={img} style={styles.avatar} />
+          ))}
+          <View style={styles.moreAvatar}>
+            <Text style={styles.moreText}>+10</Text>
           </View>
         </View>
 
-        {/* Content */}
-        <View style={styles.content}>
-          <Text style={styles.title}>
-            Child and youth care for donations – 2024
-          </Text>
-          <Text style={styles.byText}>by Smile Foundation</Text>
+        {/* Event Date */}
+        <View style={styles.detailRow}>
+          <View style={styles.detailIcon}>
+            <Image source={imageIndex.calendar1} style={styles.icon} />
 
-          {/* Avatars */}
-          <View style={styles.avatarsRow}>
-            {images.slice(1).map((img, idx) => (
-              <Image key={idx} source={img} style={styles.avatar} />
-            ))}
-            <View style={styles.moreAvatar}>
-              <Text style={styles.moreText}>+10</Text>
-            </View>
           </View>
-
-          {/* Event Date */}
-          <View style={styles.detailRow}>
-            <View style={styles.detailIcon}>
-                            <Image source={imageIndex.calendar1} style={styles.icon}/>
-
-            </View>
-            <View>
-              <Text style={styles.detailTitle}>10 September, 2023</Text>
-              <Text style={styles.detailSubtitle}>
-                Tuesday, 8:00AM–11:00AM
-              </Text>
-            </View>
+          <View>
+            <Text style={styles.detailTitle}>10 September, 2023</Text>
+            <Text style={styles.detailSubtitle}>
+              Tuesday, 8:00AM–11:00AM
+            </Text>
           </View>
-
-          {/* Venue */}
-          <View style={styles.detailRow}>
-            <View style={styles.detailIcon}>
-                            <Image source={imageIndex.location1} style={styles.icon}/>
-
-            </View>
-            <View>
-              <Text style={styles.detailTitle}>Goonj NGO</Text>
-              <Text style={styles.detailSubtitle}>
-                Sarita Vihar, New Delhi - 110076
-              </Text>
-            </View>
-          </View>
-
-          {/* Host */}
-          <View style={styles.detailRow}>
-            <View style={styles.detailIcon}>
-              <Image source={imageIndex.girl} style={styles.icon}/>
-            </View>
-            <View>
-              <Text style={styles.detailTitle}>Livia George</Text>
-              <Text style={styles.detailSubtitle}>Nation Scheifer</Text>
-            </View>
-          </View>
-
-          {/* Description */}
-              <Text style={styles.detailTitle}>About</Text>
-
-          <Text style={styles.description}>
-            Lorem ipsum dolor sit amet consectetur. Lacus maecenas volutpat
-            ipsum magna pharetra eu tellus. Vel vestibulum quis ut enim id dui
-            amet diam arcu. Id convallis tincidunt amet congue eget. Fermentum
-            sed risus in gravida ut amet est. A leo vitae elementum feugiat nec
-            pharetra cursus. Lectus eget urna lectus neque suspendisse sit
-            tempor. Dui leo lectus nisi lectus ut habitant.
-          </Text>
         </View>
-      </ScrollView>
+
+        {/* Venue */}
+        <View style={styles.detailRow}>
+          <View style={styles.detailIcon}>
+            <Image source={imageIndex.location1} style={styles.icon} />
+
+          </View>
+          <View>
+            <Text style={styles.detailTitle}>Goonj NGO</Text>
+            <Text style={styles.detailSubtitle}>
+              Sarita Vihar, New Delhi - 110076
+            </Text>
+          </View>
+        </View>
+
+        {/* Host */}
+        <View style={styles.detailRow}>
+          <View style={styles.detailIcon}>
+            <Image source={imageIndex.girl} style={styles.icon} />
+          </View>
+          <View>
+            <Text style={styles.detailTitle}>Livia George</Text>
+            <Text style={styles.detailSubtitle}>Nation Scheifer</Text>
+          </View>
+        </View>
+
+        {/* Description */}
+        <Text style={styles.detailTitle}>About</Text>
+
+        <Text style={styles.description}>
+          Lorem ipsum dolor sit amet consectetur. Lacus maecenas volutpat
+          ipsum magna pharetra eu tellus. Vel vestibulum quis ut enim id dui
+          amet diam arcu. Id convallis tincidunt amet congue eget. Fermentum
+          sed risus in gravida ut amet est. A leo vitae elementum feugiat nec
+          pharetra cursus. Lectus eget urna lectus neque suspendisse sit
+          tempor. Dui leo lectus nisi lectus ut habitant.
+        </Text>
+      </View>
+    </ScrollView>
   );
 }
 
@@ -131,8 +135,8 @@ const styles = StyleSheet.create({
   iconText: { fontSize: 16, fontWeight: "bold" },
 
   content: { padding: 16 },
-  title: { fontSize: 20, fontFamily:fonts.bold, color: "#000", marginBottom: 6 },
-  byText: { fontSize: 14, color: "#666", marginBottom: 16, fontFamily:fonts.regular },
+  title: { fontSize: 20, fontFamily: fonts.bold, color: "#000", marginBottom: 6 },
+  byText: { fontSize: 14, color: "#666", marginBottom: 16, fontFamily: fonts.regular },
 
   avatarsRow: { flexDirection: "row", alignItems: "center", marginBottom: 20 },
   avatar: {
@@ -151,7 +155,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
   },
-  moreText: { color: "#fff",fontFamily:fonts.bold },
+  moreText: { color: "#fff", fontFamily: fonts.bold },
 
   detailRow: {
     flexDirection: "row",
@@ -167,18 +171,18 @@ const styles = StyleSheet.create({
     // alignItems: "center",
     marginRight: 15,
   },
-  icon:{
-     width: 45,
+  icon: {
+    width: 45,
     height: 45,
   },
-  detailTitle: { fontSize: 15,fontFamily:fonts.bold, color: "#000" },
-  detailSubtitle: { fontSize: 13, color: "#666", fontFamily:fonts.regular },
+  detailTitle: { fontSize: 15, fontFamily: fonts.bold, color: "#000" },
+  detailSubtitle: { fontSize: 13, color: "#666", fontFamily: fonts.regular },
 
   description: {
     fontSize: 14,
     lineHeight: 20,
     color: "#555",
     marginTop: 12,
-    fontFamily:fonts.regular
+    fontFamily: fonts.regular
   },
 });

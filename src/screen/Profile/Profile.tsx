@@ -18,6 +18,7 @@ import { useDispatch, useSelector } from "react-redux";
 import LogoutModal from "../../compoent/LogoutModal";
 import { GetUserApi } from "../../Api/apiRequest";
 import LoadingModal from "../../utils/Loader";
+import { GoogleSignin } from "@react-native-google-signin/google-signin";
 
 
 // Sample data (use local icons/images in ./assets/)
@@ -39,17 +40,49 @@ const ProfileScreen = () => {
     const [loading, setLoading] = useState(false)
     const [user,setUser] = useState(null)
     const [isModalVisible, setModalVisible] = useState(false);
-    const handleLogout = () => {
-        dispatch(logout());
-        setModalVisible(false);
-        // AsyncStorage.removeItem('userRole');  // AsyncStorage में save
-        navigation.replace(ScreenNameEnum.LoginScreen);
-        // successToast(localizationStrings.logoutSuccess);
-    };
+    // const handleLogout = async() => {
+    //     dispatch(logout());
+    //     await GoogleSignin.signIn()
+    //     setModalVisible(false);
+    //     // AsyncStorage.removeItem('userRole');  // AsyncStorage में save
+    //     navigation.replace(ScreenNameEnum.LoginScreen);
+    //     // successToast(localizationStrings.logoutSuccess);
+    // };
+    const handleLogout = async () => {
+  try {
+    dispatch(logout());
+
+    // check if user was logged in with Google
+
+    const currentUser = await GoogleSignin.getCurrentUser();
+console.log(currentUser)
+    if (currentUser) {
+    //   await GoogleSignin.revokeAccess(); // optional, removes access
+      await GoogleSignin.hasPlayServices();
+      await GoogleSignin.signOut();      // logs out from Google
+      setModalVisible(false);
+    navigation.replace(ScreenNameEnum.LoginScreen);
+
+    }else{
+
+setModalVisible(false);
+    navigation.replace(ScreenNameEnum.LoginScreen);
+
+    }
+
+    
+    // successToast(localizationStrings.logoutSuccess);
+  } catch (error) {
+    console.log("Logout error:", error);
+    setModalVisible(false);
+    navigation.replace(ScreenNameEnum.LoginScreen);
+  }
+};
 
     useFocusEffect(
     useCallback(() => {
       getProfile();
+      
     }, [])
   );
   const  getProfile= async()=>{

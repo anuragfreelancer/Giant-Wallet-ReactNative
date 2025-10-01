@@ -221,13 +221,13 @@ const TokenSelectModal1 = ({ visible, onClose, onSelect, currentToken }:any) => 
 };
 
 export default function SwapScreen() {
-  const [fromToken, setFromToken] = useState("ETH");
-  const [toToken, setToToken] = useState("BTC");
+  const [fromToken, setFromToken] = useState(data[0]?.symbol);
+  const [toToken, setToToken] = useState(data[1]?.symbol);
   const [fromAmount, setFromAmount] = useState("");
   const [toAmount, setToAmount] = useState("");
 
-  const [fromIcon, setFromIcon] = useState("");
-  const [toIcon, setToIcon] = useState("");
+  const [fromIcon, setFromIcon] = useState(data[0]?.image);
+  const [toIcon, setToIcon] = useState(data[1]?.image);
   const [fromModalVisible, setFromModalVisible] = useState(false);
   const [toModalVisible, setToModalVisible] = useState(false);
   const [rate, setRate] = useState(0);
@@ -247,7 +247,7 @@ export default function SwapScreen() {
         const fee = usdValue * 0.005; // 0.5% fee
 
         setRate(conversionRate);
-        setToAmount(convertedAmount.toFixed(6));
+        setToAmount(convertedAmount.toFixed(6) );
         setUsdPrice(usdValue);
         setEstimatedFee(fee);
       }
@@ -313,7 +313,7 @@ export default function SwapScreen() {
         image={toIcon}
       />
 
-      {fromAmount && (
+      {/* {fromAmount && (
         <View style={styles.detailsCard}>
           <View style={styles.detailRow}>
             <Text style={styles.detailLabel}>Rate</Text>
@@ -336,7 +336,7 @@ export default function SwapScreen() {
             <Text style={styles.detailValue}>${estimatedFee.toFixed(2)}</Text>
           </View>
         </View>
-      )}
+      )} */}
 
       <CustomButton
         title="Confirm Swap"

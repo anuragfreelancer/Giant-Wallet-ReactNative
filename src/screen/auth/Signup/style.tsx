@@ -80,4 +80,31 @@ export const styles = StyleSheet.create({
     width: '100%',
     marginTop: 12,
   },
+  
+  button: {
+    backgroundColor: '#fff',
+    borderRadius: 27.5,
+    borderColor: '#ddd',
+    borderWidth: 0,
+    alignSelf: 'center',
+    height:55,
+    width:'100%',
+    alignItems:'center',
+    justifyContent:'center',
+    marginVertical:10
+  },
+  inner: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  text: {
+    fontSize: 14,
+    fontFamily:fonts.medium,
+    color: '#555',
+  },
+  icon: {
+    width: 18,
+    height: 18,
+    marginRight: 12,
+  },
 });

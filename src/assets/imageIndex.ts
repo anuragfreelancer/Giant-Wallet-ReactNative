@@ -74,6 +74,11 @@ search: require('./images/search.png'),
 downRed: require('./images/downRed.png'),
 send: require('./images/send.png'),
 imports: require('./images/import.png'),
+pin: require('./images/pin.png'),
+pinSqr: require('./images/pinSqr.png'),
+global: require('./images/global.png'),
+importToken: require('./images/importToken.png'),
+more: require('./images/more.png'),
 
 
 

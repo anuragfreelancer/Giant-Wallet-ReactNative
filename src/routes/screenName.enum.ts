@@ -36,6 +36,7 @@ enum ScreenNameEnum {
   BuyDetail = "BuyDetail",
   SendEth = "SendEth",
   SellDetail = "SellDetail",
+  TokenPinScreen="TokenPinScreen",
   ConfirmSwapScreen = "ConfirmSwapScreen",
   DonationTrackingDetail = "DonationTrackingDetail",
   DonationDetail = "DonationDetail",
@@ -44,7 +45,9 @@ enum ScreenNameEnum {
   DonationScreen = "DonationScreen",
   paymentMethod = "PaymentMethod",
   importWallet ="importWallet",
-  cointDetail = "cointDetail"
+  cointDetail = "cointDetail",
+  ImportTokenScreen ="ImportTokenScreen",
+  ImportCustomTokenScreen="ImportCustomTokenScreen"
 }
 
 export default ScreenNameEnum;

@@ -20,6 +20,7 @@ export const useOtpVerification = (cellCount: number = 4) => {
   const handleChangeText = (text: string) => {
     setValue(text);
     setErrorMessage(text.length < cellCount ? 'Please enter a 4-digit code.' : '');
+// console.log(text.length)
   };
 
   const handleVerifyOTP = async () => {

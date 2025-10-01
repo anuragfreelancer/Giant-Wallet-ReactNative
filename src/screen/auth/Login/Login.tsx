@@ -31,7 +31,8 @@ export default function Login() {
     handleEmailChange,
     handlePasswordChange,
     navigation,
-    handleLogin
+    handleLogin,
+    GoogleAuth
   } = useLogin();
   return (
     <SafeAreaView
@@ -86,7 +87,7 @@ export default function Login() {
 
           <Text style={styles.orText}>OR</Text>
 
-          <TouchableOpacity style={styles.button} activeOpacity={0.8}>
+          <TouchableOpacity style={styles.button} activeOpacity={0.8} onPress={GoogleAuth}>
             <View style={styles.inner}>
               <Image
                 source={imageIndex.google} // <-- add your Google icon here

@@ -14,6 +14,7 @@ import imageIndex from "../../../assets/imageIndex";
 import { fonts } from "../../../constant";
 import { useNavigation } from "@react-navigation/native";
 import ScreenNameEnum from "../../../routes/screenName.enum";
+import { data } from "./data";
 
 interface Token {
   id: string;
@@ -31,13 +32,7 @@ interface Props {
   currentToken:any
 }
 
-const tokens = [
-  { id: "1", name: "GTAN", fullname: "Giant Token", price: "$ 63,910.82", change: "-1.4%", icon: imageIndex.giantToken },
-  { id: "2", name: "BTC", fullname: "Bitcoin", price: "$ 23.00", change: "-1.4%", icon: imageIndex.bitcoin },
-  { id: "3", name: "MATIC", fullname: "Polygon", price: "$ 5,910.00", change: "-1.4%", icon: imageIndex.matic },
-  { id: "4", name: "ETH", fullname: "Ethereum", price: "$ 23.00", change: "-1.4%", icon: imageIndex.etherum },
-  { id: "5", name: "BNB", fullname: "BNB Smart Chain", price: "$ 23.00", change: "-1.4%", icon: imageIndex.bnb },
-];
+const tokens = data
 
 export default function TokenSelectModal({ visible, onClose, onSelect, currentToken }: Props) {
   const navigation = useNavigation()
@@ -47,14 +42,14 @@ export default function TokenSelectModal({ visible, onClose, onSelect, currentTo
       onSelect(item)
       // navigation.navigate(ScreenNameEnum.ConfirmSwapScreen)
     }} style={styles.tokenRow}>
-      <Image source={item.icon} style={styles.tokenIcon} />
+      <Image source={{uri:item.image}} style={styles.tokenIcon} />
       <View style={styles.tokenInfo}>
         <Text style={styles.tokenName}>{item.name}</Text>
         <Text style={styles.tokenFullname}>{item.fullname}</Text>
       </View>
       <View style={styles.tokenPriceSection}>
-        <Text style={styles.tokenPrice}>{item.price}</Text>
-        <Text style={styles.tokenChange}>{item.change}</Text>
+        <Text style={styles.tokenPrice}>{item.current_price}</Text>
+        <Text style={[styles.tokenChange,{color : item.price_change_percentage_24h>0 ? 'green':'red'}]}>{item.price_change_percentage_24h}</Text>
       </View>
     </TouchableOpacity>
   );
@@ -78,6 +73,7 @@ export default function TokenSelectModal({ visible, onClose, onSelect, currentTo
 
             {/* Token List */}
             <FlatList
+            showsVerticalScrollIndicator={false}
               data={tokens}
               keyExtractor={(item) => item.id}
               renderItem={renderToken}
@@ -126,5 +122,5 @@ const styles = StyleSheet.create({
   tokenFullname: { fontSize: 13, color: "#666", fontFamily: fonts.regular },
   tokenPriceSection: { alignItems: "flex-end" },
   tokenPrice: { fontSize: 15, fontFamily: fonts.bold, color: "#000" },
-  tokenChange: { fontSize: 13, color: "red", fontFamily: fonts.regular },
+  tokenChange: { fontSize: 13, fontFamily: fonts.regular },
 });

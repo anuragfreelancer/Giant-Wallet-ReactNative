@@ -35,7 +35,7 @@ const TokenDetailScreen = () => {
 
   const fetchTokenData = async () => {
     try {
-      setLoading(true)
+      // setLoading(true)
       setError(null);
       // Fetch token details
       const tokenResponse = await fetch(
@@ -91,9 +91,12 @@ const TokenDetailScreen = () => {
     return num.toFixed(2);
   };
 
-  const formatPercentage = (value: number) => {
-    return `${value >= 0 ? '+' : ''}${value.toFixed(2)}%`;
-  };
+ const formatPercentage = (value: number | null | undefined) => {
+    if (typeof value !== "number" || isNaN(value)) {
+        return "0.00%";
+    }
+    return `${value >= 0 ? "+" : ""}${value.toFixed(2)}%`;
+};
 
   const getPriceChangeColor = (value: number) => {
     return value >= 0 ? '#4cd964' : '#ff3b30';
@@ -101,10 +104,7 @@ const TokenDetailScreen = () => {
 
   if (loading) {
     return (
-      <View style={styles.centerContainer}>
-        <ActivityIndicator size="large" color="#007AFF" />
-        <Text style={styles.loadingText}>Loading token data...</Text>
-      </View>
+     <LoadingModal/>
     );
   }
 
@@ -208,7 +208,7 @@ const TokenDetailScreen = () => {
         {/* Chart */}
         {tokenData &&
           <View style={styles.chartContainer}>
-            <LineChart
+            {/* <LineChart
               data={chartData}
               width={width - 60}
               height={220}
@@ -220,7 +220,27 @@ const TokenDetailScreen = () => {
               withInnerLines={false}
               withOuterLines={false}
               withDots={false}
-            />
+            /> */}
+
+            {Array.isArray(priceData) && priceData.length > 0 ? (
+  <LineChart
+    data={chartData}
+    width={width - 60}
+    height={220}
+    chartConfig={chartConfig}
+    bezier
+    style={styles.chart}
+    withHorizontalLabels={true}
+    withVerticalLabels={true}
+    withInnerLines={false}
+    withOuterLines={false}
+    withDots={false}
+  />
+) : (
+  <Text style={{ textAlign: "center", marginTop: 20, color: "#888" }}>
+    No chart data available
+  </Text>
+)}
             <View style={styles.timeRangeSelector}>
               {['7', '30', '90', '365'].map((range) => (
                 <TouchableOpacity

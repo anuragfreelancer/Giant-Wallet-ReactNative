@@ -32,7 +32,7 @@ const DonationDetailScreen = () => {
                 <Text style={styles.subtitle}>by {item?.foundationName}</Text>
 
                 {/* Banner Image */}
-                <Image source={{uri:item?.image}} style={styles.bannerImage} />
+                <Image source={{ uri: item?.image }} style={styles.bannerImage} />
                 {/* About Section */}
                 <Text style={styles.sectionTitle}>About</Text>
                 <Text style={styles.aboutText}>
@@ -41,23 +41,23 @@ const DonationDetailScreen = () => {
 
                 {/* Participants */}
                 <Text style={styles.sectionTitle}>Participants</Text>
-<View style={styles.participantRow}>
-  {item?.participants.slice(0, 3).map((imgSrc: { avatar: string; }, index: React.Key | null | undefined) => (
-    <Image
-      key={index}
-      source={{ uri: encodeURI(imgSrc.avatar) }}
-      style={styles.participantImg}
-    />
-  ))}
+                <View style={styles.participantRow}>
+                    {item?.participants.slice(0, 3).map((imgSrc: { avatar: string; }, index: React.Key | null | undefined) => (
+                        <Image
+                            key={index}
+                            source={{ uri: encodeURI(imgSrc.avatar) }}
+                            style={styles.participantImg}
+                        />
+                    ))}
 
-  {item?.participants.length > 3 && (
-    <View style={styles.moreCircle}>
-      <Text style={styles.moreText}>
-        +{item?.participants.length - 3}
-      </Text>
-    </View>
-  )}
-</View>
+                    {item?.participants.length > 3 && (
+                        <View style={styles.moreCircle}>
+                            <Text style={styles.moreText}>
+                                +{item?.participants.length - 3}
+                            </Text>
+                        </View>
+                    )}
+                </View>
 
                 {/* Buttons */}
                 <CustomButton title="Donate Now" style={{ marginTop: 20 }} onPress={() => setModalVisible(true)} />

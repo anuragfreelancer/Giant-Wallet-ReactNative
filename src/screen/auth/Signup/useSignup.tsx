@@ -7,7 +7,8 @@ import { useDispatch } from 'react-redux';
 import { RegistrationStackParamList } from '../../../navigators/RegistrationRoutes';
 import { validateConfirmPassword, validateEmail, validateFirstName, validateLastName, validateMobileNumber, validatePassword } from '../../../utils/validation';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { SinupCustomer } from '../../../Api/apiRequest';
+import { SinupCustomer, SinupGoogleCustomer } from '../../../Api/apiRequest';
+import { GoogleSignin, statusCodes } from '@react-native-google-signin/google-signin';
 
 type UserType = 'User' | 'Driver';
 
@@ -30,6 +31,7 @@ export default function useSignup() {
   const [loading, setLoading] = useState(false);
   const [checked, setChecked] = useState(false)
   const [type, setType] = useState<UserType>('User');
+  
   useEffect(() => {
     (async () => {
       const userType = await AsyncStorage.getItem('userType');
@@ -98,6 +100,36 @@ setLoading(true)
     }
   };
 
+   const GoogleAuth = async () => {
+    try {
+      await GoogleSignin.hasPlayServices();
+      const userInfo = await GoogleSignin.signIn();
+      console.log("User Info:", userInfo);
+      if(userInfo?.type == 'success'){
+         const params = {
+        // email,
+        // password,
+        // roleType: role,
+        navigation,
+        gtoken:userInfo?.data?.idToken,
+        dispatch
+      };
+      await SinupGoogleCustomer(params, setLoading);
+
+      }
+    } catch (error: any) {
+      if (error.code === statusCodes.SIGN_IN_CANCELLED) {
+        console.log("User cancelled");
+      } else if (error.code === statusCodes.IN_PROGRESS) {
+        console.log("Signin in progress");
+      } else if (error.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
+        console.log("Play services not available");
+      } else {
+        console.log("Error:", error);
+      }
+    }
+  };
+
   return {
     email,
     password,
@@ -122,6 +154,7 @@ setLoading(true)
     handleLNameChange,
     phone,
     phoneError,
-    handlePhoneChange
+    handlePhoneChange,
+    GoogleAuth
   };
 }
