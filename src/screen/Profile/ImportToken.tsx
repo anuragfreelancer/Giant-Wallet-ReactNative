@@ -55,7 +55,8 @@ const ImportTokenScreen = ({ navigation }) => {
   const [coins, setCoins] = useState([]);
   const [activeTab, setActiveTab] = useState("Search");
   const [selectedToken, setSelectToken] = useState({})
-  const [address, setAddress] = useState('0xC1aDF8E7eB02A1bB4abf5747B8b9118c68ce72de')
+  const [address, setAddress] = useState('')
+  // const [address, setAddress] = useState('0xC1aDF8E7eB02A1bB4abf5747B8b9118c68ce72de')
   const isLogin = useSelector((state: any) => state?.auth);
   const [tokenData, setTokenData] = useState(null)
 
@@ -74,7 +75,7 @@ const ImportTokenScreen = ({ navigation }) => {
   };
 
   // Filtered list based on search
-  const filteredData = coins.filter(
+  const filteredData = coins.length>0 && coins?.filter(
     (item) =>
       item?.name.toLowerCase().includes(search.toLowerCase()) ||
       item?.symbol.toLowerCase().includes(search.toLowerCase())
