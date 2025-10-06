@@ -3,11 +3,9 @@ import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import BottomTabBar from '../compoent/tabBarComponent';
 import HomeScreen from '../screen/BottomTab/Dashboard/DashboardScreen';
-
 import SwapScreen from '../screen/BottomTab/swap/swap';
 import EarnList from '../screen/BottomTab/Earn/EarnList';
 import ProfileScreen from '../screen/Profile/Profile';
-
 
 const Tab = createBottomTabNavigator();
 

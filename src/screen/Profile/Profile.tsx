@@ -19,6 +19,7 @@ import LogoutModal from "../../compoent/LogoutModal";
 import { GetUserApi } from "../../Api/apiRequest";
 import LoadingModal from "../../utils/Loader";
 import { GoogleSignin } from "@react-native-google-signin/google-signin";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 
 // Sample data (use local icons/images in ./assets/)
@@ -51,7 +52,7 @@ const ProfileScreen = () => {
     const handleLogout = async () => {
   try {
     dispatch(logout());
-
+AsyncStorage.clear()
     // check if user was logged in with Google
 
     const currentUser = await GoogleSignin.getCurrentUser();

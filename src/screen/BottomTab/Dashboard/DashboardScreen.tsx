@@ -12,58 +12,148 @@ import { Fetch_CointAPI } from "../../../Api/apiRequest";
 import LoadingModal from "../../../utils/Loader";
 import { useSelector } from "react-redux";
 import TooltipMenu from "../../../compoent/CustomTooltip";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import WalletCreation from "./walletCreation";
 
-const tokens = [
-  { id: "1", name: "GTAN", fullname: "Giant Token", price: "$ 63,910.82", change: "-1.4%", icon: imageIndex.giantToken },
-  { id: "2", name: "BTC", fullname: "Bitcoin", price: "$ 23.00", change: "-1.4%", icon: imageIndex.bitcoin },
-  { id: "3", name: "MATIC", fullname: "Polygon", price: "$ 5,910.00", change: "-1.4%", icon: imageIndex.matic },
-  { id: "4", name: "ETH", fullname: "Ethereum", price: "$ 23.00", change: "-1.4%", icon: imageIndex.etherum },
-  { id: "5", name: "BNB", fullname: "BNB Smart Chain", price: "$ 23.00", change: "-1.4%", icon: imageIndex.bnb },
-];
+
+const PROVIDER_URL = "https://sepolia.infura.io/v3/0556c560569a46a283d23c736af1a7c4";
+const provider = new ethers.JsonRpcProvider(PROVIDER_URL);
 
 export default function WalletHome() {
   const navigation = useNavigation()
+    const [showWalletCreation, setShowWalletCreation] = useState(false);
   const [connected, setConnected] = useState(false)
+  const [existingMnemonic, setExistingMnemonic] = useState<string>();
   const [coins, setCoins] = useState([]);
+  const [wallet, setWallet] = useState()
+  const [balance, setBalance] = useState(0)
   const isLogin = useSelector((state: any) => state?.auth);
-console.log(isLogin)
+  console.log(isLogin)
   const [loading, setLoading] = useState(false)
   useEffect(() => {
     fetchCoins();
   }, []);
 
   const fetchCoins = async () => {
+    // AsyncStorage.removeItem('wallet')
     const data = await Fetch_CointAPI(setLoading)
+    const ww = await AsyncStorage.getItem('wallet')
+    const nn = await ww != null ? JSON.parse(ww) : null;
+    console.log(nn)
+    setWallet(nn)
+
+    if (nn) {
+      setConnected(true)
+      const bb = await getWalletBalance()
+      console.log(bb)
+    }
     setCoins(data)
   };
   // Generate a new random wallet
   const createWallet = async () => {
-    await setLoading(true)
-    const wallet = await ethers.Wallet.createRandom();
-    console.log("Address:", wallet.address);
-    console.log("Private Key:", wallet.privateKey);
-    console.log("Mnemonic:", wallet.mnemonic?.phrase);
-    Alert.alert(
-      "Wallet Created",
-      `Address: ${wallet.address}\n\nMnemonic: ${wallet.mnemonic?.phrase}`,
-      [
-        {
-          text: "Copy Mnemonic",
-          onPress: () => {
+    setLoading(true); // show loader first
 
-            Clipboard.setString(wallet.mnemonic?.phrase || "")
-            setConnected(true)
-          }
-        },
-        { text: "OK" },
-      ]
-    );
-    setLoading(false)
-    return wallet;
+    // Give React a tick to render the loader
+    setTimeout(async () => {
+      try {
+        const wallet = ethers.Wallet.createRandom();
+        console.log("Address:", wallet.address);
+        console.log("Private Key:", wallet.privateKey);
+        console.log("Mnemonic:", wallet.mnemonic?.phrase);
+
+        setConnected(true);
+
+        const jsonValue = JSON.stringify({
+          address: wallet.address,
+          privateKey: wallet.privateKey,
+          mnemonic: wallet.mnemonic?.phrase,
+        });
+        setWallet(wallet)
+        await AsyncStorage.setItem("wallet", jsonValue);
+
+        Alert.alert(
+          "Wallet Created",
+          `Address: ${wallet.address}\n\nMnemonic: ${wallet.mnemonic?.phrase}`,
+          [
+            {
+              text: "Copy Mnemonic",
+              onPress: () => {
+                Clipboard.setString(wallet.mnemonic?.phrase || "");
+                Alert.alert("Copied", "Mnemonic copied to clipboard!");
+              },
+            },
+            { text: "OK" },
+          ]
+        );
+      } catch (err) {
+        console.error("Wallet creation failed:", err);
+        Alert.alert("Error", "Failed to create wallet");
+      } finally {
+        setLoading(false); // stop loader
+      }
+    }, 100); // 100ms delay gives UI time to update
   };
-  const renderToken = ({ item }:any) => (
+
+
+
+  const getWalletBalance = async () => {
+    try {
+      // Load saved wallet
+      const walletData = await AsyncStorage.getItem("wallet");
+      if (!walletData) {
+        Alert.alert("Error", "No wallet found. Please create one first.");
+        return null;
+      }
+
+      // Parse and reconstruct wallet
+      const parsed = JSON.parse(walletData);
+      const wallet = new ethers.Wallet(parsed.privateKey, provider);
+      console.log(parsed)
+      // Get balance
+      const balanceWei = await provider.getBalance(wallet.address);
+      const balanceEth = ethers.formatEther(balanceWei); // converts wei → ETH/BNB
+      setBalance(balanceEth)
+      console.log(`Balance of ${wallet.address}: ${balanceEth}`);
+      // Alert.alert("Wallet Balance", `${balanceEth} tBNB (testnet)`);
+
+      return balanceEth;
+    } catch (err) {
+      console.error(err);
+      Alert.alert("Error", "Failed to fetch wallet balance");
+      return null;
+    }
+  };
+
+  if (showWalletCreation) {
+    return (
+      <WalletCreation 
+        existingMnemonic={existingMnemonic}
+        onWalletCreated={async(walletData) => {
+          // Handle successful wallet creation
+          await setWallet(walletData)
+           const jsonValue = JSON.stringify({
+          address: walletData.address,
+          privateKey: walletData.privateKey,
+          mnemonic: walletData.mnemonic?.phrase,
+        });
+        await AsyncStorage.setItem("wallet", jsonValue);
+        setConnected(true)
+          setShowWalletCreation(false);
+          console.log(walletData)
+          
+          await getWalletBalance()
+
+           
+        }}
+        onBack={() => setShowWalletCreation(false)}
+      />
+    );
+  }
+
+
+  const renderToken = ({ item }: any) => (
     <TouchableOpacity style={styles.tokenRow} onPress={() => navigation.navigate(ScreenNameEnum.cointDetail, { id: item?.id })}>
-      <Image source={{ uri: item.image.thumb  || item.image }} style={styles.tokenIcon} />
+      <Image source={{ uri: item.image.thumb || item.image }} style={styles.tokenIcon} />
       <View style={styles.tokenInfo}>
         {/* <Text style={styles.tokenName}>{item.name}</Text> */}
         <Text style={styles.tokenName}>{item?.symbol}</Text>
@@ -104,7 +194,12 @@ console.log(isLogin)
       {/* Wallet Actions */}
       {connected == false ?
         <View style={{ marginTop: 25, marginBottom: 10 }}>
-          <TouchableOpacity style={styles.actionCard} onPress={() => createWallet()}>
+          <TouchableOpacity style={styles.actionCard}
+           onPress={() => {
+            
+            // createWallet()
+          setShowWalletCreation(true);
+           }}>
             <Image source={imageIndex.add} style={styles.actionIcon} />
             <View>
               <Text style={styles.actionTitle}>Create new wallet</Text>
@@ -112,20 +207,39 @@ console.log(isLogin)
             </View>
           </TouchableOpacity>
 
-          <TouchableOpacity style={styles.actionCard} onPress={() => navigation.navigate(ScreenNameEnum.importWallet)}>
+          {/* <TouchableOpacity style={styles.actionCard} onPress={() => navigation.navigate(ScreenNameEnum.importWallet)}>
             <Image source={imageIndex.download} style={styles.actionIcon} />
             <View>
               <Text style={styles.actionTitle}>Add existing wallet</Text>
               <Text style={styles.actionSubtitle}>Import, restore or view-only</Text>
             </View>
-          </TouchableOpacity>
+          </TouchableOpacity> */}
         </View>
         :
         <View style={{ padding: 20, alignItems: 'center' }}>
 
 
           <Text style={styles.tokenFullname}>Current Balance</Text>
-          <Text onPress={() => setConnected(false)} style={[styles.tokenName, { fontSize: 26 }]}>$ 1500.00</Text>
+          <Text onPress={() => setConnected(false)} style={[styles.tokenName, { fontSize: 26 }]}>$ {balance}</Text>
+          {/* <Text style={[styles.tokenFullname, { width: '70%' }]} numberOfLines={1}>Wallet address: {wallet?.address}</Text> */}
+          <View style={{ flexDirection: "row", alignItems: "center", marginTop: 0, width: "85%" }}>
+            <Text style={[styles.tokenFullname, { flex: 1 }]} numberOfLines={1}>
+              Wallet address: {wallet?.address}
+            </Text>
+
+            <TouchableOpacity
+              onPress={() => {
+                if (wallet?.address) {
+                  Clipboard.setString(wallet.address);
+                  Alert.alert("Copied!", "Wallet address copied to clipboard.");
+                }
+              }}
+              style={styles.copyButton}
+            >
+              <Text style={{ fontSize: 18 }}>📋</Text>
+              {/* Or use vector-icons: <Ionicons name="copy-outline" size={20} color="black" /> */}
+            </TouchableOpacity>
+          </View>
           <View style={[styles.iconsRow, { justifyContent: 'space-between', width: '100%', marginTop: 15 }]}>
             <TouchableOpacity style={{ alignItems: 'center' }} onPress={() => navigation.navigate(ScreenNameEnum.SendScreen)}>
               <Image source={imageIndex.send} style={[styles.icon, { marginLeft: 0 }]} />
@@ -150,9 +264,9 @@ console.log(isLogin)
 
       }
       {/* Popular Tokens */}
-      <View style={{flexDirection:"row", justifyContent:'space-between'}}>
-      <Text style={styles.sectionTitle}>Popular tokens</Text>
-      <TooltipMenu/>
+      <View style={{ flexDirection: "row", justifyContent: 'space-between' }}>
+        <Text style={styles.sectionTitle}>Popular tokens</Text>
+        <TooltipMenu />
       </View>
       <FlatList
         data={coins}
@@ -203,4 +317,12 @@ const styles = StyleSheet.create({
   tokenPriceSection: { alignItems: "flex-end" },
   tokenPrice: { fontSize: 15, fontFamily: fonts.bold, color: "#000" },
   tokenChange: { fontSize: 13, color: "red", fontFamily: fonts.regular },
+
+  copyButton: {
+    marginLeft: 8,
+    padding: 0,
+    borderRadius: 6,
+    // backgroundColor: "#f2f2f2",
+  },
+
 });

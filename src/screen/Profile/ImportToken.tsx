@@ -14,9 +14,10 @@ import { color, fonts } from "../../constant";
 import { SafeAreaView } from "react-native-safe-area-context";
 import SearchBar from "../../compoent/SearchBar";
 import { useSelector } from "react-redux";
-import { Fetch_CointAPI } from "../../Api/apiRequest";
+import { AddCustomTokenAPI, Fetch_CointAPI, GetAllTokenAPI, GetTokenDetailAPI } from "../../Api/apiRequest";
 import LoadingModal from "../../utils/Loader";
 import CustomButton from "../../compoent/CustomButton";
+import CustomDropdown from "../../compoent/CustomDropdown";
 
 // Currency Data
 const currencies = [
@@ -30,14 +31,33 @@ const currencies = [
   { id: "ksm", name: "KSM", subtitle: "Kusama", icon: imageIndex.ksm },
   { id: "inj", name: "INJ", subtitle: "Native Injective", icon: imageIndex.inj },
 ];
+const dataToken = [
+  {
+    "name": "BNB Smart Chain Testnet",
+    "symbol": "ETH",
+    "chainId": 1,
+    "rpcUrl": "https://sepolia.infura.io/v3/b68bdfe421f34d50a7590e57d8a33c45"
+  },
+  {
+    "name": "Binance Smart Chain",
+    "symbol": "BNB",
+    "chainId": 56,
+    "rpcUrl": "https://bsc-dataseed.binance.org"
+  },
+
+]
+
+
 
 const ImportTokenScreen = ({ navigation }) => {
   const [selectedCurrency, setSelectedCurrency] = useState("giant-token");
   const [search, setSearch] = useState("");
   const [coins, setCoins] = useState([]);
   const [activeTab, setActiveTab] = useState("Search");
-
+  const [selectedToken, setSelectToken] = useState({})
+  const [address, setAddress] = useState('0xC1aDF8E7eB02A1bB4abf5747B8b9118c68ce72de')
   const isLogin = useSelector((state: any) => state?.auth);
+  const [tokenData, setTokenData] = useState(null)
 
   const [loading, setLoading] = useState(false)
   useEffect(() => {
@@ -45,8 +65,12 @@ const ImportTokenScreen = ({ navigation }) => {
   }, []);
 
   const fetchCoins = async () => {
-    const data = await Fetch_CointAPI(setLoading)
-    setCoins(data)
+    // const data = await Fetch_CointAPI(setLoading)
+    const param = {
+      token: isLogin?.token
+    }
+    const data = await GetAllTokenAPI(param, setLoading)
+    setCoins(data?.data)
   };
 
   // Filtered list based on search
@@ -55,19 +79,58 @@ const ImportTokenScreen = ({ navigation }) => {
       item?.name.toLowerCase().includes(search.toLowerCase()) ||
       item?.symbol.toLowerCase().includes(search.toLowerCase())
   );
-
+  const handleNext = async () => {
+    if (tokenData?.symbol) {
+      const param = {
+        ...tokenData,
+        token: isLogin?.token,
+        address
+      }
+      const dd = await AddCustomTokenAPI(param, setLoading)
+      console.log(dd)
+      setActiveTab('Search')
+      fetchCoins()
+      setTokenData(null)
+    } else {
+      console.log({
+        address,
+        selectedToken
+      })
+      const param = {
+        address,
+        rpc: selectedToken
+      }
+      const data = await GetTokenDetailAPI(param, setLoading)
+      console.log(data?.data)
+      setTokenData(data?.data)
+    }
+  }
   const renderItem = ({ item }) => (
     <TouchableOpacity
       style={styles.item}
       onPress={() => setSelectedCurrency(item.id)}
     >
       <View style={styles.leftRow}>
-        <Image source={{ uri: item?.image }} style={styles.icon} />
+        {item?.image ? (
+          <Image
+            source={{ uri: item.image }}
+            style={styles.icon}
+            onError={() => (item.image = null)} // fallback if image fails to load
+          />
+        ) : (
+          <View style={styles.fallbackIcon}>
+            <Text style={styles.fallbackText}>
+              {item?.name?.charAt(0)?.toUpperCase() || "?"}
+            </Text>
+          </View>
+        )}
+
         <View>
           <Text style={styles.label}>{item.name}</Text>
           <Text style={styles.subtitle}>{item.symbol}</Text>
         </View>
       </View>
+
       <View
         style={[
           styles.radioOuter,
@@ -122,37 +185,72 @@ const ImportTokenScreen = ({ navigation }) => {
         </TouchableOpacity>
       </View>
 
-       <View style={styles.dropdown}>
-        <Text style={styles.dropdownText}>Ethereum Mainnet</Text>
-        {/* <Ionicons name="chevron-down" size={18} color="#D32F2F" /> */}
-      </View>
-{activeTab == "Search"?
-<View>
-      <View style={styles.searchContainer}>
-        <SearchBar placeholder="Search a Token..."
-          value={search}
-          onSearchChange={setSearch} />
+
+      {activeTab == "Search" ?
+        <View>
+          <View style={styles.searchContainer}>
+            <SearchBar placeholder="Search a Token..."
+              value={search}
+              onSearchChange={setSearch} />
 
 
-      </View>
- 
-      {/* Currency List */}
-      <FlatList
-        data={filteredData}
-        showsVerticalScrollIndicator={false}
-        renderItem={renderItem}
-        keyExtractor={(item) => item.id}
-        contentContainerStyle={{ paddingVertical: 10, paddingHorizontal: 15 }}
-      />
-      </View>
-      :
-      
-      <View style={[styles.dropdown,{marginVertical:15, paddingVertical:0}]}>
-        <TextInput style={styles.dropdownText} placeholder="Token contract address"/>
-        {/* <Ionicons name="chevron-down" size={18} color="#D32F2F" /> */}
-      </View>
+          </View>
+
+          {/* Currency List */}
+          <FlatList
+            data={filteredData}
+            showsVerticalScrollIndicator={false}
+            renderItem={renderItem}
+            keyExtractor={(item) => item.id}
+            contentContainerStyle={{ paddingVertical: 10, paddingHorizontal: 15 }}
+          />
+        </View>
+        :
+        <View>
+
+          <View style={{ marginHorizontal: 20, marginBottom: 15, }}>
+            {/* <Text style={[styles.dropdownText,{color:'#000', }]}>Token Decimal:</Text> */}
+
+            <CustomDropdown
+              backgroundColor="#F7F7F7"
+              data={dataToken?.map((item) => ({ label: item?.name, value: item?.rpcUrl }))}
+              onSelect={(item) => setSelectToken(item)}
+              placeholder="Select a network"
+
+            />
+
+          </View>
+
+          {/* <Ionicons name="chevron-down" size={18} color="#D32F2F" /> */}
+          <Text style={[styles.dropdownText, { marginLeft: 20, marginVertical: 5, color: '#000', }]}>Token contract address:</Text>
+
+          <View style={[styles.dropdown, { marginBottom: 15, paddingVertical: 0 }]}>
+            <TextInput value={address} onChangeText={setAddress} style={styles.dropdownText} placeholder="Token contract address" />
+            {/* <Ionicons name="chevron-down" size={18} color="#D32F2F" /> */}
+          </View>
+          {tokenData && tokenData?.symbol &&
+            <View>
+              <Text style={[styles.dropdownText, { marginLeft: 20, marginVertical: 5, color: '#000', }]}>Token symbol:</Text>
+              <View style={[styles.dropdown, { marginBottom: 15, }]}>
+                <Text style={styles.dropdownText}>{tokenData?.symbol}</Text>
+              </View>
+              <Text style={[styles.dropdownText, { marginLeft: 20, marginVertical: 5, color: '#000', }]}>Token Decimal:</Text>
+
+              <View style={[styles.dropdown, { marginBottom: 15, }]}>
+                <Text style={styles.dropdownText}>{tokenData?.number}</Text>
+              </View>
+            </View>
+          }
+        </View>
       }
-      <CustomButton title="Next" style={{ width: "90%", alignSelf: 'center', marginBottom: 15 }} />
+      <CustomButton onPress={() => {
+        if (activeTab == "Search") {
+
+        } else {
+          handleNext()
+        }
+      }
+      } title="Next" style={{ width: "90%", alignSelf: 'center', marginBottom: 15, position: 'absolute', bottom: 20 }} />
     </SafeAreaView>
   );
 };
@@ -256,15 +354,29 @@ const styles = StyleSheet.create({
     backgroundColor: "#F7F7F7",
     paddingVertical: 14,
     paddingHorizontal: 15,
-    borderRadius: 30,
+    borderRadius: 15,
     justifyContent: "space-between",
-    marginHorizontal:20,
-    height:60
+    marginHorizontal: 20,
+    height: 60
   },
   dropdownText: {
     color: "#9E9E9E",
     fontSize: 14,
 
+  },
+  fallbackIcon: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    backgroundColor: '#E0E0E0',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginRight: 10,
+  },
+  fallbackText: {
+    color: '#333',
+    fontWeight: '600',
+    fontSize: 18,
   },
 });
 

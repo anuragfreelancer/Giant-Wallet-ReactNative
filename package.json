@@ -10,6 +10,7 @@
     "test": "jest"
   },
   "dependencies": {
+    "@alfabc/swap-sdk": "^1.0.8",
     "@mapbox/polyline": "^1.2.1",
     "@notifee/react-native": "^9.1.8",
     "@react-native-async-storage/async-storage": "^2.1.2",
@@ -28,6 +29,7 @@
     "@react-navigation/native-stack": "^7.3.13",
     "@reduxjs/toolkit": "^2.6.0",
     "@swapkit/sdk": "^4.0.30",
+    "@traderxyz/nft-swap-sdk": "^0.33.0",
     "@walletconnect/modal-react-native": "^1.1.0",
     "@walletconnect/sign-client": "^2.21.10",
     "axios": "^1.8.1",

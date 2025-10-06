@@ -15,6 +15,7 @@ interface CustomDropdownProps {
   onSelect: (value: string) => void;
   leftIcon?: React.ReactNode; // Add this
   search?:boolean;
+  backgroundColor? : string
 }
 
 const CustomDropdown: React.FC<CustomDropdownProps> = ({
@@ -22,7 +23,8 @@ const CustomDropdown: React.FC<CustomDropdownProps> = ({
   placeholder = 'Select',
   onSelect,
   leftIcon,
-  search
+  search,
+  backgroundColor
 }) => {
   const [value, setValue] = useState<string | null>(null);
   const [isFocus, setIsFocus] = useState(false);
@@ -33,9 +35,9 @@ const CustomDropdown: React.FC<CustomDropdownProps> = ({
         {leftIcon && <View style={styles.iconWrapper}>{leftIcon}</View>}
         <Dropdown
           style={[
-            styles.dropdown,
+            styles.dropdown, {backgroundColor:backgroundColor ?? "#fff"},
             isFocus && styles.focusedDropdown,
-            leftIcon && { paddingLeft: 40 }, // Add padding if icon is present
+            leftIcon && { paddingLeft: 40, }, // Add padding if icon is present
           ]}
           data={data}
           labelField="label"

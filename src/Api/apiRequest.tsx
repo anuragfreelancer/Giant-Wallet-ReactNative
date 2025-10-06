@@ -206,7 +206,7 @@ const SinupGoogleCustomer = (params: any,
                         response.message,
                     );
                     console.log(response)
-setLoading(false)
+                    setLoading(false)
                     return response
                 }
             })
@@ -216,7 +216,7 @@ setLoading(false)
         errorToast(
             'Network error',
         );
-setLoading(false)
+        setLoading(false)
 
     }
 };
@@ -719,7 +719,7 @@ const GetCompaignAPI = async (params: any, setLoading: (loading: boolean) => voi
         const myHeaders = new Headers();
         myHeaders.append("Accept", "application/json");
         myHeaders.append("Content-Type", "application/json");
-         myHeaders.append("Authorization", "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4YmU4NWZkNTVkYTYxY2ZkOWJjYWE2MCIsInJvbGUiOiJhZG1pbiIsImVtYWlsIjoiYWRtaW5uQHlvcG1haWwuY29tIiwiaWF0IjoxNzU4ODg1NDgzLCJleHAiOjE3NjE0Nzc0ODN9.v0MTJPtRVQc6hLx4RIBK90AtrezXtPMzYIW6fk23G3I");
+        myHeaders.append("Authorization", "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4YmU4NWZkNTVkYTYxY2ZkOWJjYWE2MCIsInJvbGUiOiJhZG1pbiIsImVtYWlsIjoiYWRtaW5uQHlvcG1haWwuY29tIiwiaWF0IjoxNzU4ODg1NDgzLCJleHAiOjE3NjE0Nzc0ODN9.v0MTJPtRVQc6hLx4RIBK90AtrezXtPMzYIW6fk23G3I");
         // const formdata = new FormData();
         // formdata.append("user_id", params);
 
@@ -737,6 +737,151 @@ const GetCompaignAPI = async (params: any, setLoading: (loading: boolean) => voi
         console.log(responseData)
         if (responseData.statusCode === 200) {
             setLoading(false)
+            return responseData;
+        } else {
+            errorToast(responseData.message);
+            setLoading(false)
+            return responseData;
+
+            //   return thunkApi.rejectWithValue(responseData);
+        }
+    } catch (error) {
+        console.log(error)
+
+        errorToast('Network error');
+        setLoading(false)
+
+        // return thunkApi.rejectWithValue(error);
+    }
+}
+
+const GetAllTokenAPI = async (params: any, setLoading: (loading: boolean) => void) => {
+    // const dispatch = useDispatch()
+    try {
+        setLoading(true)
+
+        const myHeaders = new Headers();
+        myHeaders.append("Accept", "application/json");
+        myHeaders.append("Content-Type", "application/json");
+        myHeaders.append("Authorization", `Bearer ${params?.token}`);
+        // const formdata = new FormData();
+        // formdata.append("user_id", params);
+
+        //         const raw = JSON.stringify({
+        //     "contractAddress": params?.address,
+        //     "rpcUrl": params?.rpc
+        // });
+        // console.log(raw)
+        const requestOptions = {
+            method: "GET",
+            headers: myHeaders,
+            // body: raw,
+        };
+        const response = await fetch(`${base_url}token/all`, requestOptions);
+        const resText = await response.text();
+        const responseData = JSON.parse(resText);
+        console.log(responseData)
+        if (responseData.statusCode === 200) {
+            setLoading(false)
+            return responseData;
+        } else {
+            errorToast(responseData.message);
+            setLoading(false)
+            return responseData;
+
+            //   return thunkApi.rejectWithValue(responseData);
+        }
+    } catch (error) {
+        console.log(error)
+
+        errorToast('Network error');
+        setLoading(false)
+
+        // return thunkApi.rejectWithValue(error);
+    }
+}
+
+const GetTokenDetailAPI = async (params: any, setLoading: (loading: boolean) => void) => {
+    // const dispatch = useDispatch()
+    try {
+        setLoading(true)
+
+        const myHeaders = new Headers();
+        myHeaders.append("Accept", "application/json");
+        myHeaders.append("Content-Type", "application/json");
+        //  myHeaders.append("Authorization", "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4YmU4NWZkNTVkYTYxY2ZkOWJjYWE2MCIsInJvbGUiOiJhZG1pbiIsImVtYWlsIjoiYWRtaW5uQHlvcG1haWwuY29tIiwiaWF0IjoxNzU4ODg1NDgzLCJleHAiOjE3NjE0Nzc0ODN9.v0MTJPtRVQc6hLx4RIBK90AtrezXtPMzYIW6fk23G3I");
+        // const formdata = new FormData();
+        // formdata.append("user_id", params);
+
+        const raw = JSON.stringify({
+            "contractAddress": params?.address,
+            "rpcUrl": params?.rpc
+        });
+        console.log(raw)
+        const requestOptions = {
+            method: "POST",
+            headers: myHeaders,
+            body: raw,
+        };
+        const response = await fetch(`${base_url}token/details`, requestOptions);
+        const resText = await response.text();
+        const responseData = JSON.parse(resText);
+        console.log(responseData)
+        if (responseData.statusCode === 201) {
+            setLoading(false)
+            successToast(responseData.message)
+            return responseData;
+        } else {
+            errorToast(responseData.message);
+            setLoading(false)
+            return responseData;
+
+            //   return thunkApi.rejectWithValue(responseData);
+        }
+    } catch (error) {
+        console.log(error)
+
+        errorToast('Network error');
+        setLoading(false)
+
+        // return thunkApi.rejectWithValue(error);
+    }
+}
+
+
+const AddCustomTokenAPI = async (params: any, setLoading: (loading: boolean) => void) => {
+    // const dispatch = useDispatch()
+    try {
+        setLoading(true)
+
+        const myHeaders = new Headers();
+        myHeaders.append("Accept", "application/json");
+        myHeaders.append("Content-Type", "application/json");
+        myHeaders.append("Authorization", `Bearer ${params?.token}`);
+        // const formdata = new FormData();
+        // formdata.append("user_id", params);
+
+        const raw = JSON.stringify({
+            "chainId": params?.chainId,
+            "contractAddress": params?.address,
+            "symbol": params?.symbol,
+            "decimals": params?.number,
+            "name": params?.name
+        }
+        );
+        console.log(raw)
+        const requestOptions = {
+            method: "POST",
+            headers: myHeaders,
+            body: raw,
+        };
+        const response = await fetch(`${base_url}token/submit`, requestOptions);
+        const resText = await response.text();
+        const responseData = JSON.parse(resText);
+        console.log(responseData)
+        if (responseData.statusCode === 201) {
+            setLoading(false)
+            successToast(responseData.message)
             return responseData;
         } else {
             errorToast(responseData.message);
@@ -892,6 +1037,9 @@ export {
     restEmailOtpScreen, LoginCustomer, otp_Verify,
     CreateLoginPin, VerifyLoginPin,
     Fetch_CointAPI, GetFoundationApi, GetCompaignAPI,
-    LoginWithGoogleCustomer, SinupGoogleCustomer
+    LoginWithGoogleCustomer, SinupGoogleCustomer,
+    GetTokenDetailAPI,
+    GetAllTokenAPI,
+    AddCustomTokenAPI
 
 }  
