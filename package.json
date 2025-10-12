@@ -10,7 +10,6 @@
     "test": "jest"
   },
   "dependencies": {
-    "@alfabc/swap-sdk": "^1.0.8",
     "@mapbox/polyline": "^1.2.1",
     "@notifee/react-native": "^9.1.8",
     "@react-native-async-storage/async-storage": "^2.1.2",
@@ -49,8 +48,6 @@
     "react-native-haptic-feedback": "^2.3.3",
     "react-native-image-crop-picker": "^0.42.0",
     "react-native-localization": "^2.3.2",
-    "react-native-maps": "^1.23.8",
-    "react-native-maps-directions": "^1.9.0",
     "react-native-paper": "^5.14.5",
     "react-native-permissions": "^5.2.6",
     "react-native-popover-view": "^6.0.0",
@@ -67,7 +64,6 @@
     "react-native-toast-message": "^2.2.1",
     "react-native-url-polyfill": "^3.0.0",
     "react-native-vector-icons": "^10.3.0",
-    "react-native-vision-camera": "^4.7.1",
     "react-native-wagmi-charts": "^2.7.3",
     "react-native-walkthrough-tooltip": "^1.6.0",
     "react-redux": "^9.2.0",

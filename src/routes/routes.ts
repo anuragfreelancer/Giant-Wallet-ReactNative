@@ -39,7 +39,7 @@ import VerifyPin from "../screen/BottomTab/Dashboard/CreatePIN/VerifyPin";
 import CointDetail from "../screen/BottomTab/Dashboard/CointDetail";
 import TokenPinScreen from "../screen/Profile/tokenPin";
 import ImportTokenScreen from "../screen/Profile/ImportToken";
-import ImportCustomTokenScreen from "../screen/Profile/ImportCustomTOken";
+import ImportCustomTokenScreen from "../screen/Profile/ImportCustomNetwork";
 
 const _routes: any = {
   REGISTRATION_ROUTE: [

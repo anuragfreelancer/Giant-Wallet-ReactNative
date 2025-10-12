@@ -801,6 +801,54 @@ const GetAllTokenAPI = async (params: any, setLoading: (loading: boolean) => voi
     }
 }
 
+
+
+const GetAllNetworkAPI = async (params: any, setLoading: (loading: boolean) => void) => {
+    // const dispatch = useDispatch()
+    try {
+        setLoading(true)
+
+        const myHeaders = new Headers();
+        myHeaders.append("Accept", "application/json");
+        myHeaders.append("Content-Type", "application/json");
+        myHeaders.append("Authorization", `Bearer ${params?.token}`);
+        // const formdata = new FormData();
+        // formdata.append("user_id", params);
+
+        //         const raw = JSON.stringify({
+        //     "contractAddress": params?.address,
+        //     "rpcUrl": params?.rpc
+        // });
+        // console.log(raw)
+        const requestOptions = {
+            method: "GET",
+            headers: myHeaders,
+            // body: raw,
+        };
+        const response = await fetch(`${base_url}network`, requestOptions);
+        const resText = await response.text();
+        const responseData = JSON.parse(resText);
+        console.log(responseData)
+        if (responseData.statusCode === 200) {
+            setLoading(false)
+            return responseData;
+        } else {
+            errorToast(responseData.message);
+            setLoading(false)
+            return responseData;
+
+            //   return thunkApi.rejectWithValue(responseData);
+        }
+    } catch (error) {
+        console.log(error)
+
+        errorToast('Network error');
+        setLoading(false)
+
+        // return thunkApi.rejectWithValue(error);
+    }
+}
+
 const GetTokenDetailAPI = async (params: any, setLoading: (loading: boolean) => void) => {
     // const dispatch = useDispatch()
     try {
@@ -876,6 +924,59 @@ const AddCustomTokenAPI = async (params: any, setLoading: (loading: boolean) => 
             body: raw,
         };
         const response = await fetch(`${base_url}token/submit`, requestOptions);
+        const resText = await response.text();
+        const responseData = JSON.parse(resText);
+        console.log(responseData)
+        if (responseData.statusCode === 201) {
+            setLoading(false)
+            successToast(responseData.message)
+            return responseData;
+        } else {
+            errorToast(responseData.message);
+            setLoading(false)
+            return responseData;
+
+            //   return thunkApi.rejectWithValue(responseData);
+        }
+    } catch (error) {
+        console.log(error)
+
+        errorToast('Network error');
+        setLoading(false)
+
+        // return thunkApi.rejectWithValue(error);
+    }
+}
+
+const AddCustomNetworkAPI = async (params: any, setLoading: (loading: boolean) => void) => {
+    // const dispatch = useDispatch()
+    try {
+        setLoading(true)
+
+        const myHeaders = new Headers();
+        myHeaders.append("Accept", "application/json");
+        myHeaders.append("Content-Type", "application/json");
+        myHeaders.append("Authorization", `Bearer ${params?.token}`);
+        // const formdata = new FormData();
+        // formdata.append("user_id", params);
+
+        const raw = JSON.stringify({
+            "chainId": params?.chainId,
+            "blockExplorerUrl": params?.explorerUrl,
+            "rpcUrl": params?.rpcUrl,
+            "name": params?.networkName,
+            "nativeCurrency":{
+                "symbol":params?.symbol
+            }
+        }
+        );
+        console.log(raw)
+        const requestOptions = {
+            method: "POST",
+            headers: myHeaders,
+            body: raw,
+        };
+        const response = await fetch(`${base_url}network`, requestOptions);
         const resText = await response.text();
         const responseData = JSON.parse(resText);
         console.log(responseData)
@@ -1040,6 +1141,8 @@ export {
     LoginWithGoogleCustomer, SinupGoogleCustomer,
     GetTokenDetailAPI,
     GetAllTokenAPI,
-    AddCustomTokenAPI
+    AddCustomTokenAPI,
+    GetAllNetworkAPI,
+    AddCustomNetworkAPI
 
 }  
