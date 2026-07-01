@@ -537,7 +537,6 @@ const Fetch_CointAPI = async (
     }
 };
 
-
 const Policies_Api = (
     setLoading: (loading: boolean) => void,
 ) => {
@@ -965,8 +964,8 @@ const AddCustomNetworkAPI = async (params: any, setLoading: (loading: boolean) =
             "blockExplorerUrl": params?.explorerUrl,
             "rpcUrl": params?.rpcUrl,
             "name": params?.networkName,
-            "nativeCurrency":{
-                "symbol":params?.symbol
+            "nativeCurrency": {
+                "symbol": params?.symbol
             }
         }
         );

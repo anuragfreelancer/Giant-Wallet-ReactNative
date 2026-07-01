@@ -15,13 +15,12 @@ import TooltipMenu from "../../../compoent/CustomTooltip";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import WalletCreation from "./walletCreation";
 
-
 const PROVIDER_URL = "https://sepolia.infura.io/v3/0556c560569a46a283d23c736af1a7c4";
 const provider = new ethers.JsonRpcProvider(PROVIDER_URL);
 
 export default function WalletHome() {
   const navigation = useNavigation()
-    const [showWalletCreation, setShowWalletCreation] = useState(false);
+  const [showWalletCreation, setShowWalletCreation] = useState(false);
   const [connected, setConnected] = useState(false)
   const [existingMnemonic, setExistingMnemonic] = useState<string>();
   const [coins, setCoins] = useState([]);
@@ -50,6 +49,36 @@ export default function WalletHome() {
     setCoins(data)
   };
   // Generate a new random wallet
+  // useEffect(() => {
+  //   (async () => {
+
+  //     const wallet = ethers.Wallet.createRandom();
+  //     console.log("Address:", wallet.address);
+
+  //     const provider = new ethers.JsonRpcProvider("https://bsc-dataseed.binance.org/");
+  //     const signer = wallet.connect(provider);
+  //     const route = await swapKit.getQuote({
+  //       fromToken: {
+  //         chainId: 56,
+  //         address: "0x55d398326f99059fF775485246999027B3197955", // USDT
+  //         decimals: 18,
+  //       },
+  //       toToken: {
+  //         chainId: 56,
+  //         address: "0x0e09fabb73bd3ade0a17ecc321fd13a19e81ce82", // CAKE
+  //         decimals: 18,
+  //       },
+  //       amount: "1000000000000000000", // 1 USDT in wei
+  //     });
+  //     const tx = await swapKit.executeSwap({
+  //       route,
+  //       signer,
+  //     });
+
+  //   })()
+  // }, [])
+
+
   const createWallet = async () => {
     setLoading(true); // show loader first
 
@@ -126,24 +155,24 @@ export default function WalletHome() {
 
   if (showWalletCreation) {
     return (
-      <WalletCreation 
+      <WalletCreation
         existingMnemonic={existingMnemonic}
-        onWalletCreated={async(walletData) => {
+        onWalletCreated={async (walletData) => {
           // Handle successful wallet creation
           await setWallet(walletData)
-           const jsonValue = JSON.stringify({
-          address: walletData.address,
-          privateKey: walletData.privateKey,
-          mnemonic: walletData.mnemonic?.phrase,
-        });
-        await AsyncStorage.setItem("wallet", jsonValue);
-        setConnected(true)
+          const jsonValue = JSON.stringify({
+            address: walletData.address,
+            privateKey: walletData.privateKey,
+            mnemonic: walletData.mnemonic?.phrase,
+          });
+          await AsyncStorage.setItem("wallet", jsonValue);
+          setConnected(true)
           setShowWalletCreation(false);
           console.log(walletData)
-          
+
           await getWalletBalance()
 
-           
+
         }}
         onBack={() => setShowWalletCreation(false)}
       />
@@ -195,11 +224,11 @@ export default function WalletHome() {
       {connected == false ?
         <View style={{ marginTop: 25, marginBottom: 10 }}>
           <TouchableOpacity style={styles.actionCard}
-           onPress={() => {
-            
-            // createWallet()
-          setShowWalletCreation(true);
-           }}>
+            onPress={() => {
+
+              // createWallet()
+              setShowWalletCreation(true);
+            }}>
             <Image source={imageIndex.add} style={styles.actionIcon} />
             <View>
               <Text style={styles.actionTitle}>Create new wallet</Text>

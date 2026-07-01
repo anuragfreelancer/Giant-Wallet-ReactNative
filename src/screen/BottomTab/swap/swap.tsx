@@ -98,6 +98,12 @@
 // });
 
 
+
+
+
+
+
+// ==================================================
 import React, { useState, useEffect } from "react";
 import {
   View,
@@ -536,3 +542,535 @@ const styles = StyleSheet.create({
     marginTop: 2,
   },
 });
+// ====================================================
+
+// import React, { useState, useEffect } from 'react';
+// import {
+//   SafeAreaView,
+//   View,
+//   Text,
+//   TextInput,
+//   TouchableOpacity,
+//   StyleSheet,
+//   Alert,
+//   KeyboardAvoidingView,
+//   Platform,
+//   ScrollView,
+// } from 'react-native';
+// import Icon from 'react-native-vector-icons/MaterialIcons';
+// import { fetchQuote, swapFromEvm, Quote } from '@mayanfinance/swap-sdk';
+// import { useWalletConnectModal } from '@walletconnect/modal-react-native';
+// import { ethers } from 'ethers';
+// import axios from 'axios';
+
+// const SwapScreen = () => {
+//   const [fromAmount, setFromAmount] = useState('');
+//   const [toAmount, setToAmount] = useState('');
+//   const [fromToken, setFromToken] = useState({ symbol: 'ETH', name: 'Ethereum', balance: 1.5 });
+//   const [toToken, setToToken] = useState({ symbol: 'USDC', name: 'USD Coin', balance: 0 });
+//   const [isSwapping, setIsSwapping] = useState(false);
+//   const [exchangeRate, setExchangeRate] = useState(3500); // 1 ETH = 3500 USDC
+// const { provider, open, isConnected, address } = useWalletConnectModal();
+
+//   const getSwapQuote = async (sellToken, buyToken, sellAmountHuman, sellTokenDecimals) => {
+//     // 1. Convert human-readable amount (e.g., 1.0) to the token's smallest unit (e.g., 1000000)
+//     const amountInSmallestUnit = ethers.utils.parseUnits(
+//       sellAmountHuman.toString(), // e.g., "1"
+//       sellTokenDecimals          // e.g., 6 for USDC/USDT
+//     ).toString();
+
+//     const quoteArgs = {
+//       amount: amountInSmallestUnit, // <-- This is the corrected amount
+//       fromToken: sellToken,
+//       toToken: buyToken,
+//       fromChain: 'arbitrum',
+//       toChain: 'polygon',
+//       slippageBps: 300,
+//     };
+
+//     try {
+//       console.log(quoteArgs)
+//       // const quotes = await fetchQuote(quoteArgs);
+//       // const quotes = await fetchQuote({
+//       //   amountIn64: "250000000", // if fromToken is USDC means 250 USDC
+//       //   fromToken: '0xFd086bC7cd5C481Dcc9C851cE204CDbE48198533',
+//       //   toToken: '0xc2132D05d31c914a87C6611c10748AEb04B58e8F',
+//       //   fromChain: "avalanche",
+//       //   toChain: "solana",
+//       //   slippageBps: "auto",
+//       //   gasDrop: 0.04, // optional
+//       //   // referrer: "YOUR SOLANA WALLET ADDRESS", // optional
+//       //   referrerBps: 5, // optional
+//       // });
+
+//       // console.log(quotes)
+//       // ... (rest of your logic)
+
+
+//       await performMayanSwap(provider, {
+//   amountIn64: "1500000",
+//   fromChain: "avalanche",
+//   toChain: "solana",
+//   fromToken: "0xFd086bC7cd5C481Dcc9C851cE204CDbE48198533", // USDT on Avalanche
+//   toToken: "So11111111111111111111111111111111111111112", // SOL (on Solana)
+//   slippageBps: 100,
+//   gasDrop: 0.04,
+//   referrerBps: 5,
+// });
+//     } catch (error) {
+//       console.error('Error fetching quote:', error);
+//       return null;
+//     }
+//   };
+
+//   // Mock exchange rate - in real app, fetch from API
+
+
+
+//  const performMayanSwap = async (provider, params) => {
+//   const {
+//     amountIn64,
+//     fromToken,
+//     toToken,
+//     fromChain,
+//     toChain,
+//     slippageBps,
+//     gasDrop,
+//     referrerBps,
+//   } = params;
+
+//   try {
+//     // 🔹 Connect signer
+//     const ethersProvider = new ethers.BrowserProvider(provider);
+//     const signer = await ethersProvider.getSigner();
+//     const walletAddress = await signer.getAddress();
+
+//     // 🔹 Fetch swap quote from Mayan
+//     const { data: quote } = await axios.get(
+//       "https://api.mayan.finance/v2/quote",
+//       {
+//         params: {
+//           fromChain,
+//           toChain,
+//           fromToken,
+//           toToken,
+//           amount: amountIn64, // ✅ Use amount, not amountIn64
+//           slippageBps: 100,   // 1% slippage
+//           gasDrop: gasDrop ?? 0.04,
+//           referrerBps: referrerBps ?? 5,
+//           user: walletAddress,
+//         },
+//       }
+//     );
+
+//     console.log("✅ Quote received:", quote);
+
+//     if (!quote.tx) throw new Error("Quote does not contain transaction data");
+
+//     // 🔹 Execute swap transaction
+//     const txResponse = await signer.sendTransaction({
+//       to: quote.tx.to,
+//       data: quote.tx.data,
+//       value: quote.tx.value ? BigInt(quote.tx.value) : 0n,
+//       gasLimit: quote.tx.gasLimit ? BigInt(quote.tx.gasLimit) : undefined,
+//     });
+
+//     console.log("🚀 Swap transaction submitted:", txResponse.hash);
+
+//     await txResponse.wait();
+//     console.log("✅ Swap completed!");
+//   } catch (error) {
+//     console.error(
+//       "❌ Swap failed:",
+//       error.response?.data || error.message || error
+//     );
+//   }
+// };
+//   useEffect(() => {
+//     calculateToAmount();
+
+//   }, [fromAmount, exchangeRate]);
+//   useEffect(() => {
+//     const ARB_USDT = "0xFd086bC7cd5C481Dcc9C851cE204CDbE48198533"; // Example: ARB USDT
+//     const POLYGON_USDT = "0xc2132D05d31c914a87C6611c10748AEb04B58e8F"; // Example: Polygon USDT
+//     getSwapQuote(ARB_USDT, POLYGON_USDT, 1.0, 6);
+//   }, [])
+
+//   const calculateToAmount = () => {
+//     if (fromAmount && !isNaN(fromAmount)) {
+//       const result = parseFloat(fromAmount) * exchangeRate;
+//       setToAmount(result.toFixed(2));
+//     } else {
+//       setToAmount('');
+//     }
+//   };
+
+//   const handleSwapTokens = () => {
+//     // Swap from and to tokens
+//     const temp = fromToken;
+//     setFromToken(toToken);
+//     setToToken(temp);
+//     setFromAmount(toAmount);
+//   };
+
+// const handleSwap = async () => {
+//   try {
+//     if (!fromAmount || parseFloat(fromAmount) <= 0) {
+//       Alert.alert("Error", "Please enter a valid amount");
+//       return;
+//     }
+
+//     if (!isConnected) {
+//       console.log('first')
+//       await open(); // open WalletConnect modal
+//       return;
+//     }
+
+//     setIsSwapping(true);
+
+//     // Step 1: Convert amount to smallest units
+//     const amountInSmallestUnit = ethers.parseUnits(
+//       fromAmount.toString(),
+//       6 // USDC decimals
+//     ).toString();
+
+//     // Step 2: Prepare quote parameters
+//     const quoteArgs = {
+//       amountIn64: amountInSmallestUnit,
+//       fromToken: "0xFd086bC7cd5C481Dcc9C851cE204CDbE48198533", // ARB USDT
+//       toToken: "0xc2132D05d31c914a87C6611c10748AEb04B58e8F",   // Polygon USDT
+//       fromChain: "avalanche",
+//       toChain: "solana",
+//       slippageBps: "auto",
+//       gasDrop: 0.04,
+//       referrerBps: 5,
+//     };
+
+//     console.log("Fetching Mayan quote...", quoteArgs);
+//     const quote = await fetchQuote(quoteArgs);
+
+//     if (!quote || !quote.tx) {
+//       Alert.alert("Error", "Failed to fetch quote");
+//       setIsSwapping(false);
+//       return;
+//     }
+
+//     console.log("Quote fetched:", quote);
+
+//     // Step 3: Create signer from WalletConnect provider
+//     const ethersProvider = new ethers.BrowserProvider(provider);
+//     const signer = await ethersProvider.getSigner();
+
+//     // Step 4: Execute swap transaction on EVM
+//     console.log("Executing swapFromEvm...");
+//     const txResponse = await swapFromEvm(signer, quote.tx);
+//     console.log("Tx sent:", txResponse);
+
+//     Alert.alert(
+//       "Swap Confirmed 🚀",
+//       `Transaction hash:\n${txResponse.hash}`,
+//       [{ text: "OK" }]
+//     );
+
+//     // Step 5: Reset form
+//     setFromAmount("");
+//     setToAmount("");
+//   } catch (error) {
+//     console.error("Swap failed:", error);
+//     Alert.alert("Swap Failed ❌", error.message || "Please try again");
+//   } finally {
+//     setIsSwapping(false);
+//   }
+// };
+//   const TokenSelector = ({ token, onPress, type }) => (
+//     <TouchableOpacity style={styles.tokenSelector} onPress={onPress}>
+//       <View style={styles.tokenInfo}>
+//         <View style={styles.tokenIcon}>
+//           <Text style={styles.tokenSymbol}>{token.symbol}</Text>
+//         </View>
+//         <View>
+//           <Text style={styles.tokenSymbolText}>{token.symbol}</Text>
+//           <Text style={styles.tokenName}>{token.name}</Text>
+//         </View>
+//       </View>
+//       <Icon name="keyboard-arrow-down" size={24} color="#666" />
+//     </TouchableOpacity>
+//   );
+
+//   const AmountInput = ({ value, onChangeText, token, type, editable = true }) => (
+//     <View style={styles.amountContainer}>
+//       <TextInput
+//         style={[styles.amountInput, !editable && styles.amountInputDisabled]}
+//         value={value}
+//         onChangeText={onChangeText}
+//         placeholder="0"
+//         keyboardType="decimal-pad"
+//         editable={editable}
+//         placeholderTextColor="#999"
+//       />
+//       <Text style={styles.balanceText}>
+//         Balance: {token.balance} {token.symbol}
+//       </Text>
+//     </View>
+//   );
+
+//   return (
+//     <SafeAreaView style={styles.container}>
+//       <KeyboardAvoidingView
+//         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+//         style={styles.container}
+//       >
+//         <ScrollView contentContainerStyle={styles.scrollContent}>
+//           <View style={styles.header}>
+//             <Text style={styles.headerTitle}>Swap</Text>
+//           </View>
+
+//           {/* From Section */}
+//           <View style={styles.swapSection}>
+//             <View style={styles.sectionHeader}>
+//               <Text style={styles.sectionLabel}>From</Text>
+//               <TouchableOpacity onPress={() => setFromAmount(fromToken.balance.toString())}>
+//                 <Text style={styles.maxButton}>MAX</Text>
+//               </TouchableOpacity>
+//             </View>
+
+//             <View style={styles.inputRow}>
+//               <AmountInput
+//                 value={fromAmount}
+//                 onChangeText={setFromAmount}
+//                 token={fromToken}
+//                 type="from"
+//                 editable={true}
+//               />
+//               <TokenSelector
+//                 token={fromToken}
+//                 onPress={() => Alert.alert('Select Token', 'Token selection would open here')}
+//               />
+//             </View>
+
+//             <Text style={styles.usdValue}>
+//               ~${(parseFloat(fromAmount || 0) * 3500).toLocaleString()}
+//             </Text>
+//           </View>
+
+//           {/* Swap Button */}
+//           <TouchableOpacity style={styles.swapButton} onPress={handleSwapTokens}>
+//             <Icon name="swap-vert" size={24} color="#fff" />
+//           </TouchableOpacity>
+
+//           {/* To Section */}
+//           <View style={styles.swapSection}>
+//             <View style={styles.sectionHeader}>
+//               <Text style={styles.sectionLabel}>To</Text>
+//             </View>
+
+//             <View style={styles.inputRow}>
+//               <AmountInput
+//                 value={toAmount}
+//                 onChangeText={setToAmount}
+//                 token={toToken}
+//                 type="to"
+//                 editable={false}
+//               />
+//               <TokenSelector
+//                 token={toToken}
+//                 onPress={() => Alert.alert('Select Token', 'Token selection would open here')}
+//               />
+//             </View>
+
+//             <Text style={styles.usdValue}>
+//               ~${toAmount || '0'}
+//             </Text>
+//           </View>
+
+//           {/* Exchange Rate */}
+//           <View style={styles.rateInfo}>
+//             <Text style={styles.rateText}>
+//               1 {fromToken.symbol} = {exchangeRate} {toToken.symbol}
+//             </Text>
+//             <Icon name="info-outline" size={16} color="#666" />
+//           </View>
+
+//           {/* Swap Button */}
+//           <TouchableOpacity
+//             style={[
+//               styles.confirmButton,
+//               (!fromAmount || parseFloat(fromAmount) <= 0 || isSwapping) && styles.confirmButtonDisabled
+//             ]}
+//             onPress={handleSwap}
+//             disabled={!fromAmount || parseFloat(fromAmount) <= 0 || isSwapping}
+//           >
+//             {isSwapping ? (
+//               <Text style={styles.confirmButtonText}>Swapping...</Text>
+//             ) : (
+//               <Text style={styles.confirmButtonText}>
+//                 {!fromAmount || parseFloat(fromAmount) <= 0 ? 'Enter Amount' : 'Swap'}
+//               </Text>
+//             )}
+//           </TouchableOpacity>
+//         </ScrollView>
+//       </KeyboardAvoidingView>
+//     </SafeAreaView>
+//   );
+// };
+
+// const styles = StyleSheet.create({
+//   container: {
+//     flex: 1,
+//     backgroundColor: '#f8f9fa',
+//   },
+//   scrollContent: {
+//     flexGrow: 1,
+//     padding: 20,
+//   },
+//   header: {
+//     alignItems: 'center',
+//     marginBottom: 30,
+//   },
+//   headerTitle: {
+//     fontSize: 24,
+//     fontWeight: 'bold',
+//     color: '#000',
+//   },
+//   swapSection: {
+//     backgroundColor: '#fff',
+//     borderRadius: 16,
+//     padding: 16,
+//     marginBottom: 20,
+//     shadowColor: '#000',
+//     shadowOffset: { width: 0, height: 2 },
+//     shadowOpacity: 0.1,
+//     shadowRadius: 8,
+//     elevation: 3,
+//   },
+//   sectionHeader: {
+//     flexDirection: 'row',
+//     justifyContent: 'space-between',
+//     alignItems: 'center',
+//     marginBottom: 12,
+//   },
+//   sectionLabel: {
+//     fontSize: 16,
+//     color: '#666',
+//     fontWeight: '500',
+//   },
+//   maxButton: {
+//     color: '#007AFF',
+//     fontWeight: '600',
+//     fontSize: 14,
+//   },
+//   inputRow: {
+//     flexDirection: 'row',
+//     justifyContent: 'space-between',
+//     alignItems: 'center',
+//   },
+//   amountContainer: {
+//     flex: 1,
+//   },
+//   amountInput: {
+//     fontSize: 28,
+//     fontWeight: '600',
+//     color: '#000',
+//     marginBottom: 4,
+//   },
+//   amountInputDisabled: {
+//     color: '#666',
+//   },
+//   balanceText: {
+//     fontSize: 14,
+//     color: '#666',
+//   },
+//   tokenSelector: {
+//     flexDirection: 'row',
+//     alignItems: 'center',
+//     backgroundColor: '#f8f9fa',
+//     paddingHorizontal: 12,
+//     paddingVertical: 8,
+//     borderRadius: 12,
+//     minWidth: 120,
+//   },
+//   tokenInfo: {
+//     flexDirection: 'row',
+//     alignItems: 'center',
+//     marginRight: 8,
+//   },
+//   tokenIcon: {
+//     width: 32,
+//     height: 32,
+//     borderRadius: 16,
+//     backgroundColor: '#007AFF',
+//     justifyContent: 'center',
+//     alignItems: 'center',
+//     marginRight: 8,
+//   },
+//   tokenSymbol: {
+//     color: '#fff',
+//     fontWeight: 'bold',
+//     fontSize: 12,
+//   },
+//   tokenSymbolText: {
+//     fontSize: 16,
+//     fontWeight: '600',
+//     color: '#000',
+//   },
+//   tokenName: {
+//     fontSize: 12,
+//     color: '#666',
+//   },
+//   usdValue: {
+//     fontSize: 14,
+//     color: '#666',
+//     marginTop: 8,
+//   },
+//   swapButton: {
+//     width: 48,
+//     height: 48,
+//     borderRadius: 24,
+//     backgroundColor: '#007AFF',
+//     justifyContent: 'center',
+//     alignItems: 'center',
+//     alignSelf: 'center',
+//     marginVertical: -10,
+//     zIndex: 1,
+//     shadowColor: '#007AFF',
+//     shadowOffset: { width: 0, height: 4 },
+//     shadowOpacity: 0.3,
+//     shadowRadius: 8,
+//     elevation: 5,
+//   },
+//   rateInfo: {
+//     flexDirection: 'row',
+//     justifyContent: 'center',
+//     alignItems: 'center',
+//     marginBottom: 30,
+//   },
+//   rateText: {
+//     fontSize: 14,
+//     color: '#666',
+//     marginRight: 6,
+//   },
+//   confirmButton: {
+//     backgroundColor: '#007AFF',
+//     borderRadius: 16,
+//     paddingVertical: 16,
+//     alignItems: 'center',
+//     shadowColor: '#007AFF',
+//     shadowOffset: { width: 0, height: 4 },
+//     shadowOpacity: 0.3,
+//     shadowRadius: 8,
+//     elevation: 5,
+//   },
+//   confirmButtonDisabled: {
+//     backgroundColor: '#ccc',
+//     shadowOpacity: 0,
+//   },
+//   confirmButtonText: {
+//     color: '#fff',
+//     fontSize: 18,
+//     fontWeight: '600',
+//   },
+// });
+
+// export default SwapScreen;
+
+
